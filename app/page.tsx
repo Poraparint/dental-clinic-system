@@ -1,12 +1,10 @@
-import { Button } from "@/components/ui/button";
+
 
 export default function Home() {
   return (
-    <div>
-      <Button variant="link">
-      hi, dev Prim
-    </Button>
+    <div className="flex justify-between">
+      <p>hi, dev</p>
+      <p>hi, dev</p>
     </div>
-    
   );
 }
