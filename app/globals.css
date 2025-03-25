@@ -30,6 +30,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -49,11 +50,13 @@
 }
 
 :root {
-  
+  --muted-foreground: oklch(0.4 0.02 260);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --primary: oklch(0.208 0.042 265.755);
+  --destructive: #F8D7DA; /* สีพื้นหลังแดงอ่อน */
+  --destructive-foreground: #842029; /* สีข้อความแดงเข้ม */
   --primary-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
   --input: oklch(0.929 0.013 255.508);
@@ -69,10 +72,12 @@
 }
 
 .dark {
-  
+  --muted-foreground: oklch(0.7 0.02 260);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --primary: oklch(0.929 0.013 255.508);
+  --destructive: #4A1C1F; /* พื้นหลังแดงเข้มขึ้นในโหมดมืด */
+  --destructive-foreground: #F8D7DA; /* ข้อความสีแดงอ่อน */
   --primary-foreground: oklch(0.208 0.042 265.755);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
