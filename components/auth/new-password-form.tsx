@@ -1,16 +1,17 @@
 "use client";
 
 import * as z from "zod";
+import { useSearchParams } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { RegisterSchema } from "@/schemas";
+import { NewPasswordSchema } from "@/schemas";
 
 //action
-import { register } from "@/actions/register";
+import { newPassword } from "@/actions/new-password";
 
 //ui
 import {
@@ -26,77 +27,43 @@ import { Button } from "@/components/ui/button";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
-export const RegisterForm = () => {
+export const NewPasswordForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      name:"",
-      email: "",
       password: "",
     },
   });
 
-  const OnSubmit = (values: z.infer<typeof RegisterSchema>) => {
+  const OnSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
     setError("");
     setSuccess("");
 
+    console.log(values);
+
     startTransition(() => {
-      register(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+      newPassword(values, token).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
       });
     });
   };
 
   return (
     <CardWrapper
-      headerLabel="Create your account"
-      backButtonLabel="have an account?"
+      headerLabel="Enter a new password"
+      backButtonLabel="Back to login"
       backButtonHref="/auth/login"
-      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)}>
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="john doe"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="johndoe@gmail.com"
-                      type="email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="password"
@@ -118,13 +85,8 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button
-            typeof="submit"
-            className="w-full"
-            
-            disabled={isPending}
-          >
-            Create an account
+          <Button typeof="submit" className="w-full" disabled={isPending}>
+            Reset password
           </Button>
         </form>
       </Form>
