@@ -23,7 +23,7 @@ model User {
   id                    String                 @id @default(uuid())
   name                  String?
   email                 String?                @unique
-  emailVerified         DateTime?              @db.Timestamptz(2)
+  emailVerified         DateTime?              
   image                 String?
   password              String?
   role                  UserRole               @default(USER)
@@ -55,7 +55,7 @@ model VerificationToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
-  expires DateTime @db.Timestamptz(2)
+  expires DateTime 
 
   @@unique([email, token])
 }
@@ -64,8 +64,7 @@ model PasswordResetToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
-  expires DateTime @db.Timestamptz(2)
-
+  expires DateTime 
   @@unique([email, token])
 }
 
@@ -73,7 +72,7 @@ model TwoFactorToken {
   id      String   @id @default(cuid())
   email   String
   token   String   @unique
-  expires DateTime @db.Timestamptz(2)
+  expires DateTime 
 
   @@unique([email, token])
 }
