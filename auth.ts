@@ -2,9 +2,11 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import authConfig from "./auth.config";
-import { db } from "./lib/db";
+import { db } from "@/lib/db";
 import { getUserById } from "@/data/user";
 import { UserRole } from "@prisma/client";
+
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 export const {
   handlers: { GET, POST },
@@ -34,7 +36,19 @@ export const {
       //Prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
 
-      //OTDO: Add 2FA check
+      //Add 2FA check
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+
+        if (!twoFactorConfirmation) return false;
+
+        //Delete two factor confirmation for next sign in
+        await db.twoFactorConfirmation.delete({
+          where: {
+            id: twoFactorConfirmation.id
+          }
+        });
+      }
 
       return true;
     },
@@ -47,6 +61,10 @@ export const {
         session.user.role = token.role as UserRole;
       }
 
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
+      }
+
       return session;
     },
 
@@ -57,6 +75,7 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
       return token;
     },

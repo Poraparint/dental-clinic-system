@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 
+//providers
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
+
 //cookies
 import { cookies } from "next/headers";
 
@@ -9,6 +13,7 @@ import { cookies } from "next/headers";
 import { ThemeProvider } from "@/theme/theme-provider";
 
 //ui
+import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/app/components/app-sidebar";
 import { Navbar } from "./components/navbar";
@@ -28,32 +33,38 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${kanit.className} antialiased flex h-screen overflow-hidden`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+    <SessionProvider session={session}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${kanit.className} antialiased flex h-screen overflow-hidden`}
         >
-          <SidebarProvider defaultOpen={defaultOpen}>
-            <div className="flex w-screen h-full">
-              {/* Sidebar */}
-              <AppSidebar />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider defaultOpen={defaultOpen}>
+              <div className="flex w-screen h-full">
+                {/* Sidebar */}
+                <AppSidebar />
 
-              {/* Main Content */}
-              <main className="flex flex-1 flex-col overflow-auto">
-                <Navbar />
-                <div className="p-4">{children}</div> 
-              </main>
-            </div>
-          </SidebarProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+                {/* Main Content */}
+                <main className="flex flex-1 flex-col overflow-auto">
+                  <Navbar />
+                  <Toaster/>
+                  <div className="p-4">{children}</div>
+                </main>
+              </div>
+            </SidebarProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }
