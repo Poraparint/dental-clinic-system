@@ -6,7 +6,7 @@ export default function Home() {
     <div className="flex justify-between">
       <p>hi, dev</p>
       <p>hi, dev</p>
-      <LoginButton>
+      <LoginButton asChild>
         <Button>Sign in</Button>
       </LoginButton>
     </div>
