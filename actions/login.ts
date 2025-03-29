@@ -1,7 +1,5 @@
 "use server";
 
-
-
 import * as z from "zod";
 
 import { AuthError } from "next-auth";
@@ -19,7 +17,10 @@ import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
 import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string | null,
+) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -49,9 +50,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
     if (code) {
-      const twoFactorToken = await getTwoFactorTokenByEmail(
-        existingUser.email
-      );
+      const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
 
       if (!twoFactorToken) {
         return { error: "Invalid code!" };
@@ -65,35 +64,33 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
       if (hasExpired) {
         return {
-          error: "Code expired!"
+          error: "Code expired!",
         };
       }
 
       await db.twoFactorToken.delete({
-        where: { id: twoFactorToken.id }
+        where: { id: twoFactorToken.id },
       });
 
-      const existingConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+      const existingConfirmation = await getTwoFactorConfirmationByUserId(
+        existingUser.id
+      );
 
       if (existingConfirmation) {
         await db.twoFactorConfirmation.delete({
-          where: { id: existingConfirmation.id }
+          where: { id: existingConfirmation.id },
         });
       }
 
       await db.twoFactorConfirmation.create({
         data: {
           userId: existingUser.id,
-        }
+        },
       });
-
     } else {
       const twoFactorToken = await generateTwoFacterToken(existingUser.email);
 
-      await sendTwoFactorTokenEmail(
-        twoFactorToken.email,
-        twoFactorToken.token,
-      );
+      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
 
       return { twoFactor: true };
     }
@@ -103,7 +100,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
     if (error instanceof AuthError) {
