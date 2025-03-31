@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useCurrentUser } from "@/hooks/user-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/logout-button";
 
 export const UserButton = () => {
@@ -28,7 +28,10 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
         <LogoutButton>
-          <DropdownMenuItem><LogOutIcon/>Logout</DropdownMenuItem>
+          <DropdownMenuItem>
+            <LogOutIcon />
+            Logout
+          </DropdownMenuItem>
         </LogoutButton>
       </DropdownMenuContent>
     </DropdownMenu>

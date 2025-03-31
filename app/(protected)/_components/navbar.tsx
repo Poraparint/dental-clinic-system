@@ -36,14 +36,13 @@ export const Navbar = () => {
           <Button
             key={list.title}
             asChild
-            variant={pathname === list.url ? "default" : "outline"}
+            variant={pathname === list.url ? "emerald" : "outline"}
           >
             <Link href={list.url}>{list.title}</Link>
           </Button>
         ))}
       </div>
-      <UserButton/>
-      
+      <UserButton />
     </div>
   );
 };
