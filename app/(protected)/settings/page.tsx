@@ -33,7 +33,7 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { useCurrentUser } from "@/hooks/user-current-user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserRole } from "@prisma/client";
 
 const SettingsPage = () => {
@@ -71,7 +71,7 @@ const SettingsPage = () => {
               })
               .catch(() => {
                 setError("Error during update");
-            })
+              });
             setSuccess(data.success);
           }
         })
@@ -106,7 +106,7 @@ const SettingsPage = () => {
                   </FormItem>
                 )}
               />
-              {user?.isOAuth === false && (
+              {user?.isOAuth !== true && (
                 <>
                   <FormField
                     control={form.control}

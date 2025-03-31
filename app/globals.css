@@ -3,14 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme{
-    --color-aqua: oklch(65.33% 0.1204 249.88);
-    --color-mable: oklch(65.33% 0.1204 249.88);
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-teal: var(--teal);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -54,6 +50,7 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
+  --teal: oklch(0.44 0.0884 151.71);
   --primary: oklch(0.208 0.042 265.755);
   --destructive: #F8D7DA; /* สีพื้นหลังแดงอ่อน */
   --destructive-foreground: #842029; /* สีข้อความแดงเข้ม */
@@ -75,6 +72,7 @@
   --muted-foreground: oklch(0.7 0.02 260);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
+  --teal: oklch(0.53 0.1086 159.06);
   --primary: oklch(0.929 0.013 255.508);
   --destructive: #4A1C1F; /* พื้นหลังแดงเข้มขึ้นในโหมดมืด */
   --destructive-foreground: #F8D7DA; /* ข้อความสีแดงอ่อน */
