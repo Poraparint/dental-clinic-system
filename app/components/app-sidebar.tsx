@@ -1,5 +1,7 @@
+"use client";
+
 //icon
-import { LayoutDashboard, Settings, Landmark, Calendar, Apple, LampDesk, MonitorSmartphone, UsersRound, Wallet, UserRoundCog } from "lucide-react";
+import { LayoutDashboard, Settings, Landmark, Calendar, LampDesk, MonitorSmartphone, UsersRound, Wallet, UserRoundCog } from "lucide-react";
 
 //ui
 import {
@@ -17,12 +19,14 @@ import {
 //next
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const manages = [
   {
     title: "จัดการคนไข้",
-    url: "#",
+    url: "/newcard",
     icon: UsersRound,
   },
   {
@@ -74,13 +78,22 @@ const settings = [
 ];
 
 export function AppSidebar() {
+
+  const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton>
-              <Apple />
+              <Image
+                src="/favicon.ico"
+                height={25}
+                width={25}
+                alt="Dental-clinic-system"
+                className="rounded-md"
+              />
               <span>DentalClinicSystem</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -93,7 +106,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {manages.map((manage) => (
                 <SidebarMenuItem key={manage.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild variant={pathname === manage.url ? "amethyst" : "default"}>
                     <Link href={manage.url} className="flex items-center gap-3">
                       <manage.icon className="size-20" />
                       <span>{manage.title}</span>
@@ -134,9 +147,18 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton>
-              <Link href="#" className="flex items-center gap-3">
-                <Apple />
-                <span>DentalClinicSystem</span>
+              <Link href="#" className="flex items-center gap-3 w-full">
+                <Image
+                  src="/ceo.png"
+                  height={25}
+                  width={25}
+                  alt="Designer-profile"
+                  className="rounded-md"
+                />
+                <div className="flex flex-col ">
+                  <span>Poraparint</span>
+                  <span className="text-muted-foreground text-sm">Creator</span>
+                </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

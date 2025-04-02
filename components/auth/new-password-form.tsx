@@ -11,7 +11,7 @@ import { FormSuccess } from "@/components/form-success";
 import { NewPasswordSchema } from "@/schemas";
 
 //action
-import { newPassword } from "@/actions/new-password";
+import { newPassword } from "@/actions/auth/new-password";
 
 //ui
 import {

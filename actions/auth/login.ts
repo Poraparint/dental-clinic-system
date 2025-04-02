@@ -1,5 +1,8 @@
 "use server";
 
+//database
+import { db } from "@/lib/db";
+
 import * as z from "zod";
 
 import { AuthError } from "next-auth";
@@ -14,7 +17,7 @@ import {
   generateTwoFacterToken,
 } from "@/lib/tokens";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
-import { db } from "@/lib/db";
+
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 export const login = async (

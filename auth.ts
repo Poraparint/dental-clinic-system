@@ -30,27 +30,30 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
-      //Allow Oauth without email verification
+      //อนุญาตให้ OAuth ล็อกอินโดยไม่ต้องยืนยันอีเมล
       if (account?.provider !== "credentials") return true;
 
+      // ถ้าไม่มี user.id ให้ปฏิเสธการล็อกอิน
       if (!user.id) return false;
 
       const existingUser = await getUserById(user.id);
 
-      //Prevent sign in without email verification
+      // ป้องกันการล็อกอินหากยังไม่ยืนยันอีเมล
       if (!existingUser?.emailVerified) return false;
 
-      //Add 2FA check
+      // ตรวจสอบ 2FA
       if (existingUser.isTwoFactorEnabled) {
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
 
         if (!twoFactorConfirmation) return false;
 
-        //Delete two factor confirmation for next sign in
+        // ลบ confirmation เพื่อใช้ในครั้งต่อไป
         await db.twoFactorConfirmation.delete({
           where: {
-            id: twoFactorConfirmation.id
-          }
+            id: twoFactorConfirmation.id,
+          },
         });
       }
 

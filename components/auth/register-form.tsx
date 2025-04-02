@@ -10,7 +10,7 @@ import { FormSuccess } from "@/components/form-success";
 import { RegisterSchema } from "@/schemas";
 
 //action
-import { register } from "@/actions/register";
+import { register } from "@/actions/auth/register";
 
 //ui
 import {
@@ -34,7 +34,7 @@ export const RegisterForm = () => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name:"",
+      name: "",
       email: "",
       password: "",
     },
@@ -118,12 +118,7 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button
-            typeof="submit"
-            className="w-full"
-            
-            disabled={isPending}
-          >
+          <Button typeof="submit" className="w-full" disabled={isPending}>
             Create an account
           </Button>
         </form>

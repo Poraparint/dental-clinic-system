@@ -12,7 +12,7 @@ import { FormSuccess } from "@/components/form-success";
 import { LoginSchema } from "@/schemas";
 
 //action
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 
 //ui
 import {
@@ -36,6 +36,7 @@ export const LoginForm = () => {
       ? "Email already in use with different provider!"
       : "";
   const [showTwoFactor, setShowTwoFactor] = useState(false);
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -96,7 +97,6 @@ export const LoginForm = () => {
                         {...field}
                         disabled={isPending}
                         placeholder="123456"
-                        
                       />
                     </FormControl>
                     <FormMessage />
