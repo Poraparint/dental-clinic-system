@@ -10,7 +10,7 @@ import { FormSuccess } from "@/components/form-success";
 import { ResetSchema } from "@/schemas";
 
 //action
-import { reset } from "@/actions/reset";
+import { reset } from "@/actions/auth/reset";
 
 //ui
 import {

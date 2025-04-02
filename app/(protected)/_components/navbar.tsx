@@ -5,26 +5,27 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { UserButton } from "@/components/auth/user-button";
 
+const lists = [
+  {
+    title: "server",
+    url: "/server",
+  },
+  {
+    title: "client",
+    url: "/client",
+  },
+  {
+    title: "admin",
+    url: "/admin",
+  },
+  {
+    title: "settings",
+    url: "/settings",
+  },
+];
+
 export const Navbar = () => {
   const pathname = usePathname();
-  const lists = [
-    {
-      title: "server",
-      url: "/server",
-    },
-    {
-      title: "client",
-      url: "/client",
-    },
-    {
-      title: "admin",
-      url: "/admin",
-    },
-    {
-      title: "settings",
-      url: "/settings",
-    },
-  ];
 
   const currentPage = lists.find((list) => list.url === pathname);
 

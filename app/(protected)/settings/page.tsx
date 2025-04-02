@@ -182,15 +182,18 @@ const SettingsPage = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
-                        <SelectItem value={UserRole.USER}>User</SelectItem>
+                        <SelectItem value={UserRole.BUILDER}>
+                          BUILDER
+                        </SelectItem>
+                        <SelectItem value={UserRole.USER}>USER</SelectItem>
+                        <SelectItem value={UserRole.WORKER}>WORKER</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {user?.isOAuth === false && (
+              {user?.isOAuth !== true && (
                 <FormField
                   control={form.control}
                   name="isTwoFactorEnabled"
