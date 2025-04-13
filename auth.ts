@@ -1,21 +1,23 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-
-import authConfig from "./auth.config";
+import authConfig from "@/auth.config";
 import { db } from "@/lib/db";
-import { getUserById } from "@/data/user";
-import { UserRole } from "@prisma/client";
+import { CompanyRole } from "@prisma/client";
 
-import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
-import { getAccountByUserId } from "@/data/account";
+//manager
+import { getManagerById } from "@/data/manager";
+import { getAccountByManagerId } from "@/data/account";
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-  
-} = NextAuth({
+//member
+import { getMemberById } from "@/data/member";
+
+//2FA
+import {
+  getTwoFactorConfirmationByManagerId,
+  getTwoFactorConfirmationByMemberId,
+} from "@/data/two-factor-confirmation";
+
+export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/auth/login",
     error: "/auth/error",
@@ -24,9 +26,9 @@ export const {
     async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerified: new Date()}
-      })
-    }
+        data: { emailVerified: new Date() },
+      });
+    },
   },
   callbacks: {
     async signIn({ user, account }) {
@@ -36,25 +38,41 @@ export const {
       // ถ้าไม่มี user.id ให้ปฏิเสธการล็อกอิน
       if (!user.id) return false;
 
-      const existingUser = await getUserById(user.id);
+      const existingManager = await getManagerById(user.id);
+      const existingMember = await getMemberById(user.id);
+
+      const CompanyAccess = existingManager || existingMember;
 
       // ป้องกันการล็อกอินหากยังไม่ยืนยันอีเมล
-      if (!existingUser?.emailVerified) return false;
+      if (!existingManager?.emailVerified) return false;
+
+      if (!CompanyAccess) return false;
 
       // ตรวจสอบ 2FA
-      if (existingUser.isTwoFactorEnabled) {
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-          existingUser.id
-        );
+      if (CompanyAccess.isTwoFactorEnabled) {
+        if (existingManager) {
+          const twoFactorConfirmation =
+            await getTwoFactorConfirmationByManagerId(CompanyAccess.id);
 
-        if (!twoFactorConfirmation) return false;
+          if (!twoFactorConfirmation) return false;
 
-        // ลบ confirmation เพื่อใช้ในครั้งต่อไป
-        await db.twoFactorConfirmation.delete({
-          where: {
-            id: twoFactorConfirmation.id,
-          },
-        });
+          // ลบ confirmation เพื่อใช้ในครั้งต่อไป
+          await db.twoFactorConfirmation.delete({
+            where: {
+              id: twoFactorConfirmation.id,
+            },
+          });
+        } else if (existingMember) {
+          const twoFactorConfirmation =
+            await getTwoFactorConfirmationByMemberId(CompanyAccess.id);
+
+          if (!twoFactorConfirmation) return false;
+
+          // ลบ confirmation เพื่อใช้ในครั้งต่อไป
+          await db.memberTwoFactorConfirmation.delete({
+            where: { id: twoFactorConfirmation.id },
+          });
+        }
       }
 
       return true;
@@ -62,10 +80,6 @@ export const {
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
-      }
-
-      if (token.role && session.user) {
-        session.user.role = token.role as UserRole;
       }
 
       if (session.user) {
@@ -78,24 +92,38 @@ export const {
         session.user.isOAuth = token.isOAuth as boolean;
       }
 
+      if (session.user) {
+        session.user.role = token.role as CompanyRole;
+      }
+
       return session;
     },
 
     async jwt({ token }) {
+      //ไม่มี id = logout
       if (!token.sub) return token;
-      const existingUser = await getUserById(token.sub);
 
-      if (!existingUser) return token;
+      const existingManager = await getManagerById(token.sub);
+      const existingMember = await getMemberById(token.sub);
 
-      const existingAccount = await getAccountByUserId(
-        existingUser.id
-      );
+      const CompanyAccess = existingManager || existingMember;
+
+      if (!CompanyAccess) return token;
+
+      const existingAccount = await getAccountByManagerId(existingManager.id);
 
       token.isOAuth = !!existingAccount;
-      token.name = existingUser.name;
-      token.email = existingUser.email;
-      token.role = existingUser.role;
-      token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.name = CompanyAccess.name;
+      token.email = CompanyAccess.email;
+      token.isTwoFactorEnabled = CompanyAccess.isTwoFactorEnabled;
+
+      if (existingManager) {
+        token.role = CompanyRole.MANAGER;
+      } else if (existingMember) {
+        token.role = existingMember.role;
+      } else {
+        token.role = CompanyRole.PENDING;
+      }
 
       return token;
     },

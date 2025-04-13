@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import * as z from "zod";
 import { NewPasswordSchema } from "@/schemas";
 import { getPasswordResetTokenByToken } from "@/data/password-reset-token";
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail } from "@/data/manager";
 import { db } from "@/lib/db";
 
 export const newPassword = async (
@@ -50,8 +50,8 @@ export const newPassword = async (
 
   await db.passwordResetToken.delete({
     where: {
-      id: existingToken.id
-    }
+      id: existingToken.id,
+    },
   });
 
   return { success: "Password updated!" };
