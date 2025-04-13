@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { db } from "@/lib/db";
 import { SettingSchema } from "@/schemas";
-import { getUserByEmail, getUserById } from "@/data/user";
+import { getUserByEmail, getUserById } from "@/data/manager";
 import { currentUser } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
@@ -36,12 +36,10 @@ export const settings = async (values: z.infer<typeof SettingSchema>) => {
       return { error: "Email already in use!" };
     }
 
-    const verificationToken = await generateVerificationToken(
-      values.email
-    );
+    const verificationToken = await generateVerificationToken(values.email);
     await sendVerificationEmail(
       verificationToken.email,
-      verificationToken.token,
+      verificationToken.token
     );
 
     return { success: "Verification email sent!" };
@@ -50,16 +48,14 @@ export const settings = async (values: z.infer<typeof SettingSchema>) => {
   if (values.password && values.newPassword && dbUser.password) {
     const passwordMatch = await bcrypt.compare(
       values.password,
-      dbUser.password,
+      dbUser.password
     );
 
     if (!passwordMatch) {
       return { error: "Incorrect password!" };
     }
 
-    const hashedPassword = await bcrypt.hash(
-      values.newPassword, 10,
-    );
+    const hashedPassword = await bcrypt.hash(values.newPassword, 10);
     values.password = hashedPassword;
     values.newPassword = undefined;
   }

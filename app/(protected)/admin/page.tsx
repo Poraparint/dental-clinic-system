@@ -4,7 +4,7 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 import { RoleGate } from "@/components/auth/role-gate";
-import { UserRole } from "@prisma/client";
+import { CompanyRole } from "@prisma/client";
 import { FormSuccess } from "@/components/form-success";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ const AdminPage = () => {
         <p>Admin</p>
       </CardHeader>
       <CardContent>
-        <RoleGate allowedRole={UserRole.BUILDER}>
+        <RoleGate allowedRole={CompanyRole.CEO}>
           <FormSuccess message="Your are allowed to see this content!" />
         </RoleGate>
         <div className="flex justify-between p-3 border">

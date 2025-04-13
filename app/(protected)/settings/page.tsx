@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/form";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserRole } from "@prisma/client";
+import { UserButton } from "@/components/auth/user-button";
 
 const SettingsPage = () => {
   const user = useCurrentUser();
@@ -83,6 +84,7 @@ const SettingsPage = () => {
     <Card>
       <CardHeader>
         <p className="text-2xl font-semibold text-center">Settings</p>
+        <UserButton/>
       </CardHeader>
       <CardContent>
         <Form {...form}>

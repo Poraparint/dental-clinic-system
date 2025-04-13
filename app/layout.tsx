@@ -2,21 +2,10 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 
-//providers
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
-
-//cookies
-import { cookies } from "next/headers";
-
-//next-themes
-import { ThemeProvider } from "@/theme/theme-provider";
-
 //ui
 import { Toaster } from "@/components/ui/sonner";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/components/app-sidebar";
-import { Navbar } from "./components/navbar";
+import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 
 const kanit = Kanit({
   subsets: ["thai", "latin"],
@@ -34,35 +23,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${kanit.className} antialiased flex h-screen overflow-hidden`}
-        >
+        <body className={`${kanit.className} antialiased `}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <SidebarProvider defaultOpen={defaultOpen}>
-              <div className="flex w-screen h-full">
-                {/* Sidebar */}
-                <AppSidebar />
-
-                {/* Main Content */}
-                <main className="flex flex-1 flex-col overflow-auto">
-                  <Navbar />
-                  <Toaster/>
-                  <div className="p-4">{children}</div>
-                </main>
-              </div>
-            </SidebarProvider>
+            <Toaster />
+            {children}
           </ThemeProvider>
         </body>
       </html>

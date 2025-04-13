@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
 
-export const getTwoFactorConfirmationByUserId = async (userId: string) => {
+export const getTwoFactorConfirmationByManagerId = async (managerId: string) => {
   try {
     const twoFactorConfirmation = await db.twoFactorConfirmation.findUnique({
-      where: { userId },
+      where: { managerId },
     });
 
     return twoFactorConfirmation;
@@ -11,3 +11,14 @@ export const getTwoFactorConfirmationByUserId = async (userId: string) => {
     return null;
   }
 };
+
+export const getTwoFactorConfirmationByMemberId = async (memberId: string) => {
+  try {
+    const twoFactorConfirmation = await db.memberTwoFactorConfirmation.findUnique({
+      where:{memberId},
+    })
+    return twoFactorConfirmation;
+  } catch {
+    return null;
+  }
+}
