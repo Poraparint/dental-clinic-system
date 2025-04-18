@@ -1,42 +1,35 @@
-import { auth } from "@/auth";
-
-//cookies
-import { cookies } from "next/headers";
-
-//bar
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "../_components/app-sidebar";
-import { Navbar } from "../_components/navbar";
+import { getCompanyByManagerId } from "@/data/company";
+import { currentManagerId } from "@/lib/auth";
+import { notFound } from "next/navigation";
 
 type CompanyLayoutProps = {
   children: React.ReactNode;
-  params: { companyId: string };
+  params: Promise<{ companyId: string; managerId: string }>;
 };
 
 export default async function CompanyLayout({
   children,
+  params,
 }: CompanyLayoutProps) {
-
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-  const session = await auth();
-
-  if (!session?.user) {
-    return { error: "Unauthentication" };
+  try {
+    const { companyId } = await params;
+    console.log("Company ID:", companyId);
+    const managerId = await currentManagerId();
+    
+    console.log("Manager ID:", managerId);
+    if (!companyId) {
+      console.error("Company ID is undefined");
+      notFound();
+    }
+    const company = await getCompanyByManagerId(companyId, managerId);
+    if (!company) {
+      console.error("Company not found for the given companyId and managerId");
+      notFound();
+    }
+  } catch (error) {
+    console.error("Error in CompanyLayout:", error);
+    return null;
   }
 
-  return (
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <div className="flex w-screen h-full">
-        {/* Sidebar */}
-        <AppSidebar />
-
-        {/* Main Content */}
-        <main className="flex flex-1 flex-col overflow-auto">
-          <Navbar />
-          <div className="p-4">{children}</div>
-        </main>
-      </div>
-    </SidebarProvider>
-  );
+  return <>{children}</>;
 }

@@ -61,7 +61,7 @@
   
   /* สีน้ำเงิน (Lapis Lazuli โทน) */
   --lapis: oklch(0.5 0.1 250);
-  --lapis-foreground: oklch(0.98 0.01 250);
+  --lapis-foreground: oklch(0.87 0.0444 250);
   --lapis-accent: oklch(0.6 0.12 245);
   
   /* สีฟ้า (Aquamarine โทน) */
@@ -98,7 +98,7 @@
   
   /* สีน้ำเงิน (Lapis Lazuli โทน - Dark Mode) */
   --lapis: oklch(0.4 0.12 255);
-  --lapis-foreground: oklch(0.95 0.01 255);
+  --lapis-foreground: oklch(0.87 0.0444 250);
   --lapis-accent: oklch(0.5 0.14 250);
   
   /* สีฟ้า (Aquamarine โทน - Dark Mode) */

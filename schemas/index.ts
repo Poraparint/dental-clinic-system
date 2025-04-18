@@ -62,13 +62,17 @@ export const RegisterSchema = z.object({
   password: z.string().min(6, {
     message: "Minimum 6 characters required",
   }),
-  username: z.string().min(1, {
+  name: z.string().min(1, {
     message: "Name is required",
   }),
-  companyname: z.string().min(1, {
-    message: "Company name is required",
-  })
 });
+
+export const CreateCompanySchema = z.object({
+  name: z.string().min(1, {
+    message: "Ministry name is required",
+  }),
+  description: z.optional(z.string()),
+})
 
 export const MemberLoginSchema = z.object({
   email: z.string().email({

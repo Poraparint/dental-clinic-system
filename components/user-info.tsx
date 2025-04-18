@@ -4,12 +4,12 @@ import { ExtendedUser } from "@/next-auth";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-interface UserInfoProps {
-  user?: ExtendedUser;
+interface ManagerInfoProps {
+  manager?: ExtendedUser;
   label: string;
 }
 
-export const UserInfo = ({ user, label }: UserInfoProps) => {
+export const UserInfo = ({ manager, label }: ManagerInfoProps) => {
   return (
     <Card>
       <CardHeader>
@@ -18,23 +18,27 @@ export const UserInfo = ({ user, label }: UserInfoProps) => {
       <CardContent>
         <div className="flex justify-between truncate">
           <p>ID :</p>
-          <p>{user?.id}</p>
+          <p>{manager?.id}</p>
         </div>
         <div className="flex justify-between truncate">
           <p>Name :</p>
-          <p>{user?.name}</p>
+          <p>{manager?.name}</p>
         </div>
         <div className="flex justify-between truncate">
           <p>Email :</p>
-          <p>{user?.email}</p>
+          <p>{manager?.email}</p>
         </div>
         <div className="flex justify-between truncate">
           <p>Role :</p>
-          <p>{user?.role}</p>
+          <p>{manager?.role}</p>
         </div>
         <div className="flex justify-between truncate">
           <p>2FA :</p>
-          <Badge variant={user?.isTwoFactorEnabled ? "secondary" : "destructive"}>{user?.isTwoFactorEnabled ? "ON" : "OFF"}</Badge>
+          <Badge
+            variant={manager?.isTwoFactorEnabled ? "secondary" : "destructive"}
+          >
+            {manager?.isTwoFactorEnabled ? "ON" : "OFF"}
+          </Badge>
         </div>
       </CardContent>
     </Card>

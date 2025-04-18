@@ -25,7 +25,11 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      const ManagerId = req.auth?.user;
+      const redirectUrl = ManagerId
+        ? `${DEFAULT_LOGIN_REDIRECT}/ministry`
+        : "/";
+      return NextResponse.redirect(new URL(redirectUrl, nextUrl));
     }
     return NextResponse.next();
   }

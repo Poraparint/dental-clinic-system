@@ -6,7 +6,7 @@ import { CompanyRole } from "@prisma/client";
 export const admin = async () => {
     const role = await currentRole();
 
-    if (role === CompanyRole.CEO) {
+    if (role === CompanyRole.MANAGER) {
       return { success: "Allowed Server Action!" };
     }
 
