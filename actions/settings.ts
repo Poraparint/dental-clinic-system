@@ -3,20 +3,20 @@
 import * as z from "zod";
 import { db } from "@/lib/db";
 import { SettingSchema } from "@/schemas";
-import { getUserByEmail, getUserById } from "@/data/manager";
-import { currentUser } from "@/lib/auth";
+import { getManagerByEmail, getManagerById } from "@/data/manager";
+import { currentManager } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import bcrypt from "bcryptjs";
 
 export const settings = async (values: z.infer<typeof SettingSchema>) => {
-  const user = await currentUser();
+  const user = await currentManager();
 
   if (!user) {
     return { error: "Unauthorized!" };
   }
 
-  const dbUser = await getUserById(user.id);
+  const dbUser = await getManagerById(user.id);
 
   if (!dbUser) {
     return { error: "Unauthorized!" };
@@ -30,7 +30,7 @@ export const settings = async (values: z.infer<typeof SettingSchema>) => {
   }
 
   if (values.email && values.email !== user.email) {
-    const existingUser = await getUserByEmail(values.email);
+    const existingUser = await getManagerByEmail(values.email);
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: "Email already in use!" };

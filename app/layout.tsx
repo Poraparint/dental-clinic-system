@@ -23,11 +23,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
+  
   return (
     <SessionProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={`${kanit.className} antialiased `}>
+          
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -36,7 +37,8 @@ export default async function RootLayout({
           >
             <Toaster />
             {children}
-          </ThemeProvider>
+            </ThemeProvider>
+          
         </body>
       </html>
     </SessionProvider>

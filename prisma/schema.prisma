@@ -29,7 +29,7 @@ model Company {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  managerId      String   @unique
+  managerId      String   
   manager        User     @relation(fields: [managerId], references: [id])
   members     Member[]
 }
@@ -38,13 +38,17 @@ model User {
   name                  String?
   email                 String?                @unique
   emailVerified         DateTime?
+  phone                 String?
   image                 String?
   password              String?
   role                  CompanyRole            @default(MANAGER)
   accounts              Account[]
-  isTwoFactorEnabled    Boolean                @default(true)
+  isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  company               Company?
+  companies               Company[]
+  members               Member[]
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
 
 model Member{
@@ -52,8 +56,10 @@ model Member{
   name                  String?
   email                 String   @unique
   emailVerified         DateTime?
+  phone                 String?
   image                 String?
   password              String?
+  memberCode            String
   role                  CompanyRole @default(PENDING)
   isTwoFactorEnabled    Boolean                @default(true)
   twoFactorConfirmation MemberTwoFactorConfirmation?
@@ -61,6 +67,11 @@ model Member{
   company               Company @relation(fields: [companyId], references: [id])
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
+  createdBy             String
+  createdByUserId       User @relation(fields: [createdBy], references: [id])
+  status                String? @default("ACTIVE")
+  @@index([companyId])
+  @@index([email])    
 
   @@unique([email, companyId])
 }

@@ -26,8 +26,8 @@ import { Button } from "@/components/ui/button";
 
 //props
 import { CardWrapper } from "@/components/props/card-wrapper";
-import { FormCategory } from "../../props/form-category";
-import { Hospital, User } from "lucide-react";
+import { CardCategory } from "@/components/props/card-category";
+import { User } from "lucide-react";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -37,10 +37,9 @@ export const RegisterForm = () => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
-      companyname: "",
     },
   });
 
@@ -67,11 +66,11 @@ export const RegisterForm = () => {
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-          <FormCategory icon={<User />} title="ข้อมูลผู้ใช้">
+          <CardCategory icon={<User />} title="ข้อมูลผู้ใช้">
             <div className="space-y-3">
               <FormField
                 control={form.control}
-                name="username"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Name</FormLabel>
@@ -123,26 +122,8 @@ export const RegisterForm = () => {
                 )}
               />
             </div>
-          </FormCategory>
-          <FormCategory icon={<Hospital />} title="ข้อมูลบริษัท">
-            <FormField
-              control={form.control}
-              name="companyname"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Clinic-name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="your-clinic-name"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </FormCategory>
+          </CardCategory>
+          
 
           <FormError message={error} />
           <FormSuccess message={success} />

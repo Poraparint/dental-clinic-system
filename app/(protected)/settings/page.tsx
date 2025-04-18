@@ -8,15 +8,6 @@ import { SettingSchema } from "@/schemas";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-//ui
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { FormSuccess } from "@/components/form-success";
 import { FormError } from "@/components/form-error";
@@ -34,7 +25,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { UserRole } from "@prisma/client";
 import { UserButton } from "@/components/auth/user-button";
 
 const SettingsPage = () => {
@@ -52,7 +42,6 @@ const SettingsPage = () => {
       newPassword: undefined,
       name: user?.name || undefined,
       email: user?.email || undefined,
-      role: user?.role || undefined,
       isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
     },
   });
@@ -166,35 +155,6 @@ const SettingsPage = () => {
                   />
                 </>
               )}
-
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Role</FormLabel>
-                    <Select
-                      disabled={isPending}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={UserRole.BUILDER}>
-                          BUILDER
-                        </SelectItem>
-                        <SelectItem value={UserRole.USER}>USER</SelectItem>
-                        <SelectItem value={UserRole.WORKER}>WORKER</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               {user?.isOAuth !== true && (
                 <FormField
                   control={form.control}

@@ -1,6 +1,6 @@
 "use client";
 //icons
-import { User, LogOutIcon } from "lucide-react";
+import { User, LogOutIcon, House } from "lucide-react";
 //ui
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/manager/logout-button";
+import Link from "next/link";
 
 export const UserButton = () => {
   const user = useCurrentUser();
@@ -27,6 +28,15 @@ export const UserButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
+        <DropdownMenuItem>
+          <User />
+          {user?.name || "USER"}
+        </DropdownMenuItem>
+        <Link href="/dashboard/ministry">
+        <DropdownMenuItem>
+          <House />
+          แดชบอร์ด
+        </DropdownMenuItem></Link>
         <LogoutButton>
           <DropdownMenuItem>
             <LogOutIcon />

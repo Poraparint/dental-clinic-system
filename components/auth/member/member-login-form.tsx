@@ -9,7 +9,7 @@ import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { LoginSchema } from "@/schemas";
+import { MemberLoginSchema } from "@/schemas";
 
 //action
 import { login } from "@/actions/auth/login";
@@ -28,33 +28,30 @@ import { Button } from "@/components/ui/button";
 
 import { CardWrapper } from "@/components/props/card-wrapper";
 
-export const LoginForm = () => {
+export const MemberLoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
   const [showTwoFactor, setShowTwoFactor] = useState(false);
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof MemberLoginSchema>>({
+    resolver: zodResolver(MemberLoginSchema),
     defaultValues: {
       email: "",
       password: "",
+      memberid: "",
     },
   });
 
-  const OnSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const OnSubmit = (values: z.infer<typeof MemberLoginSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(() => {
-      login(values, callbackUrl)
+      login.member(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
@@ -76,10 +73,10 @@ export const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      headerDescription="Sign in to access your clinic management dashboard"
-      backButtonLabel="Dont have an account"
-      backButtonHref="/auth/register"
+      headerLabel="Login with your account"
+      headerDescription="Sign in to access your clinic"
+      backButtonHref=""
+      backButtonLabel=""
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
@@ -153,7 +150,7 @@ export const LoginForm = () => {
               </>
             )}
           </div>
-          <FormError message={error || urlError} />
+          <FormError message={error} />
           <FormSuccess message={success} />
           <Button
             typeof="submit"
