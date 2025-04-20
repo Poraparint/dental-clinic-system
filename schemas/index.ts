@@ -107,9 +107,7 @@ export const CreatePatientSchema = z.object({
     message: "Name is required",
   }),
   phone: z.optional(
-    z.string().min(6, {
-      message: "Minimum 4 characters required",
-    })
+    z.string(),
   ),
   age: z.optional(z.number()),
   address: z.optional(z.string()),

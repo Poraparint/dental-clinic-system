@@ -108,7 +108,8 @@ export const CreateMinistryForm = ({ setOpen }: CreateMinistryFormProps) => {
         <FormSuccess message={success} />
         <Button
           typeof="submit"
-          className="w-full py-7 mt-7 text-base"
+          className="flex justify-self-end px-9"
+          size="lg"
           disabled={isPending}
         >
           Create Ministry

@@ -36,7 +36,6 @@ model Company {
   transactions Transaction[]
   transactionCategories TransactionCategory[]
   isDeleted   Boolean  @default(false)
-  @@unique([managerId])
 }
 model User {
   id                    String                 @id @default(uuid())
