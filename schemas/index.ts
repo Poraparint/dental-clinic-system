@@ -101,3 +101,21 @@ export const MemberRegisterSchema = z.object({
     message: "Minimum 4 characters required",
   }),
 });
+
+export const CreatePatientSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  phone: z.optional(
+    z.string().min(6, {
+      message: "Minimum 4 characters required",
+    })
+  ),
+  age: z.optional(z.number()),
+  address: z.optional(z.string()),
+  job: z.optional(z.string()),
+  work: z.optional(z.string()),
+  worktel: z.optional(z.string()),
+  cd: z.optional(z.string()),
+  drug: z.optional(z.string()),
+});

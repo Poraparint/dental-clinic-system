@@ -32,6 +32,11 @@ model Company {
   managerId      String   
   manager        User     @relation(fields: [managerId], references: [id])
   members     Member[]
+  patients    Patient[]
+  transactions Transaction[]
+  transactionCategories TransactionCategory[]
+  isDeleted   Boolean  @default(false)
+  @@unique([managerId])
 }
 model User {
   id                    String                 @id @default(uuid())
@@ -47,6 +52,7 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   companies               Company[]
   members               Member[]
+  transactionCategories TransactionCategory[]
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
@@ -67,9 +73,10 @@ model Member{
   company               Company @relation(fields: [companyId], references: [id])
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
-  createdBy             String
-  createdByUserId       User @relation(fields: [createdBy], references: [id])
+  managerId          String
+  manager       User @relation(fields: [managerId], references: [id])
   status                String? @default("ACTIVE")
+  isDeleted Boolean @default(false)
   @@index([companyId])
   @@index([email])    
 
@@ -136,5 +143,61 @@ model MemberTwoFactorConfirmation {
   member   Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
 
   @@unique([memberId])
+}
+
+model TransactionCategory{
+  id String @id @default(cuid())
+  name String
+  managerId String
+  user User @relation(fields: [managerId], references: [id])
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  transactions Transaction[]
+  isDeleted Boolean @default(false)
+  @@unique([managerId])
+}
+
+model Patient{
+  id String @id @default(cuid())
+  name String @unique
+  phone String?
+  age Int?
+  address String?
+  job String?
+  work String?
+  worktel String?
+  cd String?
+  drug String?
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
+  createdById String
+  createdByType CompanyRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
+  transactions Transaction[]
+  @@index([name, phone, job])
+  @@index([createdById, createdByType])
+}
+
+model Transaction{
+  id String @id @default(cuid())
+  datetime DateTime @default(now())
+  name String
+  detail String?
+  price Float
+  paid Float
+  patientId String
+  patient Patient @relation(fields: [patientId], references: [id])
+  transactionCategoryId String
+  transactionCategory TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
+  createdById String
+  createdByType CompanyRole
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 

@@ -21,7 +21,7 @@ export const CardMinistry = ({
       href={linkname || "#"}
       className="cursor-pointer block transition-all duration-200 hover:transform"
     >
-      <Card className="hover:border-foreground/20 hover:shadow-md transition-all size-full border-2">
+      <Card className="bg-primary-foreground hover:border-foreground/20 hover:shadow-md transition-all size-full border-2">
         <CardHeader>
           <CardTitle>{name}</CardTitle>
           <CardDescription>{description}</CardDescription>

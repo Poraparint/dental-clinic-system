@@ -479,7 +479,7 @@ const sidebarMenuButtonVariants = cva(
     variants: {
       variant: {
         default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-        amethyst: "bg-lapis text-lapis-foreground hover:bg-lapis/90 hover:text-white",
+        lapis: "bg-lapis hover:bg-lapis/90 text-white hover:text-white/90",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },

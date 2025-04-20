@@ -8,12 +8,14 @@ import {
   publicRoutes,
   authRoutes,
 } from "@/routes";
+import { CompanyRole } from "@prisma/client";
 
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const { nextUrl } = req;
-  const isLoggedIn = !!req.auth;
+  const isLoggedIn = !!req.auth?.user;
+  const companyRole = req.auth?.user?.role;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -25,8 +27,7 @@ export default auth((req) => {
 
   if (isAuthRoute) {
     if (isLoggedIn) {
-      const ManagerId = req.auth?.user;
-      const redirectUrl = ManagerId
+      const redirectUrl = companyRole === CompanyRole.MANAGER
         ? `${DEFAULT_LOGIN_REDIRECT}/ministry`
         : "/";
       return NextResponse.redirect(new URL(redirectUrl, nextUrl));
