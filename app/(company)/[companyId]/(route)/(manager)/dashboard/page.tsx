@@ -1,9 +1,17 @@
 import { UserInfo } from "@/components/user-info";
 import { currentManager } from "@/lib/auth";
 
-export default async function DashboardPage() {
+interface DashboardPageProps { 
+  params: {
+    companyId: string;
+  };
+ }
+
+export default async function DashboardPage({params}: DashboardPageProps) {
 
   const manager = await currentManager();
+
+  const companyId = await params.companyId;
 
   return (
     <div>
@@ -13,7 +21,7 @@ export default async function DashboardPage() {
       {/* ตัวอย่างข้อมูลที่อาจจะโหลด */}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="border p-4 rounded shadow">
-          <h3 className="font-semibold text-lg">Todays Appointments</h3>
+          <h3 className="font-semibold text-lg">{companyId}</h3>
         </div>
         <div className="border p-4 rounded shadow">
           <h3 className="font-semibold text-lg">Revenue</h3>

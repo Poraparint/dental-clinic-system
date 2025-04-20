@@ -17,13 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormError } from "../form-error";
-import { FormSuccess } from "../form-success";
+import { FormError } from "@/components/form-error";
+import { FormSuccess } from "@/components/form-success";
 
 import { CreateCompanySchema } from "@/schemas";
 
 //actions
-import { createCompany } from "@/actions/manager/company";
+import { createCompany } from "@/actions/company/manager/company";
 import { CardCategory } from "@/components/props/card-category";
 import { User } from "lucide-react";
 import { useRouter } from "next/navigation";

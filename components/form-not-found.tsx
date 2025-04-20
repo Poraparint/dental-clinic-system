@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { IconButton } from "./props/dialog-button";
+import { LinkButton } from "@/components/props/link-button";
 
 interface FormNotFoundProps {
   message?: string;
@@ -35,7 +35,7 @@ export const FormNotFound = ({
         </div>
       </CardHeader>
       <CardContent>
-        <IconButton icon={<Plus />} title={urlname || ""} url={url || "#"} />
+        <LinkButton icon={<Plus />} title={urlname || ""} url={url || "#"} />
       </CardContent>
     </Card>
   );

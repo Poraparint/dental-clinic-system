@@ -1,11 +1,11 @@
 "use server";
-import { currentManagerId } from "@/lib/auth"
+import { currentManager } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 export const ShowMinistrys = async () => {
   try {
-      const existingManager = await currentManagerId();
-      
+    const existingManager = await currentManager();
+
     if (!existingManager) {
       return {
         data: [],
@@ -14,9 +14,8 @@ export const ShowMinistrys = async () => {
     }
 
     const companys = await db.company.findMany({
-      where: { managerId: existingManager },
+      where: { managerId: existingManager.id },
     });
-      
 
     if (companys.length === 0) {
       return {

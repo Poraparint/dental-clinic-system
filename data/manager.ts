@@ -8,13 +8,8 @@ export const getManagerByEmail = async (email: string) => {
         companies: true,
       },
     });
-    if (manager?.role !== "MANAGER") {
-      return null; // ไม่ใช่ Manager
-    }
-
     return manager;
-  } catch (error) {
-    console.error(`Error fetching manager by email (${email}):`, error);
+  } catch {
     return null;
   }
 };
@@ -28,9 +23,7 @@ export const getManagerById = async (id: string) => {
         accounts: true,
       },
     });
-    if (manager?.role !== "MANAGER") {
-      return null; // ไม่ใช่ Manager
-    }
+    
     return manager;
   } catch {
     return null;

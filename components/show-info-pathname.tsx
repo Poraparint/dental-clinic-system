@@ -17,6 +17,6 @@ export const ShowInfoPathname = () => {
   const currentMenu = allMenus.find((menu) => menu.url(companyId) === pathname);
 
   return (
-    <div>{currentMenu ? <span>{currentMenu.title}</span> : <span></span>}</div>
+    <div>{currentMenu ? <span>{currentMenu.title}</span> : ""}</div>
   );
 };

@@ -1,14 +1,14 @@
 "use client";
 
 import { DialogButton } from "@/components/props/dialog-button";
-import { CreateMinistryForm } from "@/components/companys/create-ministry-form";
+import { CreateMinistryForm } from "@/components/companys/external/create-ministry-form";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 // ตัวอย่างการใช้งาน
-export function DialogCreateMinistry() {
+export const DialogCreateMinistry = () => {
   const [open, setOpen] = useState(false);
-  
+
   return (
     <>
       <DialogButton
@@ -23,4 +23,4 @@ export function DialogCreateMinistry() {
       </DialogButton>
     </>
   );
-}
+};

@@ -13,12 +13,12 @@ function Avatar({
     <AvatarPrimitive.Root
       data-slot="avatar"
       className={cn(
-        "relative flex size-9 shrink-0 overflow-hidden rounded-full",
+        "relative flex size-9 shrink-0 overflow-hidden rounded-full border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function AvatarImage({

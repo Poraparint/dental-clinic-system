@@ -1,5 +1,5 @@
-import { CompanyCard } from "@/components/companys/company-card";
-import { DialogCreateMinistry } from "../dialog/dialog-create-ministry";
+import { CompanyCard } from "@/components/companys/external/company-card";
+import { DialogCreateMinistry } from "@/components/dialog/external/dialog-create-ministry";
 
 export const Ministry = async () => {
   return (

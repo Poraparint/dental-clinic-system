@@ -115,7 +115,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(manage.url(companyId)) ? "amethyst" : "default"
+                      isActive(manage.url(companyId)) ? "lapis" : "default"
                     }
                   >
                     <Link
@@ -134,7 +134,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(view.url(companyId)) ? "amethyst" : "default"
+                      isActive(view.url(companyId)) ? "lapis" : "default"
                     }
                   >
                     <Link
@@ -153,7 +153,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(setting.url(companyId)) ? "amethyst" : "default"
+                      isActive(setting.url(companyId)) ? "lapis" : "default"
                     }
                   >
                     <Link
