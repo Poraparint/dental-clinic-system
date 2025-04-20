@@ -26,7 +26,7 @@ import { CreatePatientSchema } from "@/schemas";
 
 //actions
 import { CardCategory } from "@/components/props/card-category";
-import { ScanLine, User } from "lucide-react";
+import { Circle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createPatient } from "@/actions/company/public/patient";
 
@@ -34,10 +34,12 @@ interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
 }
 
-export const CreatePatientForm = ({ setOpen }: CreatePatientFormProps) => {
-
-    const params = useParams();
-    const companyId = params.companyId as string;
+export const CreatePatientForm = ({
+  setOpen,
+  onSuccess,
+}: CreatePatientFormProps & { onSuccess?: () => void }) => {
+  const params = useParams();
+  const companyId = params.companyId as string;
 
   const router = useRouter();
 
@@ -74,6 +76,7 @@ export const CreatePatientForm = ({ setOpen }: CreatePatientFormProps) => {
             setSuccess(data.success);
             router.refresh();
             setOpen(false);
+            onSuccess?.();
           }
         })
         .catch(() => setError("Something went wrong!"));
@@ -82,71 +85,20 @@ export const CreatePatientForm = ({ setOpen }: CreatePatientFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <div className="flex">
-          <CardCategory icon={<User />} title="ข้อมูลผู้ใช้">
-            <div className="space-y-3">
+        <CardCategory icon={<Circle size={15} />} title="ข้อมูลหลัก">
+          <div className="grid grid-cols-4 grid-rows-2 gap-2">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>ชื่อ-นามสกุล</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={isPending}
-                        placeholder="Dental-clinic-ministry"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>age</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="age"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>phone</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="phone"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>address</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="address"
+                        placeholder="ชื่อ-นามสกุล"
                       />
                     </FormControl>
                     <FormMessage />
@@ -154,85 +106,168 @@ export const CreatePatientForm = ({ setOpen }: CreatePatientFormProps) => {
                 )}
               />
             </div>
-          </CardCategory>
-          <CardCategory icon={<ScanLine />} title="รายละเอียด">
-            <FormField
-              control={form.control}
-              name="job"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>job</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="job" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="work"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>work</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="work" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="worktel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>worktel</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="worktel"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cd"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>cd</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="cd" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="drug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>drug</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="drug" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardCategory>
-        </div>
+            <div className="col-start-3">
+              <FormField
+                control={form.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>อายุ</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="อายุ"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-start-4">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>เบอร์ติดต่อ</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="000-0000000"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-2 row-start-2">
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ที่อยู่</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="000 หมู่000 ต.ตำบล อ.เมือง, ..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="col-span-2 col-start-3">
+              <FormField
+                control={form.control}
+                name="job"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>อาชีพ</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="นักบิน..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </CardCategory>
+        <CardCategory icon={<Circle size={15} />} title="ข้อมูลเพิ่มเติม">
+          <div className="grid grid-cols-4 grid-rows-2 gap-2">
+            <div className="col-span-2">
+              <FormField
+                control={form.control}
+                name="work"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ที่ทำงาน</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="000 หมู่000 ต.ตำบล อ.เมือง, ..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-2 col-start-3">
+              <FormField
+                control={form.control}
+                name="worktel"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>เบอร์ติดต่อที่ทำงาน</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="000-0000000"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-2 row-start-2">
+              <FormField
+                control={form.control}
+                name="cd"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>โรคประจำตัวปัจจุบัน</FormLabel>
+                    <FormControl>
+                      <Input {...field} disabled={isPending} placeholder="เบาหวาน, โลหิตจาง, ..." />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="col-span-2 col-start-3 row-start-2">
+              <FormField
+                control={form.control}
+                name="drug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ประวัติการแพ้ยา</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="Topen, ..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </CardCategory>
 
         <FormError message={error} />
         <FormSuccess message={success} />
         <Button
+          className="flex justify-self-end px-9"
           typeof="submit"
-          className="w-full py-7 mt-7 text-base"
+          size="lg"
           disabled={isPending}
         >
           เพิ่มบัตรใหม่

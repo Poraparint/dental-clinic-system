@@ -28,6 +28,7 @@ export const DialogContentForm = ({
         </DialogHeader>
         {children}
       </DialogContent>
+      
     </Dialog>
   );
 };

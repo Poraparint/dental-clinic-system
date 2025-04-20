@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CreatePatientForm } from "@/components/companys/internal/patient/patient-form";
 
 // ตัวอย่างการใช้งาน
-export const DialogCreatePatient = () => {
+export const DialogCreatePatient = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,8 +19,8 @@ export const DialogCreatePatient = () => {
         open={open}
         setOpen={setOpen}
       >
-        <CreatePatientForm setOpen={setOpen} />
+        <CreatePatientForm setOpen={setOpen} onSuccess={onSuccess} />
       </DialogButton>
     </>
   );
-}
+};

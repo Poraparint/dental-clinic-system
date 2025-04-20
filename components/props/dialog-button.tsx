@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DialogContentForm } from "@/components/props/dialog-content";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 
 interface DialogButtonProps {
   icon?: React.ReactNode;
@@ -33,6 +34,11 @@ export const DialogButton = ({
         description={dialogDescription}
       >
         {children}
+        <DialogFooter className="absolute bottom-6 right-[30%]">
+          <DialogClose asChild>
+            <Button variant="outline" size="lg">ย้อนกลับ</Button>
+          </DialogClose>
+        </DialogFooter>
       </DialogContentForm>
     </>
   );

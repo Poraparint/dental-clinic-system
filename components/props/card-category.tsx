@@ -16,7 +16,7 @@ export const CardCategory = ({
   return (
     <Card className="border-0 shadow-none">
       <CardHeader>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           {icon}
           <CardTitle>{title}</CardTitle>
         </div>

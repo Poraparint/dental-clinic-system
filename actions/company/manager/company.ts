@@ -25,10 +25,10 @@ export const createCompany = async (values: z.infer<typeof CreateCompanySchema>)
   try {
 
     const existingManager = await currentManager();
-    console.log("Manager ID:", existingManager);
+    console.log("Manager ID:", existingManager.id);
 
     if (!existingManager) {
-      console.warn(`Manager with ID ${existingManager} not found`);
+      console.log(`Manager with ID ${existingManager} not found`);
       return {error: "Manager not found!"};
     }
 
