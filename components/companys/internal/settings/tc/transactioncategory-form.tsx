@@ -1,0 +1,138 @@
+"use client";
+
+import * as z from "zod";
+
+import { useForm } from "react-hook-form";
+import { useTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+//ui
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import { CreateTransactionCategorySchema } from "@/schemas";
+
+//actions
+import { CreateTransactionCategory } from "@/actions/company/manager/transaction-category";
+import { CardCategory } from "@/components/props/card-category";
+import { Album } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+interface CreateTransactionCategoryFormProps {
+  setOpen: (open: boolean) => void;
+}
+
+export const CreateTransactionCategoryForm = ({
+  setOpen,
+}: CreateTransactionCategoryFormProps) => {
+  const params = useParams();
+  const companyId = params.companyId as string;
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<z.infer<typeof CreateTransactionCategorySchema>>({
+    resolver: zodResolver(CreateTransactionCategorySchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+    },
+  });
+
+  const OnSubmit = (
+    values: z.infer<typeof CreateTransactionCategorySchema>
+  ) => {
+   
+
+    startTransition(() => {
+      CreateTransactionCategory(values, companyId)
+        .then((data) => {
+          if (data?.error) {
+            toast.error(data.error);
+          }
+          if (data?.success) {
+            toast.success(data.success);
+            router.refresh();
+            setOpen(false);
+          }
+        })
+        .catch(() => toast.error("Something went wrong!"));
+    });
+  };
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
+        <CardCategory icon={<Album />} title="หมวดหมู่รายการทำฟัน">
+          <div className="space-y-3">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ชื่อรายการทำฟัน</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="ถอนฟัน, อุดฟัน, ขูดหินปูน, ..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>รายละเอียด</FormLabel>
+                  <FormControl>
+                    <Input {...field} disabled={isPending} placeholder="des" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ราคา</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="ราคา"
+                      type="number"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </CardCategory>
+
+        <Button
+          typeof="submit"
+          className="flex justify-self-end px-9"
+          size="lg"
+          disabled={isPending}
+        >
+          เพิ่มหมวดหมู่
+        </Button>
+      </form>
+    </Form>
+  );
+};

@@ -33,12 +33,11 @@ import { CardCategory } from "@/components/props/card-category";
 //actions
 import { createPatient } from "@/actions/company/public/patient";
 
-
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
 }
 
-export const CreatePatientForm = ({
+export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
 }: CreatePatientFormProps & { onSuccess?: () => void }) => {
@@ -65,7 +64,6 @@ export const CreatePatientForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreatePatientSchema>) => {
-
     startTransition(() => {
       createPatient(values, companyId)
         .then((data) => {
@@ -233,7 +231,11 @@ export const CreatePatientForm = ({
                   <FormItem>
                     <FormLabel>โรคประจำตัวปัจจุบัน</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} placeholder="เบาหวาน, โลหิตจาง, ..." />
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="เบาหวาน, โลหิตจาง, ..."
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

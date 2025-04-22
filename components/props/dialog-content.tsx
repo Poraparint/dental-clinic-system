@@ -8,8 +8,7 @@ interface DialogContentFormProps {
   children: React.ReactNode;
 }
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export const DialogContentForm = ({
   open,

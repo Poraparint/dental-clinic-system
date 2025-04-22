@@ -7,7 +7,9 @@ export async function GET(
 ) {
   try {
     const patients = await db.patient.findMany({
-      where: { companyId: params.companyId },
+      where: {
+        companyId: params.companyId,
+      },
       orderBy: { createdAt: "desc" },
     });
 

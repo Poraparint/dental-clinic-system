@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { CreatePatientSchema } from "@/schemas";
 
 //lib
-import { currentUser } from "@/lib/auth";
+import { currentManagerAndDentist } from "@/lib/auth";
 import { getCompanyById } from "@/data/company";
 import { getPatientByName } from "@/data/patient";
 
@@ -22,19 +22,19 @@ export const createPatient = async (values: z.infer<typeof CreatePatientSchema>,
     return{error: "Invalid fields!"};
   }
 
-  const { name, phone, age, address, job, cd, drug } = validateFields.data;
+  const { name, phone, age, address, job, work, worktel, cd, drug } = validateFields.data;
 
   const existingPatient = await getPatientByName(name, companyId);
 
   if (existingPatient) {
-    return {error: "Name already in use!"}
+    return {error: "ชื่อนี้ถูกใช้ไปแล้ว"}
   }
   
   try {
-    const existingUser = await currentUser();
+    const existingUser = await currentManagerAndDentist();
     if (!existingUser) {
       console.log(`Manager with ID ${existingUser} not found`);
-      return { error: "Manager not found!" };
+      return { error: "คุณไม่มีสิทธิเข้าถึงข้อมูลน้ี" };
     }
 
     const existingCompany = await getCompanyById(companyId);
@@ -49,6 +49,8 @@ export const createPatient = async (values: z.infer<typeof CreatePatientSchema>,
         age,
         address,
         job,
+        work,
+        worktel,
         cd,
         drug,
         companyId,
@@ -57,10 +59,10 @@ export const createPatient = async (values: z.infer<typeof CreatePatientSchema>,
       }
     })
 
-    return { success: "Patient created successfully!" };
+    return { success: "เพิ่มบัตรใหม่สำเร็จ" };
     
   } catch {
-    return {error: "An error occurred while creating the patient"};
+    return { error: "เกิดข้อผิดพลาดขณะสร้างบัตรใหม่" };
   }
 }
 

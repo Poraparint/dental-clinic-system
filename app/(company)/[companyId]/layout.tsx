@@ -1,5 +1,5 @@
 import { getCompanyByManagerId } from "@/data/company";
-import { currentManager } from "@/lib/auth";
+import { currentManager, currentUser } from "@/lib/auth";
 import { notFound } from "next/navigation";
 
 type CompanyLayoutProps = {
@@ -14,14 +14,20 @@ export default async function CompanyLayout({
   try {
     const { companyId } = await params;
     const managerId = await currentManager();
-    
-    if (!companyId) {
-      console.log("Company ID is undefined");
+    const existingUser = await currentUser();
+
+    if (!managerId && !existingUser) {
       notFound();
     }
-    const company = await getCompanyByManagerId(companyId, managerId.id);
-    if (!company) {
-      notFound();
+    if (managerId || existingUser) {
+      if (!companyId) {
+        console.log("Company ID is undefined");
+        notFound();
+      }
+      const company = await getCompanyByManagerId(companyId, managerId.id);
+      if (!company) {
+        notFound();
+      }
     }
   } catch (error) {
     console.log("Error in CompanyLayout:", error);

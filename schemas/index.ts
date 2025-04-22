@@ -102,6 +102,23 @@ export const MemberRegisterSchema = z.object({
   }),
 });
 
+export const CreateTransactionCategorySchema = z.object({
+  name: z.string().min(1, {
+    message: "Category name is required",
+  }),
+  description: z.optional(z.string()),
+  price: z
+    .optional(
+      z.union([
+        z.number(),
+        z.string().transform((val) => Number(val)), 
+      ])
+    )
+    .refine((val) => val === undefined || !isNaN(val), {
+      message: "Price must be a valid number",
+    }),
+});
+
 export const CreatePatientSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
@@ -109,7 +126,7 @@ export const CreatePatientSchema = z.object({
   phone: z.optional(
     z.string(),
   ),
-  age: z.optional(z.number()),
+  age: z.optional(z.string()),
   address: z.optional(z.string()),
   job: z.optional(z.string()),
   work: z.optional(z.string()),
@@ -117,3 +134,14 @@ export const CreatePatientSchema = z.object({
   cd: z.optional(z.string()),
   drug: z.optional(z.string()),
 });
+
+export const CreateTransactionSchema = z.object({
+  datetime: z.string().date(),
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  detail: z.optional(z.string()),
+  
+});
+
+

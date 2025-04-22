@@ -14,7 +14,7 @@ export const CardCategory = ({
   description,
 }: CardCategoryProps) => {
   return (
-    <Card className="border-0 shadow-none">
+    <Card className="mb-3 border-0 shadow-none">
       <CardHeader>
         <div className="flex gap-2 items-center">
           {icon}

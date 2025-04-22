@@ -71,6 +71,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.id = token.sub;
         session.user.role = token.role as CompanyRole;
 
+
         if (token.userType === "manager") {
           session.user.companies = token.companies || []; 
         } else if (token.userType === "member") {
