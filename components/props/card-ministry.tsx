@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 interface CardMinistryProps {
   linkname?: string | null;
   name?: string | null;
   description?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const CardMinistry = ({
@@ -27,8 +26,8 @@ export const CardMinistry = ({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardFooter>
-          {createdAt.toLocaleDateString("th-TH")}
-          {updatedAt.toLocaleDateString("th-TH")}
+          {createdAt}
+          {updatedAt}
         </CardFooter>
       </Card>
     </Link>
