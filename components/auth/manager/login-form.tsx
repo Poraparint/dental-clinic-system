@@ -75,6 +75,7 @@ export const LoginForm = () => {
   };
 
   return (
+    
     <CardWrapper
       headerLabel="Welcome back"
       headerDescription="Sign in to access your clinic management dashboard"

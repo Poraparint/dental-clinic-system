@@ -3,8 +3,9 @@
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { redirect } from "next/navigation";
 
-export default function CompanyHomePage({ params }: { params: { companyId: string } }) {
-  const { companyId } = params;
+
+export default async function CompanyHomePage({ params }: { params: Promise<{ companyId: string }> }) {
+  const { companyId } = await params;
 
   if (!companyId) {
     redirect("/");

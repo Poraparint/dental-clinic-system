@@ -18,9 +18,9 @@ interface Patient {
   phone: string;
   cd: string;
   drug: string;
-  createdAt?: Date;
-    updatedAt?: Date;
-    createdByType?: string;
+  createdAt: Date;
+    updatedAt: Date;
+    createdByType: string;
 }
 
 interface PatientsError {

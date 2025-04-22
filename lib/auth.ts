@@ -7,20 +7,39 @@ export const currentUser = async () => {
   return session?.user;
 };
 
-export const currentManager= async () => {
+export const currentByRoles = async (allowedRoles: CompanyRole[]) => {
   const user = await currentUser();
-  return user?.role === CompanyRole.MANAGER ? user : null;
+  if (!user || !user.role) return null;
+
+  // Check if role is valid CompanyRole
+  if (!(Object.values(CompanyRole) as string[]).includes(user.role)) {
+    return null;
+  }
+
+
+  return allowedRoles.includes(user?.role as CompanyRole) ? user : null;
 };
 
-export const currentMember = async () => {
-  const user = await currentUser();
-  const allowedRoles = [
-    CompanyRole.ASSISTANT,
-    CompanyRole.DENTIST,
-    CompanyRole.DENTALTECHNICIAN,
-    CompanyRole.PENDING,
-    CompanyRole.COMANAGER,
-  ];
+export const currentManager = async () => currentByRoles([CompanyRole.MANAGER]);
 
-  return allowedRoles.includes(user?.role) ? user : null;
-}
+export const currentManagerAndTechnician = async () =>
+  currentByRoles([
+    CompanyRole.MANAGER,
+    CompanyRole.COMANAGER,
+    CompanyRole.DENTALTECHNICIAN,
+  ]);
+
+export const currentManagerAndDentist = async () =>
+  currentByRoles([
+    CompanyRole.MANAGER,
+    CompanyRole.COMANAGER,
+    CompanyRole.DENTIST,
+  ]);
+
+export const currentAllStaffExceptTechnician = async () =>
+  currentByRoles([
+    CompanyRole.MANAGER,
+    CompanyRole.COMANAGER,
+    CompanyRole.DENTIST,
+    CompanyRole.ASSISTANT,
+  ]);

@@ -3,7 +3,6 @@ import authConfig from "@/auth.config";
 import { NextResponse } from "next/server";
 
 import {
-  DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
@@ -28,7 +27,7 @@ export default auth((req) => {
   if (isAuthRoute) {
     if (isLoggedIn) {
       const redirectUrl = companyRole === CompanyRole.MANAGER
-        ? `${DEFAULT_LOGIN_REDIRECT}/ministry`
+        ? "/"
         : "/";
       return NextResponse.redirect(new URL(redirectUrl, nextUrl));
     }

@@ -1,17 +1,12 @@
 import { UserInfo } from "@/components/user-info";
 import { currentManager } from "@/lib/auth";
 
-interface DashboardPageProps { 
-  params: {
-    companyId: string;
-  };
- }
-
-export default async function DashboardPage({params}: DashboardPageProps) {
-
+type DashboardPageProps = {
+  params: Promise<{ companyId: string }>;
+}
+export default async function DashboardPage({ params }: DashboardPageProps) {
   const manager = await currentManager();
-
-  const companyId = await params.companyId;
+  const { companyId } = await params;
 
   return (
     <div>

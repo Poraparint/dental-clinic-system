@@ -19,7 +19,7 @@ export default async function CompanyLayout({ children }: CompanyLayoutProps) {
         {/* Main Content */}
         <main className="flex flex-1 flex-col overflow-auto">
           <Navbar />
-          <div className="m-5 p-4 border rounded-md bg-primary-foreground">{children}</div>
+          <div className="m-3 p-5 border rounded-md bg-primary-foreground">{children}</div>
         </main>
       </div>
     </SidebarProvider>
