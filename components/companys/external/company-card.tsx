@@ -33,7 +33,7 @@ export const CompanyCard = () => {
   useEffect(() => {
     const fetchMinistry = async () => {
       try {
-        const response = await fetch(`/api/companies`);
+        const response = await fetch("/api/companies");
 
         const data = await response.json();
         setMinistrys(data);
@@ -51,7 +51,7 @@ export const CompanyCard = () => {
     };
 
     fetchMinistry();
-  });
+  }, []);
 
   if (loading) return <Loading />;
 
