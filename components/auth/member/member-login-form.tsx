@@ -12,7 +12,7 @@ import { FormSuccess } from "@/components/form-success";
 import { MemberLoginSchema } from "@/schemas";
 
 //action
-import { login } from "@/actions/auth/login";
+import { memberLogin } from "@/actions/auth/login";
 
 //ui
 import {
@@ -51,7 +51,7 @@ export const MemberLoginForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      login.member(values, callbackUrl)
+      memberLogin(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();

@@ -1,14 +1,16 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { NextRequest } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { companyId: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
+    const url = new URL(request.url);
+    const pathSegments = url.pathname.split("/");
+    const companyId = pathSegments[pathSegments.indexOf("companies") + 1];
+
     const patients = await db.patient.findMany({
       where: {
-        companyId: params.companyId,
+        companyId,
       },
       orderBy: { createdAt: "desc" },
     });
@@ -18,7 +20,7 @@ export async function GET(
         {
           error: "ไม่พบข้อมูลคนไข้",
           description: "เริ่มต้นด้วยการสร้างบัตรคนไข้แรก",
-          url: `/dashboard/${params.companyId}/create-patient`,
+          url: `/dashboard/${companyId}/create-patient`,
           urlname: "สร้างบัตรคนไข้",
         },
         { status: 404 }
@@ -32,7 +34,7 @@ export async function GET(
       {
         error: "ไม่พบข้อมูลคนไข้",
         description: "เริ่มต้นด้วยการสร้างบัตรคนไข้แรก",
-        url: `/dashboard/${params.companyId}/create-patient`,
+        url: `/dashboard/unknown/create-patient`,
         urlname: "สร้างบัตรคนไข้",
       },
       { status: 500 }

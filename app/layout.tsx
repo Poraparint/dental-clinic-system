@@ -6,6 +6,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
+import { Suspense } from "react";
+import { Loading } from "@/components/loading";
 
 const kanit = Kanit({
   subsets: ["thai", "latin"],
@@ -25,22 +27,22 @@ export default async function RootLayout({
 }>) {
   
   return (
-    <SessionProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${kanit.className} antialiased `}>
-          
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster />
-            {children}
+    <Suspense fallback={<Loading/>}>
+      <SessionProvider>
+        <html lang="en" suppressHydrationWarning>
+          <body className={`${kanit.className} antialiased `}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster />
+              {children}
             </ThemeProvider>
-          
-        </body>
-      </html>
-    </SessionProvider>
+          </body>
+        </html>
+      </SessionProvider>
+    </Suspense>
   );
 }
