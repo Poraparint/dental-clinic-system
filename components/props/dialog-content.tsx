@@ -8,7 +8,7 @@ interface DialogContentFormProps {
   children: React.ReactNode;
 }
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogPortal } from "@/components/ui/dialog";
 
 export const DialogContentForm = ({
   open,
@@ -19,15 +19,16 @@ export const DialogContentForm = ({
 }: DialogContentFormProps) => {
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
-        </DialogHeader>
-        {children}
-      </DialogContent>
-      
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
+      <DialogPortal>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          {children}
+        </DialogContent>
+      </DialogPortal>
     </Dialog>
   );
 };

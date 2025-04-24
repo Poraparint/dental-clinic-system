@@ -24,19 +24,19 @@ enum CompanyRole {
 }
 
 model Company {
-  id          String   @id @default(uuid())
-  name        String?
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  managerId      String   
-  manager        User     @relation(fields: [managerId], references: [id])
-  members     Member[]
-  patients    Patient[]
-  transactions Transaction[]
+  id                    String                @id @default(uuid())
+  name                  String?
+  description           String?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  managerId             String
+  manager               Manager               @relation(fields: [managerId], references: [id])
+  members               Member[]
+  patients              Patient[]
   transactionCategories TransactionCategory[]
-  isDeleted   Boolean  @default(false)
+  isDeleted             Boolean               @default(false)
 }
+
 model User {
   id                    String                 @id @default(uuid())
   name                  String?
@@ -45,46 +45,49 @@ model User {
   phone                 String?
   image                 String?
   password              String?
-  role                  CompanyRole            @default(MANAGER)
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  companies               Company[]
-  members               Member[]
-  transactionCategories TransactionCategory[]
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  manager               Manager?
+  member                Member?
+  patient  Patient[]
+  transaction Transaction[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 }
 
-model Member{
-  id                    String   @id @default(uuid())
-  name                  String?
-  email                 String   @unique
-  emailVerified         DateTime?
-  phone                 String?
-  image                 String?
-  password              String?
-  memberCode            String
-  role                  CompanyRole @default(PENDING)
-  isTwoFactorEnabled    Boolean                @default(true)
-  twoFactorConfirmation MemberTwoFactorConfirmation?
-  companyId             String
-  company               Company @relation(fields: [companyId], references: [id])
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-  managerId          String
-  manager       User @relation(fields: [managerId], references: [id])
-  status                String? @default("ACTIVE")
-  isDeleted Boolean @default(false)
-  @@index([companyId])
-  @@index([email])    
+model Manager {
+  id     String      @id @unique
+  role   CompanyRole @default(MANAGER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user                  User                  @relation(fields: [id], references: [id], onDelete: Cascade)
+  companies             Company[]
+  members               Member[]
+  transactionCategories TransactionCategory[]
+}
 
-  @@unique([email, companyId])
+model Member {
+  id            String      @id @unique
+  memberCode    String
+  role          CompanyRole @default(PENDING)
+  companyId String
+  managerId String
+  status    String?  @default("ACTIVE")
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [id], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+  manager Manager @relation(fields: [managerId], references: [id])
+
+  @@unique([id, companyId])
 }
 
 model Account {
   id                String  @id @default(cuid())
-  managerId         String
+  userId            String
   type              String
   provider          String
   providerAccountId String
@@ -96,7 +99,7 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
 
-  manager User @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -130,74 +133,64 @@ model TwoFactorToken {
 
 model TwoFactorConfirmation {
   id     String @id @default(cuid())
-  managerId String
-  manager   User   @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([managerId])
+  @@unique([userId])
 }
 
-model MemberTwoFactorConfirmation {
-  id       String  @id @default(cuid())
-  memberId String
-  member   Member  @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-  @@unique([memberId])
-}
-
-model TransactionCategory{
-  id String @id @default(cuid())
-  name String @unique
-  description String?
-  price Float?
-  managerId String
-  user User @relation(fields: [managerId], references: [id])
-  companyId String
-  company Company @relation(fields: [companyId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model TransactionCategory {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String?
+  price        Float?
+  managerId    String
+  manager      Manager       @relation(fields: [managerId], references: [id])
+  companyId    String
+  company      Company       @relation(fields: [companyId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   transactions Transaction[]
-  isDeleted Boolean @default(false)
+  isDeleted    Boolean       @default(false)
 }
 
-model Patient{
-  id String @id @default(cuid())
-  name String @unique
-  phone String?
-  age String?
-  address String?
-  job String?
-  work String?
-  worktel String?
-  cd String?
-  drug String?
-  companyId String
-  company Company @relation(fields: [companyId], references: [id])
-  createdById String
-  createdByType CompanyRole
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isDeleted Boolean @default(false)
-  transactions Transaction[]
+model Patient {
+  id            String        @id @default(cuid())
+  name          String        @unique
+  phone         String?
+  age           String?
+  address       String?
+  job           String?
+  work          String?
+  worktel       String?
+  cd            String?
+  drug          String?
+  companyId     String
+  creatorUserId   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  isDeleted     Boolean       @default(false)
+  transactions  Transaction[]
+
+  company       Company       @relation(fields: [companyId], references: [id])
+  creator         User          @relation(fields: [creatorUserId], references: [id])
+
   @@index([name, phone, job])
-  @@index([createdById, createdByType])
+  @@index([creatorUserId])
 }
 
-model Transaction{
-  id String @id @default(cuid())
-  datetime DateTime @default(now())
-  name String
-  detail String?
-  price Float
-  paid Float
-  patientId String
-  patient Patient @relation(fields: [patientId], references: [id])
+model Transaction {
+  id                    String              @id @default(cuid())
+  datetime              DateTime            @default(now())
+  detail                String?
+  price                 Float
+  paid                  Float
+  patientId             String
+  patient               Patient             @relation(fields: [patientId], references: [id])
   transactionCategoryId String
-  transactionCategory TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
-  companyId String
-  company Company @relation(fields: [companyId], references: [id])
-  createdById String
-  createdByType CompanyRole
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+  creatorUserId   String
+  creator         User          @relation(fields: [creatorUserId], references: [id])
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 }
-

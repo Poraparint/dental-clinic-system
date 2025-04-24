@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { db } from "@/lib/db";
 import { SettingSchema } from "@/schemas";
-import { getManagerByEmail, getManagerById } from "@/data/manager";
+import { getUserByEmail, getUserById } from "@/data/external/user";
 import { currentManager } from "@/lib/auth";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
@@ -16,7 +16,7 @@ export const settings = async (values: z.infer<typeof SettingSchema>) => {
     return { error: "Unauthorized!" };
   }
 
-  const dbUser = await getManagerById(user.id);
+  const dbUser = await getUserById(user.id);
 
   if (!dbUser) {
     return { error: "Unauthorized!" };
@@ -30,7 +30,7 @@ export const settings = async (values: z.infer<typeof SettingSchema>) => {
   }
 
   if (values.email && values.email !== user.email) {
-    const existingUser = await getManagerByEmail(values.email);
+    const existingUser = await getUserByEmail(values.email);
 
     if (existingUser && existingUser.id !== user.id) {
       return { error: "Email already in use!" };

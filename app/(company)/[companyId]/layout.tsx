@@ -1,4 +1,4 @@
-import { getCompanyByManagerId } from "@/data/company";
+import { getCompanyByManagerId } from "@/data/internal/company";
 import { currentManager, currentUser } from "@/lib/auth";
 import { notFound } from "next/navigation";
 

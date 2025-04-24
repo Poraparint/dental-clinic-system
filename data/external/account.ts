@@ -1,9 +1,9 @@
 import { db } from "@/lib/db";
 
-export const getAccountByManagerId = async (managerId: string) => {
+export const getAccountByUserId = async (userId: string) => {
     try {
         const account = await db.account.findFirst({
-            where: { managerId }
+            where: { userId }
         });
 
         return account;
