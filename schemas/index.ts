@@ -72,7 +72,7 @@ export const CreateCompanySchema = z.object({
     message: "Ministry name is required",
   }),
   description: z.optional(z.string()),
-})
+});
 
 export const MemberLoginSchema = z.object({
   email: z.string().email({
@@ -108,12 +108,7 @@ export const CreateTransactionCategorySchema = z.object({
   }),
   description: z.optional(z.string()),
   price: z
-    .optional(
-      z.union([
-        z.number(),
-        z.string().transform((val) => Number(val)), 
-      ])
-    )
+    .optional(z.union([z.number(), z.string().transform((val) => Number(val))]))
     .refine((val) => val === undefined || !isNaN(val), {
       message: "Price must be a valid number",
     }),
@@ -123,9 +118,7 @@ export const CreatePatientSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
   }),
-  phone: z.optional(
-    z.string(),
-  ),
+  phone: z.optional(z.string()),
   age: z.optional(z.string()),
   address: z.optional(z.string()),
   job: z.optional(z.string()),
@@ -135,13 +128,37 @@ export const CreatePatientSchema = z.object({
   drug: z.optional(z.string()),
 });
 
-export const CreateTransactionSchema = z.object({
-  datetime: z.string().date(),
-  name: z.string().min(1, {
-    message: "Name is required",
-  }),
-  detail: z.optional(z.string()),
-  
-});
+export const CreateTransactionSchema = z
+  .object({
+    datetime: z.date({
+      required_error: "A date is required.",
+    }),
+    transactionCategoryId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
+    detail: z.optional(z.string()),
 
-
+    price: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z
+        .number({ required_error: "กรุณากรอกราคา" })
+        .min(0, "ราคาต้องไม่น้อยกว่า 0")
+    ),
+    paid: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z
+        .number({ required_error: "กรุณากรอกจำนวนเงินที่ชำระ" })
+        .min(0, "จำนวนเงินที่ชำระต้องไม่น้อยกว่า 0")
+    ),
+  })
+  .superRefine((data, ctx) => {
+    if (
+      typeof data.price === "number" &&
+      typeof data.paid === "number" &&
+      data.paid > data.price
+    ) {
+      ctx.addIssue({
+        path: ["paid"],
+        code: z.ZodIssueCode.custom,
+        message: "จำนวนเงินที่ชำระต้องไม่เกินราคารวม",
+      });
+    }
+  });

@@ -20,7 +20,7 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    if (companys.length === 0) {
+    if (companys.length < 1) {
       return NextResponse.json(
         {
           error: "ยินดีต้อนรับสู่แดชบอร์ด",

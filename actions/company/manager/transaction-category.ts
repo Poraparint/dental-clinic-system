@@ -10,8 +10,8 @@ import { CreateTransactionCategorySchema } from "@/schemas";
 
 //lib
 import { currentManager } from "@/lib/auth";
-import { getCompanyById } from "@/data/company";
-import { getTransactionName } from "@/data/category";
+import { getCompanyById } from "@/data/internal/company";
+import { getTransactionName } from "@/data/internal/category";
 
 export const CreateTransactionCategory = async (
   values: z.infer<typeof CreateTransactionCategorySchema>,
@@ -23,8 +23,7 @@ export const CreateTransactionCategory = async (
     return { error: "Invalid fields!" };
   }
 
-  const { name, description, price } =
-    validateFields.data;
+  const { name, description, price } = validateFields.data;
 
   const existingCategory = await getTransactionName(name, companyId);
 
@@ -43,7 +42,6 @@ export const CreateTransactionCategory = async (
     if (!existingCompany) {
       return { error: "Company not found!" };
     }
-    
 
     await db.transactionCategory.create({
       data: {

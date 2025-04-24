@@ -9,7 +9,7 @@ export const sendTwoFactorTokenEmail = async (
   token: string
 ) => {
   await resend.emails.send({
-    from: `${domain}`,
+    from: "resend.dev",
     to: email,
     subject: "2FA code",
     html: `<p>Your 2FA code: ${token}</p>`,
@@ -34,7 +34,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
   await resend.emails.send({
-    from: `${domain}`,
+    from: "onboarding@resend.dev",
     to: email,
     subject: "Confirm your email",
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,

@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getManagerByEmail } from "@/data/manager";
-import { getVerificationTokenByToken } from "@/data/verification-token";
+import { getUserByEmail } from "@/data/external/user";
+import { getVerificationTokenByToken } from "@/data/external/verification-token";
 
 export const newVerification = async (token: string) => {
   const existingToken = await getVerificationTokenByToken(token);
@@ -17,7 +17,7 @@ export const newVerification = async (token: string) => {
     return { error: "Token has expired!" };
   }
 
-  const existingUser = await getManagerByEmail(existingToken.email);
+  const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
     return { error: "Email does not exist!" };

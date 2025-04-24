@@ -4,9 +4,9 @@ import bcrypt from "bcryptjs";
 
 import * as z from "zod";
 import { NewPasswordSchema } from "@/schemas";
-import { getPasswordResetTokenByToken } from "@/data/password-reset-token";
-import { getManagerByEmail } from "@/data/manager";
+import { getPasswordResetTokenByToken } from "@/data/external/password-reset-token";
 import { db } from "@/lib/db";
+import { getUserByEmail } from "@/data/external/user";
 
 export const newPassword = async (
   values: z.infer<typeof NewPasswordSchema>,
@@ -35,7 +35,7 @@ export const newPassword = async (
     return { error: "Token has expired!" };
   }
 
-  const existingUser = await getManagerByEmail(existingToken.email);
+  const existingUser = await getUserByEmail(existingToken.email);
 
   if (!existingUser) {
     return { error: "Email does not exist!" };

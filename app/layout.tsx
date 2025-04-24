@@ -27,10 +27,10 @@ export default async function RootLayout({
 }>) {
   
   return (
-    <Suspense fallback={<Loading/>}>
-      <SessionProvider>
-        <html lang="en" suppressHydrationWarning>
-          <body className={`${kanit.className} antialiased `}>
+    <SessionProvider refetchInterval={60 * 60} refetchOnWindowFocus={true}>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${kanit.className} antialiased `}>
+          <Suspense fallback={<Loading />}>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -40,9 +40,9 @@ export default async function RootLayout({
               <Toaster />
               {children}
             </ThemeProvider>
-          </body>
-        </html>
-      </SessionProvider>
-    </Suspense>
+          </Suspense>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

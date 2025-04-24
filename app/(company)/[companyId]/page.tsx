@@ -7,11 +7,11 @@ import { redirect } from "next/navigation";
 export default async function CompanyHomePage({ params }: { params: Promise<{ companyId: string }> }) {
   const { companyId } = await params;
 
-  if (!companyId) {
-    redirect("/");
+  if (companyId) {
+    redirect(`/${companyId}${DEFAULT_LOGIN_REDIRECT}`);
   }
 
-  redirect(`/${companyId}${DEFAULT_LOGIN_REDIRECT}`);
+  redirect("/");
 
   
 }
