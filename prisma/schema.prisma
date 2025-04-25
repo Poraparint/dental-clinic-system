@@ -24,17 +24,18 @@ enum CompanyRole {
 }
 
 model Company {
-  id                    String                @id @default(uuid())
-  name                  String?
-  description           String?
-  createdAt             DateTime              @default(now())
-  updatedAt             DateTime              @updatedAt
-  managerId             String
-  manager               Manager               @relation(fields: [managerId], references: [id])
-  members               Member[]
-  patients              Patient[]
-  transactionCategories TransactionCategory[]
-  isDeleted             Boolean               @default(false)
+  id                         String                @id @default(uuid())
+  name                       String?
+  description                String?
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  managerId                  String
+  manager                    Manager               @relation(fields: [managerId], references: [id])
+  members                    Member[]
+  patients                   Patient[]
+  transactionCategories      TransactionCategory[]
+  DentalTechnicianCategories DentalTechCategory[]
+  isDeleted                  Boolean               @default(false)
 }
 
 model User {
@@ -50,33 +51,34 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   manager               Manager?
   member                Member?
-  patient  Patient[]
-  transaction Transaction[]
+  patient               Patient[]
+  transaction           Transaction[]
+  dentalTechCategory    DentalTechCategory[]
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
 }
 
 model Manager {
-  id     String      @id @unique
-  role   CompanyRole @default(MANAGER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user                  User                  @relation(fields: [id], references: [id], onDelete: Cascade)
-  companies             Company[]
-  members               Member[]
-  transactionCategories TransactionCategory[]
+  id                         String                @id @unique
+  role                       CompanyRole           @default(MANAGER)
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  user                       User                  @relation(fields: [id], references: [id], onDelete: Cascade)
+  companies                  Company[]
+  members                    Member[]
+  transactionCategories      TransactionCategory[]
 }
 
 model Member {
-  id            String      @id @unique
-  memberCode    String
-  role          CompanyRole @default(PENDING)
-  companyId String
-  managerId String
-  status    String?  @default("ACTIVE")
-  isDeleted Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                         String               @id @unique
+  memberCode                 String
+  role                       CompanyRole          @default(PENDING)
+  companyId                  String
+  managerId                  String
+  status                     String               @default("ACTIVE")
+  isDeleted                  Boolean              @default(false)
+  createdAt                  DateTime             @default(now())
+  updatedAt                  DateTime             @updatedAt
 
   user    User    @relation(fields: [id], references: [id])
   company Company @relation(fields: [companyId], references: [id])
@@ -141,7 +143,7 @@ model TwoFactorConfirmation {
 
 model TransactionCategory {
   id           String        @id @default(cuid())
-  name         String        
+  name         String
   description  String?
   price        Float?
   managerId    String
@@ -152,12 +154,29 @@ model TransactionCategory {
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
   isDeleted    Boolean       @default(false)
+
+  @@unique([name, companyId])
+}
+
+model DentalTechCategory {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  creatorUserId String
+  creator       User          @relation(fields: [creatorUserId], references: [id])
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  dentalTech  Dentaltech[]
+
   @@unique([name, companyId])
 }
 
 model Patient {
   id            String        @id @default(cuid())
-  name          String        
+  name          String
   phone         String?
   age           String?
   address       String?
@@ -167,16 +186,16 @@ model Patient {
   cd            String?
   drug          String?
   companyId     String
-  creatorUserId   String
+  creatorUserId String
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   isDeleted     Boolean       @default(false)
   transactions  Transaction[]
-
+  dentaltech    Dentaltech[]
   company       Company       @relation(fields: [companyId], references: [id])
-  creator         User          @relation(fields: [creatorUserId], references: [id])
+  creator       User          @relation(fields: [creatorUserId], references: [id])
 
-@@unique([name, companyId])
+  @@unique([name, companyId])
   @@index([name, phone, job])
   @@index([creatorUserId])
 }
@@ -191,9 +210,22 @@ model Transaction {
   patient               Patient             @relation(fields: [patientId], references: [id])
   transactionCategoryId String
   transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
-  creatorUserId   String
-  creator         User          @relation(fields: [creatorUserId], references: [id])
+  creatorUserId         String
+  creator               User                @relation(fields: [creatorUserId], references: [id])
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
-  isDelete Boolean @default(false)
+  isDelete              Boolean             @default(false)
+}
+
+model Dentaltech {
+  id        String   @id @default(cuid())
+  datetime  DateTime @default(now())
+  detail    String?
+  level     String   @default("ปกติ")
+  status    String   @default("รอดำเนินการ")
+  price                 Float
+  patientId String
+  dctId String
+  dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
+  patient   Patient  @relation(fields: [patientId], references: [id])
 }

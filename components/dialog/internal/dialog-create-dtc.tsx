@@ -18,15 +18,12 @@ export const DialogCreateTransactionCategory = ({
       <DialogButton
         title="เพิ่มหมวดหมู่"
         icon={<PlusIcon />}
-        dialogTitle="หมวดหมู่รายการทำฟัน"
-        dialogDescription="รายการทำฟัน/หมวดหมู่ทำฟัน"
+        dialogTitle="หมวดหมู่รายการทันตกรรม"
+        dialogDescription="รายการทันตกรรม/หมวดหมู่ทันตกรรม"
         open={open}
         setOpen={setOpen}
       >
-        <CreateDentalTechCategoryForm
-          setOpen={setOpen}
-          onSuccess={onSuccess}
-        />
+        <CreateDentalTechCategoryForm setOpen={setOpen} onSuccess={onSuccess} />
       </DialogButton>
     </>
   );
