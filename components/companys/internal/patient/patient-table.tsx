@@ -19,8 +19,9 @@ interface Patient {
   cd: string;
   drug: string;
   createdAt: Date;
-    updatedAt: Date;
-    createdByType: string;
+  creator: {
+    name: string;
+    }
 }
 
 interface PatientsError {
@@ -74,7 +75,8 @@ export const PatientTable = ({ companyId, onRowClick }: PatientTableProps) => {
           <TableHead>เบอร์ติดต่อ</TableHead>
           <TableHead>โรคประจำตัวปัจจุบัน</TableHead>
           <TableHead>ประวัติการแพ้ยา</TableHead>
-          <TableHead>ผู้สร้าง</TableHead>
+          <TableHead>วันที่บันทึก</TableHead>
+          <TableHead>ผู้บันทึก</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -86,7 +88,13 @@ export const PatientTable = ({ companyId, onRowClick }: PatientTableProps) => {
                 second={patient.phone}
                 third={patient.cd}
                 fourth={patient.drug}
-                fifth={patient.createdByType}
+                fifth={new Date(patient.createdAt).toLocaleDateString("th-TH", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+                sixth={patient.creator.name}
+                
               />
             </TableRow>
           ))

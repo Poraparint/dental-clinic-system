@@ -12,6 +12,19 @@ export async function GET(request: NextRequest) {
       where: {
         companyId,
       },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        createdAt: true,
+        cd: true,
+        drug: true,
+        creator: {
+          select: {
+            name: true,
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
     });
 

@@ -6,6 +6,7 @@ interface TableInfoProps {
   third?: string | null;
   fourth?: string | null;
   fifth?: string | null;
+  sixth?: string | null;
 }
 
 export const TableInfo = ({
@@ -14,6 +15,7 @@ export const TableInfo = ({
   third,
   fourth,
   fifth,
+  sixth,
 }: TableInfoProps) => {
   return (
     <>
@@ -22,6 +24,7 @@ export const TableInfo = ({
       <TableCell>{third}</TableCell>
       <TableCell>{fourth}</TableCell>
       <TableCell>{fifth}</TableCell>
+      <TableCell>{sixth}</TableCell>
     </>
   );
 };

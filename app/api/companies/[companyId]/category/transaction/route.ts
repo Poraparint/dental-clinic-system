@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     const categorys = await db.transactionCategory.findMany({
       where: {
         companyId,
+        isDeleted: false,
       },
     });
 
