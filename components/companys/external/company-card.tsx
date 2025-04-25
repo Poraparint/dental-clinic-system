@@ -29,6 +29,7 @@ export const CompanyCard = () => {
     Ministry[] | MinistrysError | null
   >(null);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchMinistry = async () => {

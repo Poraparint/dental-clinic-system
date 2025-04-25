@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 //params
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 //react
 import { useForm } from "react-hook-form";
@@ -36,16 +36,17 @@ import { createPatient } from "@/actions/company/public/patient";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 export const CreatePatientForm = ({
   setOpen,
   onSuccess,
-}: CreatePatientFormProps & { onSuccess?: () => void }) => {
+}: CreatePatientFormProps ) => {
   const params = useParams();
   const companyId = params.companyId as string;
 
-  const router = useRouter();
+  
 
   const [isPending, startTransition] = useTransition();
 
@@ -74,7 +75,7 @@ export const CreatePatientForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            router.refresh();
+            
             setOpen(false);
             onSuccess?.();
           }

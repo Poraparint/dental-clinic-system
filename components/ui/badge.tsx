@@ -17,13 +17,14 @@ const badgeVariants = cva(
           "border-transparent bg-destructive-foreground text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+        emerald: "bg-emerald-500/15 text-emerald-500 [a&]:hover:bg-emerald-600",
       },
     },
     defaultVariants: {
       variant: "default",
     },
   }
-)
+);
 
 function Badge({
   className,

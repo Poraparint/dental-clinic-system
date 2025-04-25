@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 //params
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 //react
 import { useForm } from "react-hook-form";
@@ -65,7 +65,7 @@ export const CreateTransactionForm = ({
 }: CreateTransactionFormProps) => {
   const params = useParams();
   const patientId = params.patientId as string;
-  const router = useRouter();
+  
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateTransactionSchema>>({
@@ -88,7 +88,7 @@ export const CreateTransactionForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            router.refresh();
+            
             setOpen(false);
             onSuccess?.();
           }
