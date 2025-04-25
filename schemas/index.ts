@@ -114,6 +114,14 @@ export const CreateTransactionCategorySchema = z.object({
     }),
 });
 
+export const CreateDentalTechCategorySchema = z.object({
+  name: z.string().min(1, {
+    message: "Category name is required",
+  }),
+  description: z.optional(z.string()),
+  
+});
+
 export const CreatePatientSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",

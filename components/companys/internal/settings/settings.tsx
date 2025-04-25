@@ -1,5 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TransactionCategoryBoard } from "@/components/companys/internal/settings/category/tc/tc-board";
+import { DentalTechCategoryBoard } from "@/components/companys/internal/settings/category/dtc/tc-board";
 
 export const Settings = () => {
   return (
@@ -13,6 +14,7 @@ export const Settings = () => {
           <TabsTrigger value="dental-items">รายการทันตกรรม</TabsTrigger>
         </TabsList>
         <TransactionCategoryBoard />
+        <DentalTechCategoryBoard />
       </Tabs>
     </div>
   );
