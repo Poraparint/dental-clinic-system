@@ -1,5 +1,7 @@
 "use client";
 import { FormNotFound } from "@/components/form-not-found";
+
+//ui
 import {
   Table,
   TableHeader,
@@ -14,6 +16,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+
+//icons
+import { Calendar } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -87,7 +92,10 @@ export const TransactionTable = ({
             <Table className="text-base">
               <TableHeader>
                 <TableRow>
-                  <TableHead>วันที่</TableHead>
+                  <TableHead className="flex gap-2">
+                    <Calendar className="text-lapis-accent" />
+                    วันที่
+                  </TableHead>
                   <TableHead>รายการ</TableHead>
                   <TableHead>รายละเอียด</TableHead>
                   <TableHead>ราคา</TableHead>
@@ -115,15 +123,12 @@ export const TransactionTable = ({
                         {transaction.transactionCategory.name}
                       </TableCell>
                       <TableCell>
-                        <Textarea value={transaction.detail} readOnly/>
-                        
+                        <Textarea value={transaction.detail} readOnly />
                       </TableCell>
-                      <TableCell>
-                        {transaction.price} ฿
-                      </TableCell>
+                      <TableCell>{transaction.price} ฿</TableCell>
                       <TableCell>
                         {transaction.paid !== 0 ? (
-                          <Badge className="bg-green-100 text-jade hover:bg-green-100 border-jade">
+                          <Badge className="bg-green-100 text-jade hover:bg-green-200 border-green-400">
                             {transaction.paid} ฿
                           </Badge>
                         ) : (

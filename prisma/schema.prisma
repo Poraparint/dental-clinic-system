@@ -193,4 +193,5 @@ model Transaction {
   creator         User          @relation(fields: [creatorUserId], references: [id])
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
+  isDelete Boolean @default(false)
 }

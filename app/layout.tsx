@@ -27,10 +27,10 @@ export default async function RootLayout({
 }>) {
   
   return (
-    <SessionProvider refetchInterval={60 * 60} refetchOnWindowFocus={true}>
+    <SessionProvider >
       <html lang="en" suppressHydrationWarning>
         <body className={`${kanit.className} antialiased `}>
-          <Suspense fallback={<Loading />}>
+          <Suspense fallback={<div className="flex justify-center items-center h-screen w-screen"><Loading /></div>}>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
