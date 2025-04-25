@@ -45,9 +45,6 @@ export const CreatePatientForm = ({
 }: CreatePatientFormProps ) => {
   const params = useParams();
   const companyId = params.companyId as string;
-
-  
-
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreatePatientSchema>>({

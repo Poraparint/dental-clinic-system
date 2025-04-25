@@ -1,16 +1,8 @@
 "use client";
-import { FormNotFound } from "@/components/form-not-found";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { TableInfo } from "@/components/props/table-info";
-import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
+import { usePatients } from "@/hooks/internal/use-patient";
+import { DynamicTable } from "@/components/props/dynamic-table";
+import { useParams } from "next/navigation";
 
 interface Patient {
   id: string;
@@ -21,96 +13,70 @@ interface Patient {
   createdAt: Date;
   creator: {
     name: string;
-    }
-}
-
-interface PatientsError {
-  error: string;
-  description?: string;
-  url?: string;
-  urlname?: string;
+  };
 }
 
 interface PatientTableProps {
-  companyId: string;
   onRowClick: (patientId: string) => void;
 }
 
-export const PatientTable = ({ companyId, onRowClick }: PatientTableProps) => {
-  const [patients, setPatients] = useState<Patient[] | PatientsError | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
+export const PatientTable = ({  onRowClick }: PatientTableProps) => {
+  const params = useParams();
+  const companyId = params.companyId as string;
+  const { patients, isLoading } = usePatients(companyId);
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-          const response = await fetch(`/api/companies/${companyId}/patients`);
-          
-        const data = await response.json();
-        setPatients(data);
-      } catch (error) {
-        console.error("Error fetching patients:", error);
-        setPatients({
-          error: "เกิดข้อผิดพลาดในการดึงข้อมูลคนไข้",
-          description: "กรุณาลองใหม่อีกครั้งในภายหลัง",
-          urlname: "เพิ่มบัตรใหม่",
-          url: "/",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+  const columns = [
+    {
+      key: "name",
+      header: "ชื่อ-นามสกุล",
+      render: (item: Patient) => item.name,
+    },
+    {
+      key: "phone",
+      header: "เบอร์ติดต่อ",
+      render: (item: Patient) => item.phone,
+    },
+    {
+      key: "cd",
+      header: "โรคประจำตัวปัจจุบัน",
+      render: (item: Patient) => item.cd,
+    },
+    {
+      key: "drug",
+      header: "ประวัติการแพ้ยา",
+      render: (item: Patient) => item.drug,
+    },
 
-    fetchPatients();
-  }, [companyId]);
+    {
+      key: "createdAt",
+      header: "วันที่บันทึก",
+      render: (item: Patient) =>
+        new Date(item.createdAt).toLocaleDateString("th-TH", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }),
+    },
+    {
+      key: "creator",
+      header: "ผู้บันทึก",
+      render: (item: Patient) => item.creator.name,
+    },
+  ];
 
-  if (loading) return <Loading/>;
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
-    <Table className="text-base">
-      <TableHeader>
-        <TableRow>
-          <TableHead>ชื่อ-นามสกุล</TableHead>
-          <TableHead>เบอร์ติดต่อ</TableHead>
-          <TableHead>โรคประจำตัวปัจจุบัน</TableHead>
-          <TableHead>ประวัติการแพ้ยา</TableHead>
-          <TableHead>วันที่บันทึก</TableHead>
-          <TableHead>ผู้บันทึก</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Array.isArray(patients) ? (
-          patients.map((patient) => (
-            <TableRow key={patient.id} onClick={() => onRowClick(patient.id)}>
-              <TableInfo
-                first={patient.name}
-                second={patient.phone}
-                third={patient.cd}
-                fourth={patient.drug}
-                fifth={new Date(patient.createdAt).toLocaleDateString("th-TH", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-                sixth={patient.creator.name}
-                
-              />
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={6}>
-              <FormNotFound
-                message={patients?.error || "Unknown error"}
-                description={patients?.description || ""}
-                url={patients?.url || ""}
-                urlname={patients?.urlname || ""}
-              />
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <DynamicTable
+      data={patients}
+      columns={columns}
+      onRowClick={(patient) => onRowClick(patient.id)}
+      error="เริ่มต้นด้วยการสร้างบัตรใหม่"
+      description="เหมือนคุณยังไม่มีบัตรใหม่"
+      url="/"
+      urlname="เพิ่มบัตรใหม่"
+    />
   );
 };

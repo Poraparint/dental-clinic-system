@@ -17,7 +17,6 @@ export async function GET() {
       where: {
         managerId: manager.id,
       },
-      orderBy: { createdAt: "desc" },
     });
 
     if (companys.length < 1) {

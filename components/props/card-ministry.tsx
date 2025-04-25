@@ -4,8 +4,8 @@ interface CardMinistryProps {
   linkname?: string | null;
   name?: string | null;
   description?: string | null;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const CardMinistry = ({
