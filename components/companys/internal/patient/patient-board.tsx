@@ -28,7 +28,6 @@ export const PatientBoard = () => {
       <hr />
       <PatientTable
         key={refreshKey}
-        companyId={companyId}
         onRowClick={handleRowClick}
       />
     </div>

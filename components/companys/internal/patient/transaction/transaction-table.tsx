@@ -1,22 +1,10 @@
 "use client";
-import { FormNotFound } from "@/components/form-not-found";
-
-//ui
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
-import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-
+import { useTransaction } from "@/hooks/internal/use-transaction";
+import { DynamicTable } from "@/components/props/dynamic-table";
+import { useParams } from "next/navigation";
 
 interface Transaction {
   id: string;
@@ -34,125 +22,69 @@ interface Transaction {
   creatorUserId: string;
 }
 
-interface TransactionsError {
-  error: string;
-  description?: string;
-  url?: string;
-  urlname?: string;
-}
 
-interface TransactionTableProps {
-  patientId: string;
-  companyId: string;
-}
 
-export const TransactionTable = ({
-  patientId,
-  companyId,
-}: TransactionTableProps) => {
-  const [transactions, setTransactions] = useState<
-    Transaction[] | TransactionsError | null
-  >(null);
-  const [loading, setLoading] = useState(true);
+export const TransactionTable = () => {
+  const params = useParams();
+  const companyId = params.companyId as string;
+  const patientId = params.patientId as string;
+  const { transactions, isLoading } = useTransaction(companyId, patientId);
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const response = await fetch(
-          `/api/companies/${companyId}/patients/${patientId}/transaction`
-        );
+  const columns = [
+    {
+      key: "datetime",
+      header: "วันที่",
+      render: (item: Transaction) =>
+        new Date(item.datetime).toLocaleDateString("th-TH", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+    },
+    {
+      key: "transactionCategory",
+      header: "รายการ",
+      render: (item: Transaction) => item.transactionCategory.name,
+    },
+    {
+      key: "detail",
+      header: "รายละเอียด",
+      render: (item: Transaction) => <Textarea value={item.detail} readOnly />,
+    },
+    {
+      key: "price",
+      header: "ราคา",
+      render: (item: Transaction) => <span>{item.price} ฿</span>,
+    },
 
-        const data = await response.json();
-        setTransactions(data);
-      } catch (error) {
-        console.error("Error fetching transactions:", error);
-        setTransactions(() => ({
-          error: "ไม่พบข้อมูลธุรกรรม",
-          description: "เริ่มต้นด้วยการสร้างรายการธุรกรรม",
-          url: `/dashboard/create-patient`,
-          urlname: "สร้างรายการธุรกรรมใหม่",
-        }));
-      } finally {
-        setLoading(false);
-      }
-    };
+    {
+      key: "paid",
+      header: "จ่ายแล้ว",
+      render: (item: Transaction) => (
+        <Badge variant={item.paid < item.price ? "amber" : "emerald"}>
+          {item.paid} ฿
+        </Badge>
+      ),
+    },
+    {
+      key: "creator",
+      header: "ผู้บันทึก",
+      render: (item: Transaction) => item.creator.name,
+    },
+  ];
 
-    fetchTransactions();
-  }, [companyId, patientId]);
-
-  if (loading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
-    <>
-      <Card className="w-full">
-        <CardContent>
-          <ScrollArea className="h-[400px]">
-            <Table className="text-base">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>วันที่</TableHead>
-                  <TableHead>รายการ</TableHead>
-                  <TableHead>รายละเอียด</TableHead>
-                  <TableHead>ราคา</TableHead>
-                  <TableHead>ชำระแล้ว</TableHead>
-                  <TableHead>ผู้บันทึก</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {Array.isArray(transactions) ? (
-                  transactions.map((transaction) => (
-                    <TableRow key={transaction.id}>
-                      <TableCell className="whitespace-nowrap">
-                        {new Date(transaction.datetime).toLocaleDateString(
-                          "th-TH",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {transaction.transactionCategory.name}
-                      </TableCell>
-                      <TableCell>
-                        <Textarea value={transaction.detail} readOnly />
-                      </TableCell>
-                      <TableCell>{transaction.price} ฿</TableCell>
-                      <TableCell>
-                        {transaction.paid !== 0 ? (
-                          <Badge variant="emerald">{transaction.paid} ฿</Badge>
-                        ) : (
-                          <Badge
-                            variant="outline"
-                            className="bg-yellow-50 text-yellow-800 border-yellow-200 hover:bg-yellow-50"
-                          >
-                            ยังไม่ได้ชำระ
-                          </Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>{transaction.creator.name}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6}>
-                      <FormNotFound
-                        message={transactions?.error || "Unknown error"}
-                        description={transactions?.description || ""}
-                        url={transactions?.url || ""}
-                        urlname={transactions?.urlname || ""}
-                      />
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </CardContent>
-      </Card>
-    </>
+    <DynamicTable
+      data={transactions}
+      columns={columns}
+      error="ไม่พบข้อมูลธุรกรรม"
+      description="เริ่มต้นด้วยการสร้างรายการธุรกรรม"
+      url="/"
+      urlname="สร้างรายการธุรกรรมใหม่"
+    />
   );
 };

@@ -46,25 +46,27 @@ import { CreateTransactionSchema } from "@/schemas";
 
 //props
 import { CardCategory } from "@/components/props/card-category";
-import { SelectCategory } from "@/components/companys/internal/category/select-category";
+import { SelectCategory } from "@/components/props/select-category";
 
 //actions
 import { createTransaction } from "@/actions/company/public/transaction";
 import { Textarea } from "@/components/ui/textarea";
+import { useTransactionCategories } from "@/hooks/internal/use-tc";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
-  companyId: string;
+
 }
 
 export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
-  companyId,
 }: CreateTransactionFormProps) => {
   const params = useParams();
   const patientId = params.patientId as string;
+  const companyId = params.companyId as string;
+  const { categories, isLoading } = useTransactionCategories(companyId);
   
   const [isPending, startTransition] = useTransition();
 
@@ -173,7 +175,8 @@ export const CreateTransactionForm = ({
                     value={field.value}
                     onValueChange={field.onChange}
                     disabled={isPending}
-                    companyId={companyId}
+                    isLoading={isLoading}
+                    categories={categories}
                   />
                   <FormMessage />
                 </FormItem>

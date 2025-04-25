@@ -3,17 +3,19 @@
 import { DialogButton } from "@/components/props/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { CreateTransactionCategoryForm } from "@/components/companys/internal/settings/tc/transactioncategory-form";
-import { TabsContent } from "@radix-ui/react-tabs";
+import { CreateTransactionCategoryForm } from "@/components/companys/internal/settings/category/tc/transactioncategory-form";
 
-export const DialogCreateTransactionCategory = () => {
+interface DialogCreateTransactionCategoryProps {
+  onSuccess?: () => void;
+}
+export const DialogCreateTransactionCategory = ({
+  onSuccess,
+}: DialogCreateTransactionCategoryProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <TabsContent value="dental-procedures" className="space-y-4">
-        <div className="flex justify-between">
-          <h1 className="text-2xl font-bold">หมวดหมู่ทำฟัน / รายการทำฟัน</h1>
+      
           <DialogButton
             title="เพิ่มหมวดหมู่"
             icon={<PlusIcon />}
@@ -22,11 +24,10 @@ export const DialogCreateTransactionCategory = () => {
             open={open}
             setOpen={setOpen}
           >
-            <CreateTransactionCategoryForm setOpen={setOpen} />
+            <CreateTransactionCategoryForm setOpen={setOpen} onSuccess={ onSuccess } />
           </DialogButton>
-        </div>
-        <hr />
-      </TabsContent>
+        
+        
     </>
   );
 };

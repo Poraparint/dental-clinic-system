@@ -49,7 +49,7 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
         </div>
 
         <PatientInfoCard patient={patient} />
-        <TransactionInfoCard patient={patientId} company={ companyId } />
+        <TransactionInfoCard />
       </Tabs>
     </div>
   );

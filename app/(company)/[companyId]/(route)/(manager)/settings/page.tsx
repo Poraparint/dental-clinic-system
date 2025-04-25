@@ -2,6 +2,8 @@ import { Settings } from "@/components/companys/internal/settings/settings";
 import { currentManager } from "@/lib/auth";
 import { notFound } from "next/navigation";
 
+
+
 const SettingsPage = async () => {
 
     const user = await currentManager();
@@ -9,7 +11,7 @@ const SettingsPage = async () => {
     if (!user) {
         notFound();
     }
-    return (<Settings/> );
+    return (<Settings /> );
 }
  
 export default SettingsPage;

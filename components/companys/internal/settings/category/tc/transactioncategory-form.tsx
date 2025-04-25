@@ -29,14 +29,16 @@ import { toast } from "sonner";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 export const CreateTransactionCategoryForm = ({
   setOpen,
+  onSuccess,
 }: CreateTransactionCategoryFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  
+
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateTransactionCategorySchema>>({
@@ -51,8 +53,6 @@ export const CreateTransactionCategoryForm = ({
   const OnSubmit = (
     values: z.infer<typeof CreateTransactionCategorySchema>
   ) => {
-   
-
     startTransition(() => {
       CreateTransactionCategory(values, companyId)
         .then((data) => {
@@ -61,8 +61,9 @@ export const CreateTransactionCategoryForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            
+
             setOpen(false);
+            onSuccess?.();
           }
         })
         .catch(() => toast.error("Something went wrong!"));
@@ -108,7 +109,7 @@ export const CreateTransactionCategoryForm = ({
               name="price"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ราคา</FormLabel>
+                  <FormLabel>ราคาเริ่มต้น</FormLabel>
                   <FormControl>
                     <Input
                       {...field}

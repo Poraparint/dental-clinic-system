@@ -19,6 +19,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           error: "ไม่พบข้อมูลหมวดหมู่",
+          description: "ไม่พบข้อมูลหมวดหมู่",
+          url: "/",
+          urlname: "เพิ่มหมวดหมู่",
         },
         { status: 404 }
       );
@@ -26,10 +29,13 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(categorys);
   } catch (error) {
-    console.error("Error fetching patients:", error);
+    console.error("Error fetching categorys:", error);
     return NextResponse.json(
       {
         error: "ไม่พบข้อมูลหมวดหมู่",
+        description: "ไม่พบข้อมูลหมวดหมู่",
+        url: "/",
+        urlname: "เพิ่มหมวดหมู่",
       },
       { status: 500 }
     );
