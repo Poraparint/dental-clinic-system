@@ -5,8 +5,12 @@ import { CreateMinistryForm } from "@/components/companys/external/create-minist
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 
+interface DialogCreateMinistryProps{
+  onSuccess?: () => void;
+}
+
 // ตัวอย่างการใช้งาน
-export const DialogCreateMinistry = () => {
+export const DialogCreateMinistry = ({ onSuccess }: DialogCreateMinistryProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,7 +23,7 @@ export const DialogCreateMinistry = () => {
         open={open}
         setOpen={setOpen}
       >
-        <CreateMinistryForm setOpen={setOpen} />
+        <CreateMinistryForm setOpen={setOpen} onSuccess={onSuccess} />
       </DialogButton>
     </>
   );

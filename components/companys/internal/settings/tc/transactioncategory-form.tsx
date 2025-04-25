@@ -24,7 +24,7 @@ import { CreateTransactionCategorySchema } from "@/schemas";
 import { CreateTransactionCategory } from "@/actions/company/manager/transaction-category";
 import { CardCategory } from "@/components/props/card-category";
 import { Album } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
 interface CreateTransactionCategoryFormProps {
@@ -36,7 +36,7 @@ export const CreateTransactionCategoryForm = ({
 }: CreateTransactionCategoryFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const router = useRouter();
+  
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateTransactionCategorySchema>>({
@@ -61,7 +61,7 @@ export const CreateTransactionCategoryForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            router.refresh();
+            
             setOpen(false);
           }
         })

@@ -26,14 +26,14 @@ import { CreateCompanySchema } from "@/schemas";
 import { createCompany } from "@/actions/company/manager/company";
 import { CardCategory } from "@/components/props/card-category";
 import { User } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 interface CreateMinistryFormProps {
   setOpen: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
-export const CreateMinistryForm = ({ setOpen }: CreateMinistryFormProps) => {
-  const router = useRouter();
+export const CreateMinistryForm = ({ setOpen, onSuccess }: CreateMinistryFormProps) => {
+  
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -59,8 +59,8 @@ export const CreateMinistryForm = ({ setOpen }: CreateMinistryFormProps) => {
           }
           if (data?.success) {
             setSuccess(data.success);
-            router.refresh();
             setOpen(false);
+            onSuccess?.();
           }
         })
         .catch(() => setError("Something went wrong!"));

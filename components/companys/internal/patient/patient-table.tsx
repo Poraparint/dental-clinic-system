@@ -100,7 +100,7 @@ export const PatientTable = ({ companyId, onRowClick }: PatientTableProps) => {
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={5}>
+            <TableCell colSpan={6}>
               <FormNotFound
                 message={patients?.error || "Unknown error"}
                 description={patients?.description || ""}

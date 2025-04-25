@@ -141,7 +141,7 @@ model TwoFactorConfirmation {
 
 model TransactionCategory {
   id           String        @id @default(cuid())
-  name         String        @unique
+  name         String        
   description  String?
   price        Float?
   managerId    String
@@ -152,11 +152,12 @@ model TransactionCategory {
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
   isDeleted    Boolean       @default(false)
+  @@unique([name, companyId])
 }
 
 model Patient {
   id            String        @id @default(cuid())
-  name          String        @unique
+  name          String        
   phone         String?
   age           String?
   address       String?
@@ -175,6 +176,7 @@ model Patient {
   company       Company       @relation(fields: [companyId], references: [id])
   creator         User          @relation(fields: [creatorUserId], references: [id])
 
+@@unique([name, companyId])
   @@index([name, phone, job])
   @@index([creatorUserId])
 }

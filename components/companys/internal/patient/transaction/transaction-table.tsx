@@ -17,8 +17,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 
-//icons
-import { Calendar } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -92,10 +90,7 @@ export const TransactionTable = ({
             <Table className="text-base">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="flex gap-2">
-                    <Calendar className="text-lapis-accent" />
-                    วันที่
-                  </TableHead>
+                  <TableHead>วันที่</TableHead>
                   <TableHead>รายการ</TableHead>
                   <TableHead>รายละเอียด</TableHead>
                   <TableHead>ราคา</TableHead>
@@ -128,9 +123,7 @@ export const TransactionTable = ({
                       <TableCell>{transaction.price} ฿</TableCell>
                       <TableCell>
                         {transaction.paid !== 0 ? (
-                          <Badge className="bg-green-100 text-jade hover:bg-green-200 border-green-400">
-                            {transaction.paid} ฿
-                          </Badge>
+                          <Badge variant="emerald">{transaction.paid} ฿</Badge>
                         ) : (
                           <Badge
                             variant="outline"
