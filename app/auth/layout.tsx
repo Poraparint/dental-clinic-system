@@ -13,7 +13,7 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
     <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-6xl md:h-[40rem] border rounded-xl shadow-md relative">
         <div className="flex h-full">
-          <div className="relative max-md:hidden w-2/4 m-3">
+          <div className="relative w-2/4 m-3 max-md:sr-only">
             <Image
               src="/night.jpeg"
               fill

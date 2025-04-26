@@ -17,7 +17,7 @@ export const PublicNavbar = ({ children }: PublicNavbarProps) => {
             width={30}
             alt="Dental-clinic-system"
           />
-          <div className="flex flex-col text-sm font-bold tracking-wide">
+          <div className="flex flex-col text-sm font-bold tracking-wide max-md:sr-only">
             <span>DentalClinic</span>
             <span className="text-muted-foreground">ManagementSystem</span>
           </div>

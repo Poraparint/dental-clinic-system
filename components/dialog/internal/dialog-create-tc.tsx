@@ -3,7 +3,7 @@
 import { DialogButton } from "@/components/props/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { CreateDentalTechCategoryForm } from "@/components/companys/internal/settings/category/dtc/transactioncategory-form";
+import { CreateTransactionCategoryForm } from "@/components/companys/internal/settings/category/tc/transactioncategory-form";
 
 interface DialogCreateTransactionCategoryProps {
   onSuccess?: () => void;
@@ -23,7 +23,7 @@ export const DialogCreateTransactionCategory = ({
         open={open}
         setOpen={setOpen}
       >
-        <CreateDentalTechCategoryForm
+        <CreateTransactionCategoryForm
           setOpen={setOpen}
           onSuccess={onSuccess}
         />

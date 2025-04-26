@@ -13,6 +13,17 @@ export async function GET(request: NextRequest) {
         companyId,
         isDeleted: false,
       },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        creator: {
+          select: {
+            name: true,
+          }
+        }
+      }
     });
 
     if (categorys.length < 1) {

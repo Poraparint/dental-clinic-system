@@ -36,3 +36,10 @@ export const apiAuthPrefix = "/api/auth";
  */
 
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
+
+/**
+ * The default manager redirect path after logging in
+ * @type {string}
+ */
+
+export const MANAGER_LOGIN_REDIRECT = "/dashboard/ministry";

@@ -1,5 +1,7 @@
 import { UserInfo } from "@/components/user-info";
 import { currentManager } from "@/lib/auth";
+import { MANAGER_LOGIN_REDIRECT } from "@/routes";
+import { redirect } from "next/navigation";
 
 type DashboardPageProps = {
   params: Promise<{ companyId: string }>;
@@ -7,6 +9,10 @@ type DashboardPageProps = {
 export default async function DashboardPage({ params }: DashboardPageProps) {
   const manager = await currentManager();
   const { companyId } = await params;
+
+  if (!companyId) {
+    redirect(`${MANAGER_LOGIN_REDIRECT}`);
+  }
 
   return (
     <div>

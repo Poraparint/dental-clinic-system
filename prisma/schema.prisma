@@ -27,14 +27,16 @@ model Company {
   id                         String                @id @default(uuid())
   name                       String?
   description                String?
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt
   managerId                  String
   manager                    Manager               @relation(fields: [managerId], references: [id])
   members                    Member[]
   patients                   Patient[]
   transactionCategories      TransactionCategory[]
   DentalTechnicianCategories DentalTechCategory[]
+  expensesCategories ExpensesCategory[]
+  appointmentCategories AppointmentCategory[]
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
   isDeleted                  Boolean               @default(false)
 }
 
@@ -67,6 +69,8 @@ model Manager {
   companies                  Company[]
   members                    Member[]
   transactionCategories      TransactionCategory[]
+  appointmentCategories AppointmentCategory[]
+  expensesCategories ExpensesCategory[]
 }
 
 model Member {
@@ -174,6 +178,35 @@ model DentalTechCategory {
   @@unique([name, companyId])
 }
 
+model ExpensesCategory{
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  managerId    String
+  manager      Manager       @relation(fields: [managerId], references: [id])
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+
+  @@unique([name, companyId])
+}
+
+model AppointmentCategory{
+  id          String   @id @default(cuid())
+  name        String
+  managerId    String
+  manager      Manager       @relation(fields: [managerId], references: [id])
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+
+  @@unique([name, companyId])
+}
+
 model Patient {
   id            String        @id @default(cuid())
   name          String
@@ -219,13 +252,16 @@ model Transaction {
 
 model Dentaltech {
   id        String   @id @default(cuid())
-  datetime  DateTime @default(now())
   detail    String?
   level     String   @default("ปกติ")
   status    String   @default("รอดำเนินการ")
-  price                 Float
+  deadline  DateTime @default(now())
+  price                 Float?
+  postit    String?
   patientId String
   dctId String
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient   Patient  @relation(fields: [patientId], references: [id])
 }
+
+

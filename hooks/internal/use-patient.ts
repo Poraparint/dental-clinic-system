@@ -6,8 +6,6 @@ interface Patient {
   id: string;
   name: string;
   phone: string;
-  cd: string;
-  drug: string;
   createdAt: Date;
   creator: {
     name: string;

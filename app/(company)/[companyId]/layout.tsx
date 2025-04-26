@@ -1,10 +1,12 @@
 import { getCompanyByManagerId } from "@/data/internal/company";
+import { getMemberByCompanyId } from "@/data/internal/member";
 import { currentManager, currentUser } from "@/lib/auth";
-import { notFound } from "next/navigation";
+import { MANAGER_LOGIN_REDIRECT } from "@/routes";
+import {  redirect } from "next/navigation";
 
 type CompanyLayoutProps = {
   children: React.ReactNode;
-  params: Promise<{ companyId: string; managerId: string }>;
+  params: Promise<{ companyId: string; }>;
 };
 
 export default async function CompanyLayout({
@@ -14,19 +16,26 @@ export default async function CompanyLayout({
   try {
     const { companyId } = await params;
     const managerId = await currentManager();
-    const existingUser = await currentUser();
+    const memberId = await currentUser();
 
-    if (!managerId && !existingUser) {
-      notFound();
+    if (!managerId && !memberId) {
+      redirect("auth/login");
     }
-    if (managerId || existingUser) {
-      if (!companyId) {
-        console.log("Company ID is undefined");
-        notFound();
-      }
+
+    if (!companyId) {
+      console.log("Company ID is undefined");
+      redirect(`${MANAGER_LOGIN_REDIRECT}`);
+    }
+
+    if (managerId) {
       const company = await getCompanyByManagerId(companyId, managerId.id);
       if (!company) {
-        notFound();
+        redirect(`${MANAGER_LOGIN_REDIRECT}`);
+      }
+    } else if (memberId) {
+      const member = await getMemberByCompanyId(companyId, memberId.id);
+      if (!member) {
+        redirect("/");
       }
     }
   } catch (error) {

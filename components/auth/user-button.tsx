@@ -1,6 +1,6 @@
 "use client";
 //icons
-import { User, LogOutIcon, House } from "lucide-react";
+import { User, LogOutIcon, House, Users } from "lucide-react";
 //ui
 import {
   DropdownMenu,
@@ -24,7 +24,8 @@ export const UserButton = () => {
     return (
       <div className="gap-2 flex">
       <Button asChild variant="emerald">
-        <Link href="/auth/member-login">เข้าสู่ระบบพนักงาน</Link>
+          <Link href="/auth/member-login"><Users /><span className="max-md:sr-only">เข้าสู่ระบบพนักงาน
+          </span></Link>
       </Button>
       <div className="gap-2 border-l-2 pl-2 items-center flex">
         <Button asChild variant="outline">
@@ -40,52 +41,55 @@ export const UserButton = () => {
    }
 
     return (
-    <RoleGate
-      allowedRole={CompanyRole.MANAGER}
-      fallback={
-        <div className="gap-2 flex">
-          <Button asChild variant="emerald">
-            <Link href="/auth/member-login">เข้าสู่ระบบพนักงาน</Link>
-          </Button>
-          <div className="gap-2 border-l-2 pl-2 items-center flex">
-            <Button asChild variant="outline">
-              <Link href="/auth/login">เข้าสู่ระบบ</Link>
+      <RoleGate
+        allowedRole={CompanyRole.MANAGER}
+        fallback={
+          <div className="gap-2 flex">
+            <Button asChild variant="emerald">
+              <Link href="/auth/member-login">
+                <Users />
+                <span className="max-md:sr-only">เข้าสู่ระบบพนักงาน</span>
+              </Link>
             </Button>
-            <Button asChild variant="lapis">
-              <Link href="/auth/register">ลงทะเบียน</Link>
-            </Button>
+            <div className="gap-2 border-l-2 pl-2 items-center flex">
+              <Button asChild variant="outline">
+                <Link href="/auth/login">เข้าสู่ระบบ</Link>
+              </Button>
+              <Button asChild variant="lapis">
+                <Link href="/auth/register">ลงทะเบียน</Link>
+              </Button>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <Avatar>
-            <AvatarImage src={user?.image || ""} />
-            <AvatarFallback className="p-2">
+        }
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarImage src={user?.image || ""} />
+              <AvatarFallback className="p-2">
+                <User />
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40" align="end">
+            <DropdownMenuItem>
               <User />
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-40" align="end">
-          <DropdownMenuItem>
-            <User />
-            {user.name || "USER"}
-          </DropdownMenuItem>
-          <Link href="/dashboard/ministry">
-            <DropdownMenuItem>
-              <House />
-              แดชบอร์ด
+              {user.name || "USER"}
             </DropdownMenuItem>
-          </Link>
-          <LogoutButton>
-            <DropdownMenuItem>
-              <LogOutIcon />
-              Logout
-            </DropdownMenuItem>
-          </LogoutButton>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </RoleGate>
-  );
+            <Link href="/dashboard/ministry">
+              <DropdownMenuItem>
+                <House />
+                แดชบอร์ด
+              </DropdownMenuItem>
+            </Link>
+            <LogoutButton>
+              <DropdownMenuItem>
+                <LogOutIcon />
+                Logout
+              </DropdownMenuItem>
+            </LogoutButton>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </RoleGate>
+    );
 };
