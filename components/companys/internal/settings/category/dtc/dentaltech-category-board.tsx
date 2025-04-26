@@ -2,7 +2,7 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import { DialogCreateTransactionCategory } from "@/components/dialog/internal/dialog-create-tc";
-import { DentalTechCategoriesTable } from "./tc-table";
+import { DentalTechCategoriesTable } from "./dentaltech-category-table";
 
 export const DentalTechCategoryBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
