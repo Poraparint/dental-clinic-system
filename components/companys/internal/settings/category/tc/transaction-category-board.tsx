@@ -1,6 +1,6 @@
 "use client";
 import { TabsContent } from "@/components/ui/tabs";
-import { TransactionCategoriesTable } from "@/components/companys/internal/settings/category/tc/tc-table";
+import { TransactionCategoriesTable } from "@/components/companys/internal/settings/category/tc/transaction-category-table";
 import { useState } from "react";
 import { DialogCreateTransactionCategory } from "@/components/dialog/internal/dialog-create-tc";
 
