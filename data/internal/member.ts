@@ -16,7 +16,7 @@ export const getMemberById = async (id: string) => {
   }
 };
 
-export const getMemberByCompanyId = async (companyId: string) => {
+export const getAllMembersByCompanyId = async (companyId: string) => {
   try {
     const member = await db.member.findMany({
       where: { companyId },
@@ -25,4 +25,18 @@ export const getMemberByCompanyId = async (companyId: string) => {
   } catch {
     return null;
   }
+};
+
+export const getMemberByCompanyId = async (companyId: string, memberId: string) => {
+try {
+  const member = await db.member.findUnique({
+    where: {
+      id: memberId,
+      companyId
+    },
+  });
+  return member;
+} catch {
+  return null;
+}
 };

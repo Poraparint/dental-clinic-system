@@ -6,6 +6,9 @@ interface Category {
   id: string;
   name: string;
   description: string;
+  creator: {
+    name: string;
+  }
   createdAt: Date;
 }
 

@@ -8,8 +8,6 @@ interface Patient {
   id: string;
   name: string;
   phone: string;
-  cd: string;
-  drug: string;
   createdAt: Date;
   creator: {
     name: string;
@@ -35,16 +33,6 @@ export const PatientTable = ({  onRowClick }: PatientTableProps) => {
       key: "phone",
       header: "เบอร์ติดต่อ",
       render: (item: Patient) => item.phone,
-    },
-    {
-      key: "cd",
-      header: "โรคประจำตัวปัจจุบัน",
-      render: (item: Patient) => item.cd,
-    },
-    {
-      key: "drug",
-      header: "ประวัติการแพ้ยา",
-      render: (item: Patient) => item.drug,
     },
 
     {

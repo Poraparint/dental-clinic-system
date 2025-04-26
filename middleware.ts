@@ -6,6 +6,7 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
+  MANAGER_LOGIN_REDIRECT,
 } from "@/routes";
 import { CompanyRole } from "@prisma/client";
 
@@ -27,7 +28,7 @@ export default auth((req) => {
   if (isAuthRoute) {
     if (isLoggedIn) {
       const redirectUrl = companyRole === CompanyRole.MANAGER
-        ? "/"
+        ? `${MANAGER_LOGIN_REDIRECT}`
         : "/";
       return NextResponse.redirect(new URL(redirectUrl, nextUrl));
     }

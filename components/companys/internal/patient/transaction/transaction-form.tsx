@@ -129,9 +129,10 @@ export const CreateTransactionForm = ({
                           )}
                         </Button>
                       </PopoverTrigger>
+                      
                       <PopoverContent
                         align="start"
-                        className="flex w-auto flex-col space-y-2 p-2 bg-background"
+                        className="flex w-auto flex-col space-y-2 p-2 bg-background z-[1000]"
                       >
                         <Select
                           onValueChange={(value) =>

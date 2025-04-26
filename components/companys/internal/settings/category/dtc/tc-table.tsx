@@ -9,6 +9,9 @@ interface DentalTechnicianCategory {
   id: string;
   name: string;
   description?: string;
+  creator: {
+    name: string;
+  }
   createdAt: Date;
 }
 export const DentalTechCategoriesTable = () => {
@@ -36,6 +39,11 @@ export const DentalTechCategoriesTable = () => {
           month: "short",
           day: "numeric",
         }),
+    },
+    {
+      key: "creator",
+      header: "ผู้บันทึก",
+      render: (item: DentalTechnicianCategory) => item.creator.name,
     },
   ];
 
