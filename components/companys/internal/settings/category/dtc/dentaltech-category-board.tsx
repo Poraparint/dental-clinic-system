@@ -1,7 +1,7 @@
 "use client";
 import { TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
-import { DialogCreateTransactionCategory } from "@/components/dialog/internal/dialog-create-tc";
+import { DialogCreateTransactionCategory } from "@/components/dialog/internal/category/dialog-create-tc";
 import { DentalTechCategoriesTable } from "./dentaltech-category-table";
 
 export const DentalTechCategoryBoard = () => {
@@ -14,7 +14,9 @@ export const DentalTechCategoryBoard = () => {
   return (
     <TabsContent value="dental-items" className="space-y-4">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">หมวดหมู่ทันตกรรม / รายการทันตกรรม</h1>
+        <h1 className="text-2xl font-bold">
+          หมวดหมู่ทันตกรรม / รายการทันตกรรม
+        </h1>
         <DialogCreateTransactionCategory onSuccess={handleRefresh} />
       </div>
       <hr />

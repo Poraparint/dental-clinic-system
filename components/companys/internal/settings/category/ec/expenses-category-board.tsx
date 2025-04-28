@@ -2,7 +2,7 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import { ExpensesCategoriesTable } from "@/components/companys/internal/settings/category/ec/expenses-category-table";
-import { DialogCreateExpensesCategory } from "@/components/dialog/internal/dialog-create-ec";
+import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
 
 export const ExpensesCategoryBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);

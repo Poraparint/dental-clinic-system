@@ -2,7 +2,7 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { TransactionCategoriesTable } from "@/components/companys/internal/settings/category/tc/transaction-category-table";
 import { useState } from "react";
-import { DialogCreateTransactionCategory } from "@/components/dialog/internal/dialog-create-tc";
+import { DialogCreateTransactionCategory } from "@/components/dialog/internal/category/dialog-create-tc";
 
 export const TransactionCategoryBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
