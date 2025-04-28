@@ -75,7 +75,7 @@ model Manager {
 
 model Member {
   id                         String               @id @unique
-  memberCode                 String
+  memberCode                 String?
   role                       CompanyRole          @default(PENDING)
   companyId                  String
   managerId                  String

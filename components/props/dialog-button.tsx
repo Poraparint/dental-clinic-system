@@ -34,7 +34,7 @@ export const DialogButton = ({
         description={dialogDescription}
       >
         {children}
-        <DialogFooter className="absolute bottom-6 right-[30%]">
+        <DialogFooter className="absolute bottom-6 left-5">
           <DialogClose asChild>
             <Button variant="outline" size="lg">ย้อนกลับ</Button>
           </DialogClose>

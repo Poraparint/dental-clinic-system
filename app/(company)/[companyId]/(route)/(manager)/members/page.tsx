@@ -1,7 +1,7 @@
+import { MemberBoard } from "@/components/companys/internal/members/member-board";
+
 const MemberManagementPage = () => {
-    return (<div>
-        member
-    </div> );
+    return (<MemberBoard/> );
 }
  
 export default MemberManagementPage;
