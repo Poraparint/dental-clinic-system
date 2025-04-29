@@ -44,7 +44,7 @@ export const UserButton = () => {
 
     return (
       <RoleGate
-        allowedRole={CompanyRole.MANAGER || CompanyRole.COMANAGER}
+        allowedRole={[CompanyRole.MANAGER , CompanyRole.COMANAGER]}
         fallback={
           <DropdownMenu>
             <DropdownMenuTrigger>

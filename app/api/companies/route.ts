@@ -12,7 +12,7 @@ export async function GET() {
       },
     });
 
-    if (companys.length < 7) {
+    if (companys.length < 1) {
       return NextResponse.json(
         {
           error: "ยินดีต้อนรับสู่แดชบอร์ด",
