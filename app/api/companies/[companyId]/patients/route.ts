@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
+import { currentManagerAndDentist } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const pathSegments = url.pathname.split("/");
+    const existingUser = await currentManagerAndDentist();
+
+    if (!existingUser) {
+      return{error: "คุณไม่มีสิทธิเข้าถึงข้อมูล"}
+    }
     const companyId = pathSegments[pathSegments.indexOf("companies") + 1];
 
     const patients = await db.patient.findMany({

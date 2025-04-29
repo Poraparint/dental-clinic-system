@@ -23,7 +23,10 @@ export const DialogButton = ({
 }: DialogButtonProps) => {
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="tracking-wide">
+      <Button
+        onClick={() => setOpen(true)}
+        className="tracking-wide bg-gradient-to-r from-indigo-800 to-indigo-500"
+      >
         {icon}
         {title}
       </Button>
@@ -36,7 +39,9 @@ export const DialogButton = ({
         {children}
         <DialogFooter className="absolute bottom-6 left-5">
           <DialogClose asChild>
-            <Button variant="outline" size="lg">ย้อนกลับ</Button>
+            <Button variant="outline" size="lg">
+              ย้อนกลับ
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContentForm>

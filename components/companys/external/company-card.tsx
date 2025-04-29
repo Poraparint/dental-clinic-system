@@ -8,6 +8,8 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import { useMinistry } from "@/hooks/external/use-ministry";
+import { RoleGate } from "@/components/props/role-gate";
+import { CompanyRole } from "@prisma/client";
 
 export const CompanyCard = () => {
   const { ministries, isLoading } = useMinistry();
@@ -15,30 +17,32 @@ export const CompanyCard = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <CardCategory
-      icon={<Hospital />}
-      title="Dental Clinic"
-      description="Manage your dental clinic"
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.isArray(ministries) ? (
-          ministries.map((ministry) => (
-            <CardMinistry
-              key={ministry.id}
-              linkname={`/${ministry.id}${DEFAULT_LOGIN_REDIRECT}`}
-              name={ministry.name}
-              description={ministry.description}
+    <RoleGate allowedRole={[CompanyRole.MANAGER]}>
+      <CardCategory
+        icon={<Hospital />}
+        title="Dental Clinic"
+        description="Manage your dental clinic"
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.isArray(ministries) ? (
+            ministries.map((ministry) => (
+              <CardMinistry
+                key={ministry.id}
+                linkname={`/${ministry.id}${DEFAULT_LOGIN_REDIRECT}`}
+                name={ministry.name}
+                description={ministry.description}
+              />
+            ))
+          ) : (
+            <FormNotFound
+              message={ministries?.error}
+              description={ministries?.description}
+              url={ministries?.url}
+              urlname={ministries?.urlname}
             />
-          ))
-        ) : (
-          <FormNotFound
-            message={ministries?.error}
-            description={ministries?.description}
-            url={ministries?.url}
-            urlname={ministries?.urlname}
-          />
-        )}
-      </div>
-    </CardCategory>
+          )}
+        </div>
+      </CardCategory>
+    </RoleGate>
   );
 };

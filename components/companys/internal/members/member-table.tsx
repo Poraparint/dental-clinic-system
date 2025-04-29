@@ -1,4 +1,14 @@
 "use client";
+//icons
+import {
+  Mail,
+  Phone,
+  User,
+  ShieldCheck,
+  Barcode,
+  CalendarDays,
+  Briefcase,
+} from "lucide-react";
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/dynamic-table";
@@ -27,43 +37,76 @@ export const MemberTable = () => {
     {
       key: "name",
       header: "ชื่อพนักงาน",
-      render: (item: MemberCategory) => item.user.name,
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <User className="h-4 w-4 text-lapis-accent" />
+          {item.user.name}
+        </div>
+      ),
     },
     {
       key: "phone",
       header: "เบอร์ติดต่อ",
-      render: (item: MemberCategory) => item.user.phone,
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <Phone className="h-4 w-4 text-jade" />
+          {item.user.phone}
+        </div>
+      ),
     },
     {
       key: "email",
       header: "อีเมล",
-      render: (item: MemberCategory) => item.user.email,
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <Mail className="h-4 w-4 text-amber-500" />
+          {item.user.email}
+        </div>
+      ),
     },
     {
       key: "isTwoFactorEnabled",
       header: "2FA",
-      render: (item: MemberCategory) =>
-        item.user.isTwoFactorEnabled ? "ON" : "OFF",
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="h-4 w-4 text-jade" />
+          {item.user.isTwoFactorEnabled ? "ON" : "OFF"}
+        </div>
+      ),
     },
     {
       key: "memberCode",
       header: "รหัสพนักงาน",
-      render: (item: MemberCategory) => item.memberCode,
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <Barcode className="h-4 w-4 text-mted-foreground" />
+          {item.memberCode}
+        </div>
+      ),
     },
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: MemberCategory) =>
-        new Date(item.createdAt).toLocaleDateString("th-TH", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <CalendarDays className="h-4 w-4 text-jade" />
+          {new Date(item.createdAt).toLocaleDateString("th-TH", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
+        </div>
+      ),
     },
     {
       key: "role",
       header: "ตำแหน่ง",
-      render: (item: MemberCategory) => item.role as CompanyRole,
+      render: (item: MemberCategory) => (
+        <div className="flex items-center gap-2">
+          <Briefcase className="h-4 w-4 " />
+          {item.role}
+        </div>
+      ),
     },
   ];
 

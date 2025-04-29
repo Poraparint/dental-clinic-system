@@ -4,14 +4,7 @@ import { currentManager } from "@/lib/auth";
 
 export async function GET() {
   try {
-      const manager = await currentManager();
-
-      if (!manager) {
-          return NextResponse.json(
-              { error: "Manager not authenticated", data: [] },
-              { status: 401 }
-          );
-      }
+    const manager = await currentManager();
 
     const companys = await db.company.findMany({
       where: {
@@ -19,7 +12,7 @@ export async function GET() {
       },
     });
 
-    if (companys.length < 1) {
+    if (companys.length < 7) {
       return NextResponse.json(
         {
           error: "ยินดีต้อนรับสู่แดชบอร์ด",
