@@ -2,13 +2,17 @@
 import { Button } from "@/components/ui/button";
 
 //icon
-import { ShieldCheck } from "lucide-react";
+import { ShieldCheck, Rocket, ArrowBigLeft } from "lucide-react";
 import Image from "next/image";
 import { RoleGate } from "../props/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { LinkButton } from "@/components/props/link-button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const HeroSection = () => {
+
+  const user = useCurrentUser();
+
   return (
     <div className="container flex justify-between">
       <div className="space-y-6 w-2/4">
@@ -20,22 +24,26 @@ export const HeroSection = () => {
           ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบครบวงจรที่ออกแบบมาโดยเฉพาะสำหรับทันตแพทย์
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <RoleGate
-            allowedRole={CompanyRole.MANAGER}
-            fallback={
+          {user ? (
+            <RoleGate
+              allowedRole={[CompanyRole.MANAGER]}
+              fallback={
+                <LinkButton
+                  title="เข้าทำงาน"
+                  icon={<ArrowBigLeft />}
+                  url={user?.companyId ? `/${user.companyId}/patients` : "/"}
+                />
+              }
+            >
               <LinkButton
-                title="ทดลองใช้งาน"
+                title="เริ่มต้นใช้งาน"
                 icon={<ShieldCheck />}
                 url="/dashboard/ministry"
               />
-            }
-          >
-            <LinkButton
-              title="เริ่มต้นใช้งาน"
-              icon={<ShieldCheck />}
-              url="/dashboard/ministry"
-            />
-          </RoleGate>
+            </RoleGate>
+          ) : (
+            <LinkButton title="ทดลองใช้งาน" icon={<Rocket />} url="/" />
+          )}
 
           <Button size="lg" variant="outline">
             เรียนรู้เพิ่มเติม

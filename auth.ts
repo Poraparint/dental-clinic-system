@@ -64,6 +64,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.role = token.role as string;
         session.user.roleType = token.roleType as "MANAGER" | "MEMBER";
+        session.user.companyId = token.companyId as string;
       }
 
       return session;
@@ -96,12 +97,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       } else {
         const member = await db.member.findUnique({
           where: { id: existingUser.id },
-          select: { role: true },
+          select: {
+            role: true,
+            companyId: true,
+           },
         });
 
         if (member) {
           token.role = member.role;
           token.roleType = "MEMBER";
+          token.companyId = member.companyId;
         }
       }
 

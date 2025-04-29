@@ -69,7 +69,6 @@ export const MemberRegister = async (values: z.infer<typeof MemberRegisterSchema
   const existingManager = await currentManager();
 
   if (!existingManager) {
-    console.log(`Manager with ID ${existingManager} not found`);
     return { error: "คุณไม่มีสิทธิเข้าถึงข้อมูลน้ี" };
   }
 

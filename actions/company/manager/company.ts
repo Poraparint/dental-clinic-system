@@ -11,39 +11,32 @@ import { CreateCompanySchema } from "@/schemas";
 //lib
 import { currentManager } from "@/lib/auth";
 
-
-export const createCompany = async (values: z.infer<typeof CreateCompanySchema>) => {
-
+export const createCompany = async (
+  values: z.infer<typeof CreateCompanySchema>
+) => {
   const validateFields = CreateCompanySchema.safeParse(values);
 
-  if (!validateFields.success) { 
-    return{error: "Invalid fields!"};
+  if (!validateFields.success) {
+    return { error: "Invalid fields!" };
   }
 
   const { name, description } = validateFields.data;
-  
+
+  const existingManager = await currentManager();
+  if (!existingManager) {
+    return { error: "คุณไม่มีสิทธิเพิ่มข้อมูล" };
+  }
   try {
-
-    const existingManager = await currentManager();
-    console.log("Manager ID:", existingManager.id);
-
-    if (!existingManager) {
-      console.log(`Manager with ID ${existingManager} not found`);
-      return {error: "Manager not found!"};
-    }
-
     await db.company.create({
       data: {
         name,
         description,
         managerId: existingManager.id,
-      }
-    })
+      },
+    });
 
-    return { success: "Company created successfully!" };
-    
+    return { success: "สร้างบริษัทสำเร็จ!" };
   } catch {
-    return {error: "An error occurred while creating the company"};
+    return { error: "เกิดข้อผิดพลาดขณะสร้างบริษัท" };
   }
-}
-
+};

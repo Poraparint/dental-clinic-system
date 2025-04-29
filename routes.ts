@@ -38,6 +38,13 @@ export const apiAuthPrefix = "/api/auth";
 export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
 
 /**
+ * The default member redirect path after logging in
+ * @type {string}
+ */
+
+export const MEMBER_LOGIN_REDIRECT = "/patients";
+
+/**
  * The default manager redirect path after logging in
  * @type {string}
  */

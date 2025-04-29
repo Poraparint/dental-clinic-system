@@ -4,14 +4,7 @@ import { currentManager } from "@/lib/auth";
 
 export async function GET() {
   try {
-      const manager = await currentManager();
-
-      if (!manager) {
-          return NextResponse.json(
-              { error: "Manager not authenticated", data: [] },
-              { status: 401 }
-          );
-      }
+    const manager = await currentManager();
 
     const companys = await db.company.findMany({
       where: {
