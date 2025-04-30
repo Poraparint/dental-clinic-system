@@ -9,7 +9,7 @@ import { useExpensesCategories } from "@/hooks/internal/use-ec";
 import { useParams } from "next/navigation";
 import { UserCard } from "@/components/props/user-card";
 import { Loading } from "@/components/loading";
-import { ChevronLeft, ChevronRight, CreditCard } from "lucide-react";
+import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
 import { useExpensesOverview } from "@/hooks/internal/use-expenses-overview";
 import { Button } from "@/components/ui/button";
@@ -98,7 +98,7 @@ export const Expenses = () => {
                   key={`${category.id}-${refreshKey}`}
                   title={category.name || ""}
                   description={`${categoryExpenses.toLocaleString()} บาท (${percentage}%)`}
-                  icon={<CreditCard />}
+                  icon={<BriefcaseBusiness className="text-white"/>}
                   color={category.color}
                   progressValue={percentage}
                 />

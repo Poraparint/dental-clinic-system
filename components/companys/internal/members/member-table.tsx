@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   Barcode,
   CalendarDays,
-  Briefcase,
+  BriefcaseBusiness,
 } from "lucide-react";
 
 import { Loading } from "@/components/loading";
@@ -103,7 +103,7 @@ export const MemberTable = () => {
       header: "ตำแหน่ง",
       render: (item: MemberCategory) => (
         <div className="flex items-center gap-2">
-          <Briefcase className="h-4 w-4 " />
+          <BriefcaseBusiness className="h-4 w-4 " />
           {item.role}
         </div>
       ),
