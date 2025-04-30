@@ -1,6 +1,7 @@
 import { PatientInfoCard } from "@/components/companys/internal/patient/patient-info-card";
 import { TransactionInfoCard } from "@/components/companys/internal/patient/transaction/transaction-info-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPatientByCompanyId } from "@/data/internal/patient";
@@ -30,7 +31,7 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
   }
 
   return (
-    <div className="tracking-wide">
+    <Card className="tracking-wide px-5">
       <Tabs defaultValue="info" className="space-y-4">
         <TabsList>
           <TabsTrigger value="info">ข้อมูลส่วนตัว</TabsTrigger>
@@ -51,7 +52,7 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
         <PatientInfoCard patient={patient} />
         <TransactionInfoCard />
       </Tabs>
-    </div>
+    </Card>
   );
 };
 

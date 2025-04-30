@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { FormNotFound } from "@/components/form-not-found";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ColumnConfig<T> {
   key: string;
@@ -40,46 +41,49 @@ export function DynamicTable<T>({
   onRowClick,
 }: DynamicTableProps<T>) {
   return (
-    <Table className={className}>
-      <TableHeader>
-        <TableRow>
-          {columns.map((column) => (
-            <TableHead key={column.key} className={column.className}>
-              {column.header}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.length > 0 ? (
-          data.map((item, index) => (
-            <TableRow
-              key={index}
-              onClick={() => onRowClick && onRowClick(item)}
-            >
-              {columns.map((column) => (
-                <TableCell
-                  key={`${column.key}-${index}`}
-                  className={column.className}
-                >
-                  {column.render(item)}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
-        ) : (
+    <ScrollArea className="h-96">
+      <Table className={className}>
+        <TableHeader>
           <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              <FormNotFound
-                message={error || "Unknown error"}
-                description={description || ""}
-                url={url || ""}
-                urlname={urlname || ""}
-              />
-            </TableCell>
+            {columns.map((column) => (
+              <TableHead key={column.key} className={column.className}>
+                {column.header}
+              </TableHead>
+            ))}
           </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        </TableHeader>
+
+        <TableBody>
+          {data.length > 0 ? (
+            data.map((item, index) => (
+              <TableRow
+                key={index}
+                onClick={() => onRowClick && onRowClick(item)}
+              >
+                {columns.map((column) => (
+                  <TableCell
+                    key={`${column.key}-${index}`}
+                    className={column.className}
+                  >
+                    {column.render(item)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                <FormNotFound
+                  message={error || "Unknown error"}
+                  description={description || ""}
+                  url={url || ""}
+                  urlname={urlname || ""}
+                />
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </ScrollArea>
   );
 }

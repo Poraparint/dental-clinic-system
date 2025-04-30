@@ -5,11 +5,12 @@ import { ExpensesCategoryBoard } from "@/components/companys/internal/settings/c
 import { AppointmentCategoryBoard } from "@/components/companys/internal/settings/category/apc/appointment-category-board";
 import { RoleGate } from "@/components/props/role-gate";
 import { CompanyRole } from "@prisma/client";
+import { Card } from "@/components/ui/card";
 
 export const Settings = () => {
   return (
     <RoleGate allowedRole={[CompanyRole.MANAGER]}>
-      <div>
+      <Card className="px-5">
         <h1 className="text-3xl font-bold mb-6">ระบบจัดการหมวดหมู่</h1>
         <Tabs defaultValue="dental-procedures">
           <TabsList className="grid grid-cols-4 mb-8">
@@ -23,7 +24,7 @@ export const Settings = () => {
           <ExpensesCategoryBoard />
           <AppointmentCategoryBoard />
         </Tabs>
-      </div>
+      </Card>
     </RoleGate>
   );
 };

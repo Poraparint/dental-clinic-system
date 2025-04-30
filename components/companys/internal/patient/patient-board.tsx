@@ -6,6 +6,7 @@ import { PatientTable } from "@/components/companys/internal/patient/patient-tab
 import { useState } from "react";
 import { RoleGate } from "@/components/props/role-gate";
 import { CompanyRole } from "@prisma/client";
+import { Card } from "@/components/ui/card";
 
 export const PatientBoard = () => {
   const params = useParams();
@@ -23,14 +24,14 @@ export const PatientBoard = () => {
 
   return (
     <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER, CompanyRole.DENTIST]}>
-      <div className="space-y-4">
+      <Card className="px-5">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">รายชื่อคนไข้ / บัตรคนไข้</h1>
           <DialogCreatePatient onSuccess={handleRefresh} />
         </div>
         <hr />
         <PatientTable key={refreshKey} onRowClick={handleRowClick} />
-      </div>
+      </Card>
     </RoleGate>
   );
 };

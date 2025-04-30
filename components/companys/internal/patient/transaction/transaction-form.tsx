@@ -56,7 +56,6 @@ import { useTransactionCategories } from "@/hooks/internal/use-tc";
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
-
 }
 
 export const CreateTransactionForm = ({
@@ -67,7 +66,7 @@ export const CreateTransactionForm = ({
   const patientId = params.patientId as string;
   const companyId = params.companyId as string;
   const { categories, isLoading } = useTransactionCategories(companyId);
-  
+
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateTransactionSchema>>({
@@ -80,6 +79,11 @@ export const CreateTransactionForm = ({
       paid: 0,
     },
   });
+  const transactionCategoryId = form.watch("transactionCategoryId");
+
+  const selectedCategory = categories.find(
+    (cat) => cat.id === transactionCategoryId
+  );
 
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
     startTransition(() => {
@@ -90,7 +94,7 @@ export const CreateTransactionForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            
+
             setOpen(false);
             onSuccess?.();
           }
@@ -129,7 +133,7 @@ export const CreateTransactionForm = ({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      
+
                       <PopoverContent
                         align="start"
                         className="flex w-auto flex-col space-y-2 p-2 bg-background z-[1000]"
@@ -223,7 +227,11 @@ export const CreateTransactionForm = ({
                       <Input
                         {...field}
                         disabled={isPending}
-                        placeholder="0.00"
+                        placeholder={
+                          selectedCategory?.price
+                            ? selectedCategory.price.toFixed(2)
+                            : "0.00"
+                        }
                         type="number"
                         className="pl-8"
                         value={field.value === 0 ? "" : field.value}
@@ -264,14 +272,16 @@ export const CreateTransactionForm = ({
             />
           </div>
         </CardCategory>
-        <Button
-          className="flex justify-self-end px-9"
-          typeof="submit"
-          size="lg"
-          disabled={isPending}
-        >
-          เพิ่มรายการใหม่
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            className="px-9"
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+          >
+            เพิ่มรายการใหม่
+          </Button>
+        </div>
       </form>
     </Form>
   );
