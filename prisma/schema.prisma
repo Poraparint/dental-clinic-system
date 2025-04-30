@@ -35,6 +35,7 @@ model Company {
   DentalTechnicianCategories DentalTechCategory[]
   expensesCategories ExpensesCategory[]
   appointmentCategories AppointmentCategory[]
+  expenses Expenses[]
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
   isDeleted                  Boolean               @default(false)
@@ -182,6 +183,7 @@ model ExpensesCategory{
   id          String   @id @default(cuid())
   name        String
   description String?
+  color String?
   managerId    String
   manager      Manager       @relation(fields: [managerId], references: [id])
   companyId   String
@@ -189,6 +191,7 @@ model ExpensesCategory{
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)
+  expenses Expenses[]
 
   @@unique([name, companyId])
 }
@@ -262,6 +265,18 @@ model Dentaltech {
   dctId String
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient   Patient  @relation(fields: [patientId], references: [id])
+}
+
+model Expenses{
+  id String @id @default(cuid())
+  datetime DateTime @default(now())
+  name String
+  ecId String
+  payment String
+  amount Float
+  expensesCategory ExpensesCategory @relation(fields: [ecId], references: [id])
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
 }
 
 

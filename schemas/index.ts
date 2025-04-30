@@ -124,7 +124,7 @@ export const CreateDentalTechCategorySchema = z.object({
     message: "Category name is required",
   }),
   description: z.optional(z.string()),
-  
+  color: z.optional(z.string()),
 });
 
 export const CreatePatientSchema = z.object({
@@ -175,3 +175,20 @@ export const CreateTransactionSchema = z
       });
     }
   });
+
+export const CreateExpensesSchema = z.object({
+  datetime: z.date({
+    required_error: "A date is required.",
+  }),
+  name: z.string().min(1, {
+    message: "name is required",
+  }),
+  ecId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
+  payment: z.string().min(1, "ต้องเลือกประเภทรายการ"),
+  amount: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "กรุณากรอกจำนวนเงินที่ชำระ" })
+      .min(0, "จำนวนเงินที่ชำระต้องไม่น้อยกว่า 0")
+  ),
+});

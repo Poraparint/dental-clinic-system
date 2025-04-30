@@ -23,7 +23,7 @@ export const CreateExpensesCategory = async (
     return { error: "Invalid fields!" };
   }
 
-  const { name, description } = validateFields.data;
+  const { name, description, color } = validateFields.data;
 
   const existingCategory = await getTransactionName(name, companyId);
 
@@ -47,6 +47,7 @@ export const CreateExpensesCategory = async (
       data: {
         name,
         description,
+        color,
         companyId,
         managerId: existingManager.id,
       },

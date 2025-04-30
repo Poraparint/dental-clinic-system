@@ -10,7 +10,7 @@ import {
 import { FormControl } from "@/components/ui/form";
 
 interface SelectCategoryProps {
-  value: string;
+  value: string | undefined;
   onValueChange: (value: string) => void;
   disabled?: boolean;
   placeholder?: string;
