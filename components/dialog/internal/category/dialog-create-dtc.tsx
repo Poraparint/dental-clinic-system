@@ -5,12 +5,12 @@ import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { CreateDentalTechCategoryForm } from "@/components/companys/internal/settings/category/dtc/dentaltech-category-form";
 
-interface DialogCreateTransactionCategoryProps {
+interface DialogCreateDentalTechCategoryProps {
   onSuccess?: () => void;
 }
-export const DialogCreateTransactionCategory = ({
+export const DialogCreateDentalTechCategory = ({
   onSuccess,
-}: DialogCreateTransactionCategoryProps) => {
+}: DialogCreateDentalTechCategoryProps) => {
   const [open, setOpen] = useState(false);
 
   return (
