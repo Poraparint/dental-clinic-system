@@ -108,14 +108,16 @@ export const CreateDentalTechCategoryForm = ({
           </div>
         </CardCategory>
 
-        <Button
-          typeof="submit"
-          className="flex justify-self-end px-9"
-          size="lg"
-          disabled={isPending}
-        >
-          เพิ่มหมวดหมู่
-        </Button>
+       <div className="flex justify-end">
+                 <Button
+                   typeof="submit"
+                   size="lg"
+                   disabled={isPending}
+                   className="px-9"
+                 >
+                   เพิ่มหมวดหมู่
+                 </Button>
+               </div>
       </form>
     </Form>
   );

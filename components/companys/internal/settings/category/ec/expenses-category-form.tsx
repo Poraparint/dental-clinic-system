@@ -57,7 +57,9 @@ export const CreateExpensesCategoryForm = ({
     { id: "#34d399", name: "มินต์กรีน" }, // Emerald-400
     { id: "#60a5fa", name: "ฟ้าสดใส" }, // Blue-400
     { id: "#c084fc", name: "ลาเวนเดอร์" }, // Purple-400
-    { id: "#cccccc", name: "ครีม" },
+    { id: "#663A44", name: "ม่วงแดง" },
+    { id: "#D4C8BE", name: "ครีม" },
+    { id: "#43474D", name: "เทาเข้ม" },
   ];
 
   const form = useForm<z.infer<typeof CreateDentalTechCategorySchema>>({
@@ -65,7 +67,7 @@ export const CreateExpensesCategoryForm = ({
     defaultValues: {
       name: "",
       description: "",
-      color: "#cccccc",
+      color: "#D4C8BE",
     },
   });
 
@@ -143,7 +145,6 @@ export const CreateExpensesCategoryForm = ({
                       >
                         <SelectTrigger className="w-[180px]">
                           <div className="flex items-center gap-2">
-                            
                             <SelectValue placeholder="เลือกสี" />
                           </div>
                         </SelectTrigger>
@@ -190,14 +191,16 @@ export const CreateExpensesCategoryForm = ({
           </Card>
         </CardCategory>
 
-        <Button
-          typeof="submit"
-          className="flex justify-self-end px-9"
-          size="lg"
-          disabled={isPending}
-        >
-          เพิ่มหมวดหมู่
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+            className="px-9"
+          >
+            เพิ่มหมวดหมู่
+          </Button>
+        </div>
       </form>
     </Form>
   );

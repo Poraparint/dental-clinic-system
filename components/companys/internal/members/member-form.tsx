@@ -228,7 +228,7 @@ export const MemberRegisterForm = ({
           </div>
         </CardCategory>
 
-        <div className="flex w-fit justify-self-end">
+        <div className="flex justify-end">
           <Button type="submit" size="lg" disabled={isPending} className="px-9">
             สร้างบัญชี
           </Button>

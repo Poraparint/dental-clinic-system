@@ -276,14 +276,16 @@ export const CreateExpensesForm = ({
             />
           </div>
         </CardCategory>
-        <Button
-          className="flex justify-self-end px-9"
-          typeof="submit"
-          size="lg"
-          disabled={isPending}
-        >
-          เพิ่มรายการใหม่
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+            className="px-9"
+          >
+            เพิ่มรายการใหม่
+          </Button>
+        </div>
       </form>
     </Form>
   );

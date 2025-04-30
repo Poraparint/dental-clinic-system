@@ -231,7 +231,11 @@ export const CreatePatientForm = ({
                   <FormItem>
                     <FormLabel>โรคประจำตัวปัจจุบัน</FormLabel>
                     <FormControl>
-                      <Input {...field} disabled={isPending} placeholder="เบาหวาน, โลหิตจาง, ..." />
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="เบาหวาน, โลหิตจาง, ..."
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -259,14 +263,16 @@ export const CreatePatientForm = ({
             </div>
           </div>
         </CardCategory>
-        <Button
-          className="flex justify-self-end px-9"
-          typeof="submit"
-          size="lg"
-          disabled={isPending}
-        >
-          เพิ่มบัตรใหม่
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            className="px-9"
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+          >
+            เพิ่มบัตรใหม่
+          </Button>
+        </div>
       </form>
     </Form>
   );

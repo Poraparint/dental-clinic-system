@@ -7,7 +7,6 @@ import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
 import { useExpensesCategories } from "@/hooks/internal/use-ec";
 import { useParams } from "next/navigation";
-import { UserCard } from "@/components/props/user-card";
 import { Loading } from "@/components/loading";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
@@ -15,6 +14,7 @@ import { useExpensesOverview } from "@/hooks/internal/use-expenses-overview";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
+import { Card, CardTitle } from "@/components/ui/card";
 
 export const Expenses = () => {
   const params = useParams();
@@ -43,75 +43,118 @@ export const Expenses = () => {
 
   return (
     <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}>
-      <div className="md:flex gap-4 space-y-4">
-        <div className="space-y-4 md:w-9/12 border p-4 rounded-xl">
-          <div className="flex justify-between">
+      <div className="lg:flex gap-4 space-y-4">
+        <div className="space-y-4 lg:w-8/12">
+          <Card className="sm:flex-row justify-between px-5">
             <div>
-              <h5 className="text-muted-foreground">
+              <h5 className="text-muted-foreground font-medium">
                 รายจ่ายทั้งหมดในเดือนนี้
               </h5>
-              <h1 className="text-2xl font-bold">
+              <h1 className="text-2xl font-bold mt-1">
                 {expensesOverview.total.toLocaleString()} บาท
               </h1>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={handlePrevMonth}>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center bg-primary-foreground/90  rounded-lg p-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:primary-foreground"
+                  onClick={handlePrevMonth}
+                >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
 
-                <div className="text-lg font-medium min-w-[120px] text-center">
+                <div className="text-sm font-medium min-w-[120px] text-center">
                   {format(currentMonth, "MMM yyyy", { locale: th })}
                 </div>
 
-                <Button variant="outline" size="icon" onClick={handleNextMonth}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:primary-foreground"
+                  onClick={handleNextMonth}
+                >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
 
               <DialogCreateExpenses onSuccess={handleRefresh} />
             </div>
-          </div>
-          <hr />
-          <ExpensesTable
-            key={refreshKey}
-            month={format(currentMonth, "yyyy-MM")}
-          />
-        </div>
-        <div className="md:w-3/12 space-y-3">
-          {Array.isArray(categories) ? (
-            categories.map((category) => {
-              const categoryExpenses =
-                expensesOverview.byCategory.find(
-                  (item) => item.categoryId === category.id
-                )?.total || 0;
-              const percentage =
-                expensesOverview.total > 0
-                  ? Math.round(
-                      (categoryExpenses / expensesOverview.total) * 100
-                    )
-                  : 0;
-
-              return (
-                <UserCard
-                  key={`${category.id}-${refreshKey}`}
-                  title={category.name || ""}
-                  description={`${categoryExpenses.toLocaleString()} บาท (${percentage}%)`}
-                  icon={<BriefcaseBusiness className="text-white"/>}
-                  color={category.color}
-                  progressValue={percentage}
-                />
-              );
-            })
-          ) : (
-            <FormNotFound
-              message={error?.error}
-              description={error?.description}
-              url={error?.url}
-              urlname={error?.urlname}
+          </Card>
+          <Card className="px-5">
+            <ExpensesTable
+              key={refreshKey}
+              month={format(currentMonth, "yyyy-MM")}
             />
-          )}
+          </Card>
+        </div>
+        <div className="lg:w-4/12 space-y-4">
+          <Card className="px-5">
+            <CardTitle className="text-lg font-medium mb-4">
+              สัดส่วนค่าใช้จ่าย
+            </CardTitle>
+            <div className="space-y-4">
+              {Array.isArray(categories) ? (
+                categories.map((category) => {
+                  const categoryExpenses =
+                    expensesOverview.byCategory.find(
+                      (item) => item.categoryId === category.id
+                    )?.total || 0;
+                  const percentage =
+                    expensesOverview.total > 0
+                      ? Math.round(
+                          (categoryExpenses / expensesOverview.total) * 100
+                        )
+                      : 0;
+
+                  return (
+                    <div
+                      key={`${category.id}-${refreshKey}`}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background/90 transition-colors"
+                    >
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: category.color || "#6366F1" }}
+                      >
+                        <BriefcaseBusiness className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">
+                          {category.name}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-muted-foreground">
+                            {percentage}%
+                          </p>
+                          <p>
+                            {categoryExpenses.toLocaleString()} บาท
+                          </p>
+                        </div>
+                        <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1.5">
+                          <div
+                            className="h-1.5 rounded-full"
+                            style={{
+                              width: `${percentage}%`,
+                              backgroundColor: category.color || "#6366F1",
+                            }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <FormNotFound
+                  message={error?.error}
+                  description={error?.description}
+                  url={error?.url}
+                  urlname={error?.urlname}
+                />
+              )}
+            </div>
+          </Card>
         </div>
       </div>
     </RoleGate>
