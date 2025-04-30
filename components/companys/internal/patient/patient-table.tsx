@@ -4,6 +4,8 @@ import { usePatients } from "@/hooks/internal/use-patient";
 import { DynamicTable } from "@/components/props/dynamic-table";
 import { useParams } from "next/navigation";
 
+import { User, Phone, Calendar, UserCheck } from "lucide-react";
+
 interface Patient {
   id: string;
   name: string;
@@ -27,28 +29,48 @@ export const PatientTable = ({  onRowClick }: PatientTableProps) => {
     {
       key: "name",
       header: "ชื่อ-นามสกุล",
-      render: (item: Patient) => item.name,
+      render: (item: Patient) => (
+        <div className="flex items-center gap-2">
+          <User className="size-4 text-lapis-accent" />
+          <span>{item.name}</span>
+        </div>
+      ),
     },
     {
       key: "phone",
       header: "เบอร์ติดต่อ",
-      render: (item: Patient) => item.phone,
+      render: (item: Patient) => (
+        <div className="flex items-center gap-2">
+          <Phone className="size-4 text-jade" />
+          <span>{item.phone}</span>
+        </div>
+      ),
     },
-
     {
       key: "createdAt",
       header: "วันที่บันทึก",
-      render: (item: Patient) =>
-        new Date(item.createdAt).toLocaleDateString("th-TH", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+      render: (item: Patient) => (
+        <div className="flex items-center gap-2">
+          <Calendar className="size-4 text-muted-foreground" />
+          <span>
+            {new Date(item.createdAt).toLocaleDateString("th-TH", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+        </div>
+      ),
     },
     {
       key: "creator",
       header: "ผู้บันทึก",
-      render: (item: Patient) => item.creator.name,
+      render: (item: Patient) => (
+        <div className="flex items-center gap-2">
+          <UserCheck className="size-4 text-amethyst-accent" />
+          <span>{item.creator.name}</span>
+        </div>
+      ),
     },
   ];
 
