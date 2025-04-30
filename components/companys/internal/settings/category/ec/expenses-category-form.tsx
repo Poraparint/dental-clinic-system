@@ -22,7 +22,7 @@ import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
 import { CardCategory } from "@/components/props/card-category";
-import { CreditCard } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CreateExpensesCategory } from "@/actions/company/manager/expenses-category";
@@ -94,7 +94,7 @@ export const CreateExpensesCategoryForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-        <CardCategory icon={<CreditCard />} title="หมวดหมู่ค่าใช้จ่าย">
+        <CardCategory icon={<BriefcaseBusiness />} title="หมวดหมู่ค่าใช้จ่าย">
           <div className="space-y-3 mb-5">
             <FormField
               control={form.control}
@@ -176,7 +176,7 @@ export const CreateExpensesCategoryForm = ({
                   className="h-12 w-12 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: watchColor }}
                 >
-                  <CreditCard className="h-6 w-6 text-white" />
+                  <BriefcaseBusiness className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="font-medium">
