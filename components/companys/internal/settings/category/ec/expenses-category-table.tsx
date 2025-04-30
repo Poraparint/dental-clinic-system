@@ -2,35 +2,47 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/dynamic-table";
-import { useExpensesCategories } from "@/hooks/internal/use-expenses";
+import { useExpensesCategories } from "@/hooks/internal/use-ec";
 import { useParams } from "next/navigation";
 
-interface DentalTechnicianCategory {
+interface ExpensesCategory {
   id: string;
   name: string;
   description?: string;
+  color?: string;
   createdAt: Date;
 }
 export const ExpensesCategoriesTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { categories, isLoading } = useExpensesCategories(companyId);
+  const { categories, isLoading, error } = useExpensesCategories(companyId);
 
   const columns = [
     {
+      key: "color",
+      header: "",
+      render: (item: ExpensesCategory) => (
+        <div
+          className="h-5 w-5 rounded-full border"
+          style={{ backgroundColor: item.color || "#cccccc" }}
+        />
+      ),
+      width: 50,
+    },
+    {
       key: "name",
       header: "ชื่อรายการ",
-      render: (item: DentalTechnicianCategory) => item.name,
+      render: (item: ExpensesCategory) => item.name,
     },
     {
       key: "description",
       header: "รายละเอียด",
-      render: (item: DentalTechnicianCategory) => item.description || "-",
+      render: (item: ExpensesCategory) => item.description || "-",
     },
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: DentalTechnicianCategory) =>
+      render: (item: ExpensesCategory) =>
         new Date(item.createdAt).toLocaleDateString("th-TH", {
           year: "numeric",
           month: "short",
@@ -46,10 +58,10 @@ export const ExpensesCategoriesTable = () => {
     <DynamicTable
       data={categories}
       columns={columns}
-      error="เริ่มต้นด้วยการสร้างหมวดหมู่ชนิดรายจ่าย"
-      description="เหมือนคุณยังไม่มีหมวดหมู่รายการจ่าย"
-      url="/"
-      urlname="เพิ่มหมวดหมู่"
+      error={error?.error}
+      description={error?.description}
+      url={error?.url}
+      urlname={error?.urlname}
     />
   );
 };

@@ -26,6 +26,14 @@ import { CreditCard } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CreateExpensesCategory } from "@/actions/company/manager/expenses-category";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -41,13 +49,29 @@ export const CreateExpensesCategoryForm = ({
 
   const [isPending, startTransition] = useTransition();
 
+  const colorOptions = [
+    { id: "#a78bfa", name: "ม่วงอ่อน" }, // Purple-300
+    { id: "#f472b6", name: "ชมพูพาสเทล" }, // Pink-400
+    { id: "#fb923c", name: "ส้มอบอุ่น" }, // Orange-400
+    { id: "#fbbf24", name: "เหลืองทอง" }, // Amber-400
+    { id: "#34d399", name: "มินต์กรีน" }, // Emerald-400
+    { id: "#60a5fa", name: "ฟ้าสดใส" }, // Blue-400
+    { id: "#c084fc", name: "ลาเวนเดอร์" }, // Purple-400
+    { id: "#cccccc", name: "ครีม" },
+  ];
+
   const form = useForm<z.infer<typeof CreateDentalTechCategorySchema>>({
     resolver: zodResolver(CreateDentalTechCategorySchema),
     defaultValues: {
       name: "",
       description: "",
+      color: "#cccccc",
     },
   });
+
+  const watchName = form.watch("name");
+  const watchDescription = form.watch("description");
+  const watchColor = form.watch("color");
 
   const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
     startTransition(() => {
@@ -58,7 +82,6 @@ export const CreateExpensesCategoryForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-
             setOpen(false);
             onSuccess?.();
           }
@@ -70,7 +93,7 @@ export const CreateExpensesCategoryForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
         <CardCategory icon={<CreditCard />} title="หมวดหมู่ค่าใช้จ่าย">
-          <div className="space-y-3">
+          <div className="space-y-3 mb-5">
             <FormField
               control={form.control}
               name="name"
@@ -105,7 +128,66 @@ export const CreateExpensesCategoryForm = ({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>สีหมวดหมู่</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center gap-4">
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isPending}
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <div className="flex items-center gap-2">
+                            
+                            <SelectValue placeholder="เลือกสี" />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {colorOptions.map((color) => (
+                            <SelectItem key={color.id} value={color.id}>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="h-4 w-4 rounded-full"
+                                  style={{ backgroundColor: color.id }}
+                                />
+                                {color.name}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+          <Card>
+            <CardContent>
+              <div className="flex items-center gap-3">
+                <div
+                  className="h-12 w-12 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: watchColor }}
+                >
+                  <CreditCard className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-medium">
+                    {watchName || "ชื่อหมวดหมู่ตัวอย่าง"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {watchDescription || "คำอธิบายหมวดหมู่"}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </CardCategory>
 
         <Button

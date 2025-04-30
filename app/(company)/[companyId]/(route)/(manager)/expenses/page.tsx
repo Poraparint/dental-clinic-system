@@ -1,9 +1,7 @@
-
+import { Expenses } from "@/components/companys/internal/expenses/expenses-board";
 
 const ExpensesPage = () => {
-    return (<div>
-        ExpensesPage
-    </div> );
-}
- 
+  return <Expenses />;
+};
+
 export default ExpensesPage;

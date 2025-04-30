@@ -2,39 +2,51 @@
 
 import { useEffect, useState } from "react";
 
-interface Category {
+interface Expense {
   id: string;
+  datetime: string;
   name: string;
-  description: string;
-  createdAt: Date;
+  expensesCategory: {
+    id: string;
+    name: string;
+    color: string;
+  }
+  payment: string;
+  amount: number;
 }
 
 
 
-export const useExpensesCategories = (companyId: string) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+export const useExpenses = (companyId: string, month?: string) => {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchExpenses = async () => {
       try {
-        const response = await fetch(
-          `/api/companies/${companyId}/category/expenses`
-        );
+        const url = `/api/companies/${companyId}/expenses${
+          month ? `?month=${month}` : ""
+        }`;
+        const response = await fetch(url);
 
-        const data = await response.json();
-        setCategories(data);
+        const json = await response.json();
+        if (Array.isArray(json.data)) {
+          setExpenses(json.data);
+        } else {
+          setExpenses([]);
+        }
+
       } catch (error) {
-        console.error("ไม่พบข้อมูลหมวดหมู่", error);
+        console.error("ไม่พบข้อมูล", error);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (companyId) {
-      fetchCategories();
+      fetchExpenses();
     }
-  }, [companyId]);
+  }, [companyId, month]);
 
-  return { categories, isLoading };
+  return { expenses, isLoading };
 };
