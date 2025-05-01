@@ -1,17 +1,33 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
+import { currentManager } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
-  
+  { params }: { params: Promise<{ companyId: string }> }
 ) {
+  const existingManager = await currentManager();
+
+  if (!existingManager) {
+    return NextResponse.json({
+      status: 403,
+    });
+  }
+  const { companyId } = await params;
+
+  if (!companyId) {
+    return NextResponse.json(
+      {
+        error: "ไม่พบ companyId",
+        description: "URL ไม่ถูกต้อง",
+      },
+      { status: 400 }
+    );
+  }
   try {
     const { searchParams } = new URL(request.url);
     const month = searchParams.get("month"); // รูปแบบ YYYY-MM
-    const pathSegments = request.nextUrl.pathname.split("/");
-    const companyId = pathSegments[pathSegments.indexOf("companies") + 1];
-
     // 1. สร้าง where condition แบบ Type Safe
     const whereCondition: {
       companyId: string;
@@ -56,16 +72,14 @@ export async function GET(
         {
           error: "ไม่พบข้อมูลรายการ",
           description: "เริ่มต้นด้วยการสร้างรายการรายจ่าย",
-          url: `/dashboard/expenses/create`,
-          urlname: "สร้างรายการรายจ่าย",
-        },
-        { status: 404 }
+        }
       );
     }
 
     // 3. คำนวณยอดรวมทั้งหมด
     const totalAmount = expenses.reduce(
-      (sum, expense) => sum + Number(expense.amount),0
+      (sum, expense) => sum + Number(expense.amount),
+      0
     );
 
     return NextResponse.json({

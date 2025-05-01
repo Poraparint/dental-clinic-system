@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
-import { currentAllStaffExceptTechnician } from "@/lib/auth";
+import { currentManager } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ companyId: string }> }
 ) {
-  const existingManager = await currentAllStaffExceptTechnician();
+  const existingManager = await currentManager();
 
   if (!existingManager) {
     return NextResponse.json({
@@ -26,42 +26,44 @@ export async function GET(
     );
   }
   try {
-    const patients = await db.patient.findMany({
+
+    const dentalTech = await db.dentaltech.findMany({
       where: {
         companyId,
       },
       select: {
         id: true,
-        name: true,
-        phone: true,
-        createdAt: true,
-        cd: true,
-        drug: true,
-        creator: {
+        deadline: true,
+        detail: true,
+          level: true,
+        status: true,
+        patient: {
           select: {
             name: true,
           },
-        },
+          },
+          dentalTechCategory: {
+              select: {
+                name: true,
+            }
+        }
       },
-      orderBy: { createdAt: "desc" },
     });
 
-    if (patients.length < 1) {
-      return NextResponse.json(
-        {
-          error: "ไม่พบข้อมูลคนไข้",
-          description: "เริ่มต้นด้วยการสร้างบัตรคนไข้แรก",
-        }
-      );
+    if (dentalTech.length < 1) {
+      return NextResponse.json({
+        error: "ไม่พบข้อมูล",
+        description: "เริ่มต้นด้วยการสร้างรายการทันตกรรม",
+      });
     }
 
-    return NextResponse.json(patients);
+    return NextResponse.json(dentalTech);
   } catch (error) {
     console.error("Error fetching patients:", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลคนไข้",
-        description: "เริ่มต้นด้วยการสร้างบัตรคนไข้แรก",
+        error: "ไม่พบข้อมูลพนักงาน",
+        description: "เริ่มต้นด้วยการสร้างบัญชีพนักงาน",
       },
       { status: 500 }
     );

@@ -23,8 +23,7 @@ export default async function CompanyLayout({
     }
 
     if (!companyId) {
-      console.log("Company ID is undefined");
-      redirect(`${MANAGER_LOGIN_REDIRECT}`);
+      redirect("/");
     }
 
     if (managerId) {

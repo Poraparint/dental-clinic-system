@@ -479,7 +479,8 @@ const sidebarMenuButtonVariants = cva(
     variants: {
       variant: {
         default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-        lapis: "bg-lapis hover:bg-lapis/90 text-white hover:text-white/90",
+        indigo:
+          "bg-gradient-to-r from-indigo-800 to-indigo-500 text-white hover:from-indigo-700 hover:to-indigo-400 hover:text-white/90",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },

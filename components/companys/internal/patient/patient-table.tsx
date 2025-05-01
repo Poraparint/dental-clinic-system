@@ -5,6 +5,7 @@ import { DynamicTable } from "@/components/props/dynamic-table";
 import { useParams } from "next/navigation";
 
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 interface Patient {
   id: string;
@@ -53,11 +54,7 @@ export const PatientTable = ({  onRowClick }: PatientTableProps) => {
         <div className="flex items-center gap-2">
           <Calendar className="size-4 text-muted-foreground" />
           <span>
-            {new Date(item.createdAt).toLocaleDateString("th-TH", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
+            {formatDate(item.createdAt)}
           </span>
         </div>
       ),
@@ -85,8 +82,6 @@ export const PatientTable = ({  onRowClick }: PatientTableProps) => {
       onRowClick={(patient) => onRowClick(patient.id)}
       error="เริ่มต้นด้วยการสร้างบัตรใหม่"
       description="เหมือนคุณยังไม่มีบัตรใหม่"
-      url="/"
-      urlname="เพิ่มบัตรใหม่"
     />
   );
 };

@@ -14,9 +14,20 @@ export const ShowInfoPathname = () => {
   const companyId = params.companyId as string;
 
   const allMenus = [...manages, ...views, ...settings];
-  const currentMenu = allMenus.find((menu) => menu.url(companyId) === pathname);
+  const currentMenu = allMenus.find((menu) =>
+    pathname.startsWith(menu.url(companyId))
+  );
 
   return (
-    <div>{currentMenu ? <span>{currentMenu.title}</span> : ""}</div>
+    <>
+      {currentMenu ? (
+        <span className="flex gap-2 ml-4">
+          {<currentMenu.icon />}
+          {currentMenu.title}
+        </span>
+      ) : (
+        ""
+      )}
+    </>
   );
 };

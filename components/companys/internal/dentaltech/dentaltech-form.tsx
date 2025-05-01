@@ -2,15 +2,9 @@
 
 import * as z from "zod";
 
-//params
-import { useParams } from "next/navigation";
-
-//react
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, addDays } from "date-fns";
-
 //icons
 import { Circle, CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -24,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -42,52 +35,59 @@ import {
 } from "@/components/ui/popover";
 
 //schema
-import { CreateTransactionSchema } from "@/schemas";
+import { CreateDentalTechSchema } from "@/schemas";
 
 //props
 import { CardCategory } from "@/components/props/card-category";
 import { SelectCategory } from "@/components/props/select-category";
 
 //actions
-import { createTransaction } from "@/actions/company/public/transaction";
+import { useParams } from "next/navigation";
+import { addDays, format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
-import { useTransactionCategories } from "@/hooks/internal/use-tc";
+import { usePatients } from "@/hooks/internal/use-patient";
+import { ComboboxCategories } from "@/components/props/combobox-categories";
+import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
+import { createDentalTech } from "@/actions/company/manager/dentaltech";
 
-interface CreateTransactionFormProps {
+interface CreateDentaltechFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
 }
 
-export const CreateTransactionForm = ({
+export const CreateDentaltechForm = ({
   setOpen,
   onSuccess,
-}: CreateTransactionFormProps) => {
+}: CreateDentaltechFormProps) => {
   const params = useParams();
-  const patientId = params.patientId as string;
   const companyId = params.companyId as string;
-  const { categories, isLoading } = useTransactionCategories(companyId);
+  const { patients, isLoading: patientLoading } = usePatients(companyId);
+  const { categories, isLoading: dctLoading } =
+    useDentaltTechCategories(companyId);
 
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof CreateTransactionSchema>>({
-    resolver: zodResolver(CreateTransactionSchema),
+
+  const levelOptions = [
+    { id: "#0369a1", name: "ปกติ" },
+    { id: "#fb923c", name: "เร่งด่วน" },
+    { id: "#DC143C", name: "ด่วนมาก" },
+  ];
+
+  const form = useForm<z.infer<typeof CreateDentalTechSchema>>({
+    resolver: zodResolver(CreateDentalTechSchema),
     defaultValues: {
-      datetime: new Date(),
-      transactionCategoryId: "",
+      deadline: new Date(),
       detail: "",
-      price: 0,
-      paid: 0,
+      level: "ปกติ",
+      patientId: "",
+      dctId: "",
     },
   });
-  const transactionCategoryId = form.watch("transactionCategoryId");
 
-  const selectedCategory = categories.find(
-    (cat) => cat.id === transactionCategoryId
-  );
-
-  const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
+  const OnSubmit = (values: z.infer<typeof CreateDentalTechSchema>) => {
     startTransition(() => {
-      createTransaction(values, patientId, companyId)
+      createDentalTech(values, companyId)
         .then((data) => {
           if (data?.error) {
             toast.error(data.error);
@@ -105,15 +105,15 @@ export const CreateTransactionForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Circle size={15} />} title="รายการธุรกกรม">
+        <CardCategory icon={<Circle size={15} />} title="รายการงานทันตกรรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="datetime"
+              name="deadline"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    เลือกวันที่
+                  <FormLabel className="font-medium">
+                    เลือกวันกำหนดรับงาน
                   </FormLabel>
                   <FormControl>
                     <Popover>
@@ -125,7 +125,7 @@ export const CreateTransactionForm = ({
                             !field.value && "text-muted-foreground"
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          <CalendarIcon className="mr-2 size-4" />
                           {field.value ? (
                             format(field.value, "PPP")
                           ) : (
@@ -151,6 +151,8 @@ export const CreateTransactionForm = ({
                             <SelectItem value="1">พรุ่งนี้</SelectItem>
                             <SelectItem value="3">อีก 3 วัน</SelectItem>
                             <SelectItem value="7">อีก 1 สัปดาห์</SelectItem>
+                            <SelectItem value="14">อีก 2 สัปดาห์</SelectItem>
+                            <SelectItem value="28">อีก 4 สัปดาห์</SelectItem>
                           </SelectContent>
                         </Select>
                         <div className="rounded-md border">
@@ -167,76 +169,56 @@ export const CreateTransactionForm = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="transactionCategoryId"
+              name="patientId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    ประเภทการทำธุรกรรม
-                  </FormLabel>
+                  <FormLabel className="font-medium">รายชื่อคนไข้</FormLabel>
+                  <ComboboxCategories
+                    options={patients.map((patient) => ({
+                      value: patient.id,
+                      label: patient.name,
+                    }))}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isPending}
+                    isLoading={patientLoading}
+                    placeholder="ค้นหาคนไข้..."
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dctId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-medium">หมวดหมู่</FormLabel>
                   <SelectCategory
                     value={field.value}
                     onValueChange={field.onChange}
                     disabled={isPending}
-                    isLoading={isLoading}
+                    isLoading={dctLoading}
                     categories={categories}
                   />
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-
-          {/* แถวที่สอง: รายละเอียด */}
-          <FormField
-            control={form.control}
-            name="detail"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">
-                  รายละเอียด
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    disabled={isPending}
-                    placeholder="กรอกรายละเอียดการทำธุรกรรม"
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* แถวที่สาม: ราคาและการชำระเงิน */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
-              name="price"
+              name="detail"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">ราคา</FormLabel>
+                  <FormLabel className="font-medium">รายการ</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        ฿
-                      </span>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder={
-                          selectedCategory?.price
-                            ? selectedCategory.price.toFixed(2)
-                            : "0.00"
-                        }
-                        type="number"
-                        className="pl-8"
-                        value={field.value === 0 ? "" : field.value}
-                      />
-                    </div>
+                    <Textarea
+                      {...field}
+                      disabled={isPending}
+                      placeholder="รายละเอียด"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -245,25 +227,36 @@ export const CreateTransactionForm = ({
 
             <FormField
               control={form.control}
-              name="paid"
+              name="level"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    จ่ายแล้ว
-                  </FormLabel>
+                  <FormLabel className="font-medium">ระดับ</FormLabel>
                   <FormControl>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        ฿
-                      </span>
-                      <Input
-                        {...field}
+                    <div className="flex items-center gap-4">
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
                         disabled={isPending}
-                        placeholder="0.00"
-                        type="number"
-                        className="pl-8"
-                        value={field.value === 0 ? "" : field.value}
-                      />
+                      >
+                        <SelectTrigger className="w-[180px]">
+                          <div className="flex items-center gap-2">
+                            <SelectValue placeholder="เลือกระดับงาน" />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {levelOptions.map((level) => (
+                            <SelectItem key={level.id} value={level.name}>
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="h-4 w-4 rounded-full"
+                                  style={{ backgroundColor: level.id }}
+                                />
+                                {level.name}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -274,10 +267,10 @@ export const CreateTransactionForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <Button
-            className="px-9"
             typeof="submit"
             size="lg"
             disabled={isPending}
+            className="px-9"
           >
             เพิ่มรายการใหม่
           </Button>

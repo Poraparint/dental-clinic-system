@@ -41,7 +41,7 @@ export const manages = [
   },
   {
     title: "งานทันตกรรม",
-    url: (companyId: string) => `/${companyId}/dental-works`,
+    url: (companyId: string) => `/${companyId}/dentaltech`,
     icon: MonitorSmartphone,
   },
 ];
@@ -84,7 +84,7 @@ export function AppSidebar() {
   const companyId = params.companyId as string;
 
   const isActive = (url: string) => {
-    return pathname === url;
+    return pathname.startsWith(url);
   }
 
   return (
@@ -115,7 +115,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(manage.url(companyId)) ? "lapis" : "default"
+                      isActive(manage.url(companyId)) ? "indigo" : "default"
                     }
                   >
                     <Link
@@ -134,7 +134,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(view.url(companyId)) ? "lapis" : "default"
+                      isActive(view.url(companyId)) ? "indigo" : "default"
                     }
                   >
                     <Link
@@ -153,7 +153,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     variant={
-                      isActive(setting.url(companyId)) ? "lapis" : "default"
+                      isActive(setting.url(companyId)) ? "indigo" : "default"
                     }
                   >
                     <Link

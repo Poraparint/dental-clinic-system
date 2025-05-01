@@ -22,6 +22,8 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        indigo:
+          "bg-gradient-to-r from-indigo-800 to-indigo-500 text-white hover:from-indigo-700 hover:to-indigo-400 hover:text-white/90",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -31,7 +33,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "lapis",
+      variant: "indigo",
       size: "default",
     },
   }

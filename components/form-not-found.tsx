@@ -1,42 +1,25 @@
-import { Plus, Search } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { LinkButton } from "@/components/props/link-button";
+"use client";
+import { Search } from "lucide-react";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
 interface FormNotFoundProps {
   message?: string;
   description?: string;
-  url?: string | null;
-  urlname?: string;
 }
 
-export const FormNotFound = ({
-  message,
-  description,
-  url,
-  urlname,
-}: FormNotFoundProps) => {
+export const FormNotFound = ({ message, description }: FormNotFoundProps) => {
   if (!message) return null;
 
   return (
-    <Card className="justify-center items-center col-span-full">
-      <CardHeader className="w-full">
-        <div className="flex flex-col items-center gap-4">
-          <div className="rounded-full bg-lapis-foreground w-fit p-5">
-            <Search className="size-16 text-lapis-accent stroke-3" />
-          </div>
-          <CardTitle>{message}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <LinkButton icon={<Plus />} title={urlname || ""} url={url || "#"} />
-      </CardContent>
+    <Card className="p-8 flex flex-col items-center justify-center text-center col-span-full">
+      <div className="size-20 rounded-full flex items-center justify-center flex-shrink-0 bg-gradient-to-r from-indigo-800 to-indigo-500">
+        <Search className="size-10 text-white" />
+      </div>
+
+      {message && <CardTitle>{message}</CardTitle>}
+      {description && (
+        <CardDescription>{description}</CardDescription>
+      )}
     </Card>
   );
 };

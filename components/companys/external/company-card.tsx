@@ -37,8 +37,6 @@ export const CompanyCard = () => {
             <FormNotFound
               message={ministries?.error}
               description={ministries?.description}
-              url={ministries?.url}
-              urlname={ministries?.urlname}
             />
           )}
         </div>

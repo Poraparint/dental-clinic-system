@@ -3,6 +3,7 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/dynamic-table";
 import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
+import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 interface DentalTechnicianCategory {
@@ -34,11 +35,7 @@ export const DentalTechCategoriesTable = () => {
       key: "createdAt",
       header: "บันทึกเมื่อ",
       render: (item: DentalTechnicianCategory) =>
-        new Date(item.createdAt).toLocaleDateString("th-TH", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+      (<>{formatDate(item.createdAt)}</>),
     },
     {
       key: "creator",
@@ -56,8 +53,6 @@ export const DentalTechCategoriesTable = () => {
       columns={columns}
       error="เริ่มต้นด้วยการสร้างหมวดหมู่รายการทันตกรรม"
       description="เหมือนคุณยังไม่มีหมวดหมู่รายการทันตกรรม"
-      url="/"
-      urlname="เพิ่มหมวดหมู่"
     />
   );
 };
