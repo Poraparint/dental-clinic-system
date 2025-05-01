@@ -3,6 +3,7 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/dynamic-table";
 import { useTransactionCategories } from "@/hooks/internal/use-tc";
+import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 interface TransactionCategory {
@@ -37,11 +38,7 @@ export const TransactionCategoriesTable = () => {
       key: "createdAt",
       header: "บันทึกเมื่อ",
       render: (item: TransactionCategory) =>
-        new Date(item.createdAt).toLocaleDateString("th-TH", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+        (<>{formatDate(item.createdAt)}</>),
     },
   ];
 
@@ -54,8 +51,6 @@ export const TransactionCategoriesTable = () => {
       columns={columns}
       error="เริ่มต้นด้วยการสร้างหมวดหมู่รายการทำฟัน"
       description="เหมือนคุณยังไม่มีหมวดหมู่รายการทำฟัน"
-      url="/"
-      urlname="เพิ่มหมวดหมู่"
     />
   );
 };

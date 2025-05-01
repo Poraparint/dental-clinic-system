@@ -3,6 +3,7 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/dynamic-table";
 import { useExpensesCategories } from "@/hooks/internal/use-ec";
+import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 interface ExpensesCategory {
@@ -42,12 +43,7 @@ export const ExpensesCategoriesTable = () => {
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: ExpensesCategory) =>
-        new Date(item.createdAt).toLocaleDateString("th-TH", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        }),
+      render: (item: ExpensesCategory) => <>{formatDate(item.createdAt)}</>,
     },
   ];
 
@@ -60,8 +56,6 @@ export const ExpensesCategoriesTable = () => {
       columns={columns}
       error={error?.error}
       description={error?.description}
-      url={error?.url}
-      urlname={error?.urlname}
     />
   );
 };

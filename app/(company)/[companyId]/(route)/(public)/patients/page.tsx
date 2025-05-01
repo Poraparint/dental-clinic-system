@@ -1,9 +1,9 @@
 import { PatientBoard } from "@/components/companys/internal/patient/patient-board";
 
-const NewCard = () => {
+const PatientBoardPage = () => {
     return (
         <PatientBoard />
     );
 }
  
-export default NewCard;
+export default PatientBoardPage;

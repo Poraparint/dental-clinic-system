@@ -14,7 +14,9 @@ import { useExpensesOverview } from "@/hooks/internal/use-expenses-overview";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
-import { Card, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
+import { formatCurrency } from "@/lib/utils";
 
 export const Expenses = () => {
   const params = useParams();
@@ -51,11 +53,11 @@ export const Expenses = () => {
                 รายจ่ายทั้งหมดในเดือนนี้
               </h5>
               <h1 className="text-2xl font-bold mt-1">
-                {expensesOverview.total.toLocaleString()} บาท
+                ฿ {formatCurrency(expensesOverview?.total)}
               </h1>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex items-center gap-4 justify-between">
               <div className="flex items-center bg-primary-foreground/90  rounded-lg p-1">
                 <Button
                   variant="ghost"
@@ -92,9 +94,13 @@ export const Expenses = () => {
         </div>
         <div className="lg:w-4/12 space-y-4">
           <Card className="px-5">
-            <CardTitle className="text-lg font-medium mb-4">
-              สัดส่วนค่าใช้จ่าย
-            </CardTitle>
+            <CardHeader className="flex justify-between">
+              <CardTitle className="text-lg font-medium mb-4">
+                สัดส่วนค่าใช้จ่าย
+              </CardTitle>
+              <DialogCreateExpensesCategory onSuccess={handleRefresh} />
+            </CardHeader>
+
             <div className="space-y-4">
               {Array.isArray(categories) ? (
                 categories.map((category) => {
@@ -121,16 +127,10 @@ export const Expenses = () => {
                         <BriefcaseBusiness className="h-5 w-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">
-                          {category.name}
-                        </p>
+                        <p className="font-medium truncate">{category.name}</p>
                         <div className="flex items-center justify-between">
-                          <p className="text-muted-foreground">
-                            {percentage}%
-                          </p>
-                          <p>
-                            {categoryExpenses.toLocaleString()} บาท
-                          </p>
+                          <p className="text-muted-foreground">{percentage}%</p>
+                          <p>฿ {categoryExpenses.toLocaleString()}</p>
                         </div>
                         <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1.5">
                           <div
@@ -149,8 +149,6 @@ export const Expenses = () => {
                 <FormNotFound
                   message={error?.error}
                   description={error?.description}
-                  url={error?.url}
-                  urlname={error?.urlname}
                 />
               )}
             </div>

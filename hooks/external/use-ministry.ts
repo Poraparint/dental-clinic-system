@@ -11,8 +11,6 @@ interface Ministry {
 interface ApiError {
   error?: string;
   description?: string;
-  url?: string;
-  urlname?: string;
 }
 
 export const useMinistry = () => {

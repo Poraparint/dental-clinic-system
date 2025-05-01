@@ -15,6 +15,7 @@ import { DynamicTable } from "@/components/props/dynamic-table";
 import { useMembers } from "@/hooks/internal/use-member";
 import { CompanyRole } from "@prisma/client";
 import { useParams } from "next/navigation";
+import { formatDate } from "@/lib/utils";
 
 interface MemberCategory {
   id: string;
@@ -32,7 +33,7 @@ export const MemberTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
   const { members, isLoading } = useMembers(companyId);
-
+ 
   const columns = [
     {
       key: "name",
@@ -90,11 +91,7 @@ export const MemberTable = () => {
       render: (item: MemberCategory) => (
         <div className="flex items-center gap-2">
           <CalendarDays className="h-4 w-4 text-jade" />
-          {new Date(item.createdAt).toLocaleDateString("th-TH", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
+          {formatDate(item.createdAt)}
         </div>
       ),
     },
@@ -117,10 +114,8 @@ export const MemberTable = () => {
     <DynamicTable
       data={members}
       columns={columns}
-      error="เริ่มต้นด้วยการสร้างบัญชีสมาชิก"
-      description="เหมือนคุณยังไม่มีสมาชิกเลย"
-      url="/"
-      urlname="เพิ่มบัญชีสมาชิก"
+      error="ไม่พบข้อมูลสมาชิก"
+      description="เริ่มต้นด้วยการสร้างบัญชีสมาชิกใหม่"
     />
   );
 };

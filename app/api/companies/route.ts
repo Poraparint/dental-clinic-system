@@ -17,10 +17,7 @@ export async function GET() {
         {
           error: "ยินดีต้อนรับสู่แดชบอร์ด",
           description: "เริ่มต้นใช้งานด้วยการสร้างหน่วยงานแรก",
-          url: "/dashboard/create-ministry",
-          urlname: "Create Ministry",
-        },
-        { status: 404 }
+        }
       );
     }
 

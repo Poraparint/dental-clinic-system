@@ -36,6 +36,7 @@ model Company {
   expensesCategories ExpensesCategory[]
   appointmentCategories AppointmentCategory[]
   expenses Expenses[]
+  dentalTech Dentaltech[]
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
   isDeleted                  Boolean               @default(false)
@@ -263,6 +264,8 @@ model Dentaltech {
   postit    String?
   patientId String
   dctId String
+  companyId String
+  company Company @relation(fields: [companyId], references: [id])
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient   Patient  @relation(fields: [patientId], references: [id])
 }

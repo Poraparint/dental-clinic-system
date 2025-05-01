@@ -5,13 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate (dateString: string) {
+export function formatDate (dateString: Date) {
   const date = new Date(dateString);
   return date.toLocaleDateString("th-TH", {
     year: "numeric",
     month: "short",
     day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
   });
-};
+}
+
+export function formatCurrency(value?: number) {
+  return typeof value === "number" ? value.toLocaleString() : "-"
+}

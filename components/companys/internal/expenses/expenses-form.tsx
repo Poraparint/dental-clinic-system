@@ -18,6 +18,8 @@ import {
   HandCoins,
   CreditCard,
   Banknote,
+  QrCode,
+  Smartphone,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -58,7 +60,7 @@ import { SelectCategory } from "@/components/props/select-category";
 import { createExpenses } from "@/actions/company/manager/expenses";
 import { useExpensesCategories } from "@/hooks/internal/use-ec";
 
-interface CreateTransactionFormProps {
+interface CreateExpensesFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
 }
@@ -66,7 +68,7 @@ interface CreateTransactionFormProps {
 export const CreateExpensesForm = ({
   setOpen,
   onSuccess,
-}: CreateTransactionFormProps) => {
+}: CreateExpensesFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
   const { categories, isLoading } = useExpensesCategories(companyId);
@@ -74,9 +76,11 @@ export const CreateExpensesForm = ({
   const [isPending, startTransition] = useTransition();
 
   const paymentOptions = [
-    { id: "เงินสด", icon: <Banknote className="w-4 h-4" /> },
-    { id: "บัตรเครดิต", icon: <CreditCard className="w-4 h-4" /> },
-    { id: "บัตรเดบิต", icon: <HandCoins className="w-4 h-4" /> },
+    { id: "เงินสด", icon: <Banknote className="size-4" /> },
+    { id: "โอนเงินธนาคาร", icon: <QrCode className="size-4" /> },
+    { id: "พร้อมเพย์", icon: <Smartphone className="size-4" /> },
+    { id: "บัตรเครดิต", icon: <CreditCard className="size-4" /> },
+    { id: "บัตรเดบิต", icon: <HandCoins className="size-4" /> },
   ];
 
   const form = useForm<z.infer<typeof CreateExpensesSchema>>({

@@ -1,14 +1,32 @@
+import { currentManager } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
+  { params }: { params: Promise<{ companyId: string }> }
 ) {
+  const existingManager = await currentManager();
+
+  if (!existingManager) {
+    return NextResponse.json({
+      status: 403,
+    });
+  }
+  const { companyId } = await params;
+
+  if (!companyId) {
+    return NextResponse.json(
+      {
+        error: "ไม่พบ companyId",
+        description: "URL ไม่ถูกต้อง",
+      },
+      { status: 400 }
+    );
+  }
   try {
     const { searchParams } = new URL(request.url);
     const month = searchParams.get("month");
-     const pathSegments = request.nextUrl.pathname.split("/");
-     const companyId = pathSegments[pathSegments.indexOf("companies") + 1];
 
     const [year, monthNum] = month
       ? month.split("-").map(Number)

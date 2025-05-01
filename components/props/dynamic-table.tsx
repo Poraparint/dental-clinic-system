@@ -36,8 +36,6 @@ export function DynamicTable<T>({
   className = "text-base",
   error,
   description,
-  url,
-  urlname,
   onRowClick,
 }: DynamicTableProps<T>) {
   return (
@@ -74,10 +72,8 @@ export function DynamicTable<T>({
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 <FormNotFound
-                  message={error || "Unknown error"}
-                  description={description || ""}
-                  url={url || ""}
-                  urlname={urlname || ""}
+                  message={error || "ไม่พบข้อมูล"}
+                  description={description || "ลองตรวจสอบหรือเพิ่มข้อมูลใหม่"}
                 />
               </TableCell>
             </TableRow>

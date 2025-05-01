@@ -192,3 +192,13 @@ export const CreateExpensesSchema = z.object({
       .min(0, "จำนวนเงินที่ชำระต้องไม่น้อยกว่า 0")
   ),
 });
+
+export const CreateDentalTechSchema = z.object({
+  deadline: z.date({
+    required_error: "A date is required.",
+  }),
+  detail: z.optional(z.string()),
+  patientId: z.string().min(1, "ต้องมีรายชื่อ"),
+  dctId: z.string().min(1, "ต้องเลือกหมวดหมู่"),
+  level: z.string().min(1, "ต้องเลือกประเภทรายการ"),
+});

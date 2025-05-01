@@ -83,8 +83,6 @@ export const TransactionTable = () => {
       columns={columns}
       error="ไม่พบข้อมูลธุรกรรม"
       description="เริ่มต้นด้วยการสร้างรายการธุรกรรม"
-      url="/"
-      urlname="สร้างรายการธุรกรรมใหม่"
     />
   );
 };

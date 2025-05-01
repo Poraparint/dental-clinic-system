@@ -3,7 +3,7 @@
 import { useCurrentRole } from "@/hooks/use-current-role";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { CompanyRole } from "@prisma/client";
-import { AccessDenied } from "../companys/fallbacks/AccessDenied";
+import {PermissionDenied} from "@/components/companys/fallbacks/permissionDenied";
 
 interface RoleGateProps {
   children: React.ReactNode;
@@ -23,9 +23,7 @@ export const RoleGate = ({
     if (fallback) {
       return <>{fallback}</>;
     }
-    return (
-        <AccessDenied ctaText="เข้าสู่ระบบ" ctaLink="/auth/login" />
-    );
+    return <PermissionDenied/>;
   }
   
 
@@ -33,7 +31,7 @@ export const RoleGate = ({
     if (fallback) {
       return <>{fallback}</>;
     }
-    return <AccessDenied />;
+    return <PermissionDenied />;
   }
 
   return <>{children}</>;

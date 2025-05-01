@@ -63,7 +63,7 @@ export const ExpensesTable = ({month}: ExpensesTableProps) => {
     {
       key: "amount",
       header: "จำนวนเงิน",
-      render: (item: Expense) => item.amount,
+      render: (item: Expense) => (<span>฿ {item.amount}</span>),
     },
   ];
 
@@ -76,8 +76,6 @@ export const ExpensesTable = ({month}: ExpensesTableProps) => {
       columns={columns}
       error="เริ่มต้นด้วยการเพิ่มรายการรายจ่าย"
       description="เหมือนคุณยังไม่มีรายการรายจ่าย"
-      url="/"
-      urlname="เพิ่มรายการรายจ่าย"
     />
   );
 };

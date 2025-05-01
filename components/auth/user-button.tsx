@@ -18,9 +18,25 @@ import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const UserButton = () => {
-
   const user = useCurrentUser();
-  if (!user) { 
+  const getAvatarBgColor = (role?: CompanyRole) => {
+    switch (role) {
+      case CompanyRole.MANAGER:
+        return "bg-indigo-500"; 
+      case CompanyRole.COMANAGER:
+        return "bg-blue-400"; 
+      case CompanyRole.DENTIST:
+        return "bg-teal-500"; 
+      case CompanyRole.DENTALTECHNICIAN:
+        return "bg-amber-500"; 
+      case CompanyRole.ASSISTANT:
+        return "bg-purple-400"; 
+      default:
+        return "bg-gray-400";
+    }
+  };
+
+  if (!user) {
     return (
       <div className="gap-2 flex">
         <Button asChild variant="emerald">
@@ -39,65 +55,41 @@ export const UserButton = () => {
         </div>
       </div>
     );
-    
-   }
+  }
 
-    return (
-      <RoleGate
-        allowedRole={[CompanyRole.MANAGER , CompanyRole.COMANAGER]}
-        fallback={
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarImage src={user?.image || ""} />
-                <AvatarFallback className="p-2">
-                  <User />
-                </AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-40" align="end">
-              <DropdownMenuItem>
-                <User />
-                {user.name || "USER"}
-              </DropdownMenuItem>
-              <LogoutButton>
-                <DropdownMenuItem>
-                  <LogOutIcon />
-                  Logout
-                </DropdownMenuItem>
-              </LogoutButton>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        }
-      >
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage src={user?.image || ""} />
-              <AvatarFallback className="p-2">
-                <User />
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-40" align="end">
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Avatar>
+          <AvatarImage src={user?.image || ""} />
+          <AvatarFallback className={`p-2 text-white ${getAvatarBgColor(user.role)}`}>
+            <User />
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40" align="end">
+        <DropdownMenuItem>
+          <User />
+          {user.name || "USER"}
+        </DropdownMenuItem>
+        <RoleGate
+          allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}
+          fallback={<></>}
+        >
+          <Link href="/dashboard/ministry">
             <DropdownMenuItem>
-              <User />
-              {user.name || "USER"}
+              <House />
+              แดชบอร์ด
             </DropdownMenuItem>
-            <Link href="/dashboard/ministry">
-              <DropdownMenuItem>
-                <House />
-                แดชบอร์ด
-              </DropdownMenuItem>
-            </Link>
-            <LogoutButton>
-              <DropdownMenuItem>
-                <LogOutIcon />
-                Logout
-              </DropdownMenuItem>
-            </LogoutButton>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </RoleGate>
-    );
+          </Link>
+        </RoleGate>
+        <LogoutButton>
+          <DropdownMenuItem>
+            <LogOutIcon />
+            Logout
+          </DropdownMenuItem>
+        </LogoutButton>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
