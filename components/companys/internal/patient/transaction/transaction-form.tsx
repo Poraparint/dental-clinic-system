@@ -9,10 +9,9 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, addDays } from "date-fns";
 
 //icons
-import { Circle, CalendarIcon } from "lucide-react";
+import { Circle } from "lucide-react";
 import { toast } from "sonner";
 
 //ui
@@ -26,32 +25,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 //schema
 import { CreateTransactionSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/card-category";
-import { SelectCategory } from "@/components/props/select-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
+import { SelectCategory } from "@/components/props/component/select-category";
 
 //actions
 import { createTransaction } from "@/actions/company/public/transaction";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/use-tc";
+import { DatePickerField } from "@/components/props/component/date-picker-field";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
@@ -107,65 +93,10 @@ export const CreateTransactionForm = ({
       <form onSubmit={form.handleSubmit(OnSubmit)}>
         <CardCategory icon={<Circle size={15} />} title="รายการธุรกกรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
+            <DatePickerField
+              form={form}
               name="datetime"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    เลือกวันที่
-                  </FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>เลือกวันที่</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-
-                      <PopoverContent
-                        align="start"
-                        className="flex w-auto flex-col space-y-2 p-2 bg-background"
-                      >
-                        <Select
-                          onValueChange={(value) =>
-                            field.onChange(addDays(new Date(), parseInt(value)))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="เลือกรายการ" />
-                          </SelectTrigger>
-                          <SelectContent position="popper">
-                            <SelectItem value="0">วันนี้</SelectItem>
-                            <SelectItem value="1">พรุ่งนี้</SelectItem>
-                            <SelectItem value="3">อีก 3 วัน</SelectItem>
-                            <SelectItem value="7">อีก 1 สัปดาห์</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <div className="rounded-md border">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              withQuickSelect={false}
             />
 
             <FormField

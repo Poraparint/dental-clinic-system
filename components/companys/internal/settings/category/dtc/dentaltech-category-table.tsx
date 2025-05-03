@@ -1,7 +1,7 @@
 "use client";
 
 import { Loading } from "@/components/loading";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
@@ -12,7 +12,7 @@ interface DentalTechnicianCategory {
   description?: string;
   creator: {
     name: string;
-  }
+  };
   createdAt: Date;
 }
 export const DentalTechCategoriesTable = () => {
@@ -34,8 +34,9 @@ export const DentalTechCategoriesTable = () => {
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: DentalTechnicianCategory) =>
-      (<>{formatDate(item.createdAt)}</>),
+      render: (item: DentalTechnicianCategory) => (
+        <>{formatDate(item.createdAt)}</>
+      ),
     },
     {
       key: "creator",

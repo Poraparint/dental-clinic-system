@@ -1,7 +1,5 @@
 "use client";
 
-import { RoleGate } from "@/components/props/role-gate";
-import { CompanyRole } from "@prisma/client";
 import { useState } from "react";
 import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-table";
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
@@ -44,7 +42,7 @@ export const Expenses = () => {
   }
 
   return (
-    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}>
+   
       <div className="lg:flex gap-4 space-y-4">
         <div className="space-y-4 lg:w-8/12">
           <Card className="sm:flex-row justify-between px-5">
@@ -155,6 +153,6 @@ export const Expenses = () => {
           </Card>
         </div>
       </div>
-    </RoleGate>
+    
   );
 };

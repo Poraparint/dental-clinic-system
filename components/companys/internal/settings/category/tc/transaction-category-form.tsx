@@ -22,7 +22,7 @@ import { CreateTransactionCategorySchema } from "@/schemas";
 
 //actions
 import { CreateTransactionCategory } from "@/actions/company/manager/transaction-category";
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Album } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -126,15 +126,15 @@ export const CreateTransactionCategoryForm = ({
         </CardCategory>
 
         <div className="flex justify-end">
-                  <Button
-                    typeof="submit"
-                    size="lg"
-                    disabled={isPending}
-                    className="px-9"
-                  >
-                    เพิ่มหมวดหมู่
-                  </Button>
-                </div>
+          <Button
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+            className="px-9"
+          >
+            เพิ่มหมวดหมู่
+          </Button>
+        </div>
       </form>
     </Form>
   );

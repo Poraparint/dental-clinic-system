@@ -36,6 +36,14 @@ export const currentManagerAndDentist = async () =>
     CompanyRole.DENTIST,
   ]);
 
+export const currentAllStaffExceptAssistant = async () =>
+  currentByRoles([
+    CompanyRole.MANAGER,
+    CompanyRole.COMANAGER,
+    CompanyRole.DENTIST,
+    CompanyRole.DENTALTECHNICIAN,
+  ]);
+
 export const currentAllStaffExceptTechnician = async () =>
   currentByRoles([
     CompanyRole.MANAGER,

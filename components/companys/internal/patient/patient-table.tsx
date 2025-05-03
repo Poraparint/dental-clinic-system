@@ -1,7 +1,7 @@
 "use client";
 import { Loading } from "@/components/loading";
 import { usePatients } from "@/hooks/internal/use-patient";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
 
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
@@ -21,7 +21,7 @@ interface PatientTableProps {
   onRowClick: (patientId: string) => void;
 }
 
-export const PatientTable = ({  onRowClick }: PatientTableProps) => {
+export const PatientTable = ({ onRowClick }: PatientTableProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
   const { patients, isLoading } = usePatients(companyId);
@@ -53,9 +53,7 @@ export const PatientTable = ({  onRowClick }: PatientTableProps) => {
       render: (item: Patient) => (
         <div className="flex items-center gap-2">
           <Calendar className="size-4 text-muted-foreground" />
-          <span>
-            {formatDate(item.createdAt)}
-          </span>
+          <span>{formatDate(item.createdAt)}</span>
         </div>
       ),
     },

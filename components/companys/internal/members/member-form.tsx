@@ -29,9 +29,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
 //props
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Users } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -41,7 +40,6 @@ interface MemberRegisterFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
 }
-
 
 export const MemberRegisterForm = ({
   setOpen,
@@ -213,11 +211,13 @@ export const MemberRegisterForm = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {Object.values(CompanyRole).filter((role) => role !== CompanyRole.MANAGER).map((role) => (
-                          <SelectItem key={role} value={role}>
-                            {role}
-                          </SelectItem>
-                        ))}
+                        {Object.values(CompanyRole)
+                          .filter((role) => role !== CompanyRole.MANAGER)
+                          .map((role) => (
+                            <SelectItem key={role} value={role}>
+                              {role}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

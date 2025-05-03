@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
-import { currentManager } from "@/lib/auth";
+import { currentAllStaffExceptAssistant } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ companyId: string }> }
 ) {
-  const existingManager = await currentManager();
+  const existingManager = await currentAllStaffExceptAssistant();
 
   if (!existingManager) {
     return NextResponse.json({
@@ -35,18 +35,21 @@ export async function GET(
         id: true,
         deadline: true,
         detail: true,
-          level: true,
+        level: true,
         status: true,
         patient: {
           select: {
             name: true,
           },
+        },
+        dentalTechCategory: {
+          select: {
+            name: true,
           },
-          dentalTechCategory: {
-              select: {
-                name: true,
-            }
-        }
+        },
+      },
+      orderBy: {
+        deadline: "asc",
       },
     });
 

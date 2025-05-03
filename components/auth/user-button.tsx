@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogoutButton } from "@/components/auth/manager/logout-button";
 import Link from "next/link";
-import { RoleGate } from "@/components/props/role-gate";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -22,15 +22,15 @@ export const UserButton = () => {
   const getAvatarBgColor = (role?: CompanyRole) => {
     switch (role) {
       case CompanyRole.MANAGER:
-        return "bg-indigo-500"; 
+        return "bg-indigo-500";
       case CompanyRole.COMANAGER:
-        return "bg-blue-400"; 
+        return "bg-blue-400";
       case CompanyRole.DENTIST:
-        return "bg-teal-500"; 
+        return "bg-teal-500";
       case CompanyRole.DENTALTECHNICIAN:
-        return "bg-amber-500"; 
+        return "bg-amber-500";
       case CompanyRole.ASSISTANT:
-        return "bg-purple-400"; 
+        return "bg-purple-400";
       default:
         return "bg-gray-400";
     }
@@ -62,7 +62,9 @@ export const UserButton = () => {
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src={user?.image || ""} />
-          <AvatarFallback className={`p-2 text-white ${getAvatarBgColor(user.role)}`}>
+          <AvatarFallback
+            className={`p-2 text-white ${getAvatarBgColor(user.role)}`}
+          >
             <User />
           </AvatarFallback>
         </Avatar>

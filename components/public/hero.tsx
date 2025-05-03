@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 //icon
 import { ShieldCheck, Rocket, ArrowBigLeft } from "lucide-react";
 import Image from "next/image";
-import { RoleGate } from "../props/role-gate";
+import { RoleGate } from "../props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
-import { LinkButton } from "@/components/props/link-button";
+import { LinkButton } from "@/components/props/component/link-button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const HeroSection = () => {
-
   const user = useCurrentUser();
 
   return (
@@ -19,7 +18,7 @@ export const HeroSection = () => {
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           ระบบบริการจัดการคลินิกทันตกรรม
         </h1>
-        <div className="w-24 h-1 bg-primary mb-6"></div>
+        <div className="w-24 h-1 bg-primary mb-6" />
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
           ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบครบวงจรที่ออกแบบมาโดยเฉพาะสำหรับทันตแพทย์
         </p>

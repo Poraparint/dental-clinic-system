@@ -3,7 +3,7 @@ import { Loading } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransaction } from "@/hooks/internal/use-transaction";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
 
 interface Transaction {
@@ -21,8 +21,6 @@ interface Transaction {
   paid: number;
   creatorUserId: string;
 }
-
-
 
 export const TransactionTable = () => {
   const params = useParams();

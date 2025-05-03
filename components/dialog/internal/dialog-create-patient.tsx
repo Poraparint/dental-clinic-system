@@ -1,12 +1,16 @@
 "use client";
 
-import { DialogButton } from "@/components/props/dialog-button";
+import { DialogButton } from "@/components/props/wrapper/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { CreatePatientForm } from "@/components/companys/internal/patient/patient-form";
 
 // ตัวอย่างการใช้งาน
-export const DialogCreatePatient = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const DialogCreatePatient = ({
+  onSuccess,
+}: {
+  onSuccess?: () => void;
+}) => {
   const [open, setOpen] = useState(false);
 
   return (

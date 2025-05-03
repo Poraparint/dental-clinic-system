@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { DialogContentForm } from "@/components/props/dialog-content";
+import { DialogContentForm } from "@/components/props/wrapper/dialog-content";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 
 interface DialogButtonProps {

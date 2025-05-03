@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
-import { currentManager } from "@/lib/auth";
+import { currentManagerAndDentist } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ companyId: string }> }
 ) {
-  const existingManager = await currentManager();
+  const existingManager = await currentManagerAndDentist();
 
   if (!existingManager) {
     return NextResponse.json({
@@ -26,9 +26,6 @@ export async function GET(
     );
   }
   try {
-    const url = new URL(request.url);
-    const pathSegments = url.pathname.split("/");
-    const companyId = pathSegments[pathSegments.indexOf("companies") + 1];
 
     const categorys = await db.transactionCategory.findMany({
       where: {

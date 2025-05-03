@@ -40,6 +40,8 @@ model Company {
   createdAt                  DateTime              @default(now())
   updatedAt                  DateTime              @updatedAt
   isDeleted                  Boolean               @default(false)
+  @@index([managerId])
+  @@index([isDeleted])
 }
 
 model User {
@@ -91,6 +93,9 @@ model Member {
   manager Manager @relation(fields: [managerId], references: [id])
 
   @@unique([id, companyId])
+  @@index([companyId, role])
+  @@index([managerId])
+  @@index([isDeleted])
 }
 
 model Account {
@@ -162,6 +167,7 @@ model TransactionCategory {
   isDeleted    Boolean       @default(false)
 
   @@unique([name, companyId])
+  @@index([companyId])
 }
 
 model DentalTechCategory {
@@ -178,6 +184,7 @@ model DentalTechCategory {
   dentalTech  Dentaltech[]
 
   @@unique([name, companyId])
+  @@index([companyId])
 }
 
 model ExpensesCategory{
@@ -195,6 +202,7 @@ model ExpensesCategory{
   expenses Expenses[]
 
   @@unique([name, companyId])
+  @@index([companyId])
 }
 
 model AppointmentCategory{
@@ -209,6 +217,7 @@ model AppointmentCategory{
   isDeleted   Boolean  @default(false)
 
   @@unique([name, companyId])
+  @@index([companyId])
 }
 
 model Patient {
@@ -233,8 +242,10 @@ model Patient {
   creator       User          @relation(fields: [creatorUserId], references: [id])
 
   @@unique([name, companyId])
-  @@index([name, phone, job])
+  @@index([companyId])
   @@index([creatorUserId])
+  @@index([companyId, createdAt])
+  @@index([isDeleted])
 }
 
 model Transaction {
@@ -252,6 +263,9 @@ model Transaction {
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   isDelete              Boolean             @default(false)
+  @@index([patientId])
+  @@index([creatorUserId])
+  @@index([isDelete])
 }
 
 model Dentaltech {
@@ -268,6 +282,10 @@ model Dentaltech {
   company Company @relation(fields: [companyId], references: [id])
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient   Patient  @relation(fields: [patientId], references: [id])
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  @@index([companyId])
+  @@index([companyId, status, deadline])
 }
 
 model Expenses{
@@ -280,6 +298,10 @@ model Expenses{
   expensesCategory ExpensesCategory @relation(fields: [ecId], references: [id])
   companyId String
   company Company @relation(fields: [companyId], references: [id])
+  createdAt             DateTime            @default(now())
+  @@index([companyId])
+  @@index([datetime])
+  @@index([ecId])
 }
 
 

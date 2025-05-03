@@ -44,11 +44,11 @@ export const ComboboxCategories = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between font-medium"
           disabled={disabled || isLoading}
         >
           {isLoading ? (
-            "Loading..."
+            "กำลังโหลด..."
           ) : value ? (
             options.find((option) => option.value === value)?.label
           ) : (
@@ -60,7 +60,6 @@ export const ComboboxCategories = ({
       <PopoverContent className="w-full p-0">
         <Command>
           <div className="flex items-center border-b px-3">
-            
             <CommandInput placeholder="Search..." />
           </div>
           <CommandEmpty>No item found.</CommandEmpty>
@@ -76,7 +75,7 @@ export const ComboboxCategories = ({
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
+                    "mr-2 size-4",
                     value === option.value ? "opacity-100" : "opacity-0"
                   )}
                 />

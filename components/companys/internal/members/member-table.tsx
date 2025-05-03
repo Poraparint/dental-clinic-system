@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import { Loading } from "@/components/loading";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useMembers } from "@/hooks/internal/use-member";
 import { CompanyRole } from "@prisma/client";
 import { useParams } from "next/navigation";
@@ -33,7 +33,7 @@ export const MemberTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
   const { members, isLoading } = useMembers(companyId);
- 
+
   const columns = [
     {
       key: "name",

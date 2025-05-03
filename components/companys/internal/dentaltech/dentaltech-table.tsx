@@ -4,52 +4,22 @@ import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  CalendarDays,
-  FolderKanban,
-  Clock,
-  UserCheck,
-  CheckCircle2,
-  Gauge,
-  Timer,
-  Flame,
-} from "lucide-react";
+import { CalendarDays, BriefcaseBusiness, User } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useDentalTechs } from "@/hooks/internal/use-dentalTech";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
-
-function renderStatusIcon(status: string) {
-  switch (status) {
-    case "รอดำเนินการ":
-      return <Clock className="w-4 h-4 text-yellow-500" />;
-    case "รับงานเรียบร้อย":
-      return <UserCheck className="w-4 h-4 text-blue-500" />;
-    case "เสร็จสิ้น":
-      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-    default:
-      return null;
-  }
-}
-
-function renderLevelIcon(level: string) {
-  switch (level) {
-    case "ปกติ":
-      return <Gauge className="w-4 h-4 text-lapis-accent" />;
-    case "เร่งด่วน":
-      return <Timer className="w-4 h-4 text-orange-500" />;
-    case "ด่วนมาก":
-      return <Flame className="w-4 h-4 text-red-500" />;
-    default:
-      return null;
-  }
-}
+import { useState } from "react";
+import {
+  renderLevelIcon,
+  renderStatusIcon,
+} from "@/components/props/render/render-icons";
+import { FilterBar } from "@/components/props/component/filter-bar";
 
 export const DentalTechTable = () => {
   const params = useParams();
@@ -57,57 +27,80 @@ export const DentalTechTable = () => {
 
   const { dentalTechs, isLoading } = useDentalTechs(companyId);
 
+  const [selectedStatus, setSelectedStatus] = useState("ทั้งหมด");
+  const [selectedLevel, setSelectedLevel] = useState("ทั้งหมด");
+
+  const filtered = Array.isArray(dentalTechs)
+    ? dentalTechs.filter((tech) => {
+        const matchStatus =
+          selectedStatus === "ทั้งหมด" || tech.status === selectedStatus;
+        const matchLevel =
+          selectedLevel === "ทั้งหมด" || tech.level === selectedLevel;
+        return matchStatus && matchLevel;
+      })
+    : [];
+
   if (isLoading) return <Loading />;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {Array.isArray(dentalTechs) ? (
-        dentalTechs.map((dentaltech) => (
-          <Card key={dentaltech.id} className="border rounded-2xl shadow-sm">
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-lg font-semibold">
-                  {dentaltech.patient.name}
-                </CardTitle>
-                <div className="flex items-center text-muted-foreground text-sm">
-                  <CalendarDays className="w-4 h-4 mr-1" />
-                  {formatDate(dentaltech.deadline)}
+    <div className="space-y-4">
+      <FilterBar
+        onStatusChange={setSelectedStatus}
+        onLevelChange={setSelectedLevel}
+      />
+      <div className="grid md:grid-cols-2 gap-3">
+        {filtered.length > 0 ? (
+          filtered.map((dentaltech) => (
+            <Card key={dentaltech.id} className="md:flex-row justify-between">
+              <CardHeader className="w-full">
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                    <BriefcaseBusiness className="size-4 text-indigo-600" />
+                    {dentaltech.dentalTechCategory.name}
+                  </CardTitle>
+                  <CardDescription className="flex items-center gap-2">
+                    <User className="size-4 text-jade" />
+                    {dentaltech.patient.name}
+                  </CardDescription>
                 </div>
-              </div>
-              <CardDescription className="flex items-center mt-1 text-sm">
-                <FolderKanban className="w-4 h-4 mr-1 text-muted-foreground" />
-                {dentaltech.dentalTechCategory.name}
-              </CardDescription>
-            </CardHeader>
 
-            {dentaltech.detail && (
-              <CardContent>
-                <Textarea
-                  value={dentaltech.detail}
-                  readOnly
-                  className="min-h-[80px]"
-                />
-              </CardContent>
-            )}
+                {dentaltech.detail && (
+                  <>
+                    <div className="w-24 h-[2px] bg-muted-foreground mb-2 rounded-md" />
+                    <CardDescription>รายละเอียด :</CardDescription>
+                    <Textarea value={dentaltech.detail} readOnly />
+                  </>
+                )}
+              </CardHeader>
 
-            <CardFooter className="flex justify-between text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                {renderStatusIcon(dentaltech.status)}
-                {dentaltech.status}
-              </div>
-              <div className="flex items-center gap-2">
-                {renderLevelIcon(dentaltech.level)}
-                {dentaltech.level}
-              </div>
-            </CardFooter>
-          </Card>
-        ))
-      ) : (
-        <FormNotFound
-          message={dentalTechs?.error}
-          description={dentalTechs?.description}
-        />
-      )}
+              <CardFooter className="flex flex-col justify-between gap-4 w-full md:items-end">
+                <CardDescription className="flex items-center gap-2">
+                  <CalendarDays className="size-4" />
+                  กำหนดรับงาน :
+                  <span className="text-base">
+                    {formatDate(dentaltech.deadline)}
+                  </span>
+                </CardDescription>
+                <CardDescription className="flex gap-4">
+                  <div className="flex items-center gap-2">
+                    {renderLevelIcon(dentaltech.level)}
+                    {dentaltech.level}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {renderStatusIcon(dentaltech.status)}
+                    {dentaltech.status}
+                  </div>
+                </CardDescription>
+              </CardFooter>
+            </Card>
+          ))
+        ) : (
+          <FormNotFound
+            message="ไม่พบข้อมูลตามที่เลือก"
+            description="กรุณาเปลี่ยนตัวกรองเพื่อดูข้อมูล"
+          />
+        )}
+      </div>
     </div>
   );
 };

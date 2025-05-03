@@ -28,11 +28,10 @@ import { toast } from "sonner";
 import { CreatePatientSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 
 //actions
 import { createPatient } from "@/actions/company/public/patient";
-
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
@@ -42,7 +41,7 @@ interface CreatePatientFormProps {
 export const CreatePatientForm = ({
   setOpen,
   onSuccess,
-}: CreatePatientFormProps ) => {
+}: CreatePatientFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
   const [isPending, startTransition] = useTransition();
@@ -63,7 +62,6 @@ export const CreatePatientForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreatePatientSchema>) => {
-
     startTransition(() => {
       createPatient(values, companyId)
         .then((data) => {
@@ -72,7 +70,7 @@ export const CreatePatientForm = ({
           }
           if (data?.success) {
             toast.success(data.success);
-            
+
             setOpen(false);
             onSuccess?.();
           }

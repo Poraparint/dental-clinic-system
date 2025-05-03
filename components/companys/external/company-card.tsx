@@ -1,14 +1,14 @@
 "use client";
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Hospital } from "lucide-react";
 
 //props
-import { CardMinistry } from "@/components/props/card-ministry";
+import { CardMinistry } from "@/components/props/component/card-ministry";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import { useMinistry } from "@/hooks/external/use-ministry";
-import { RoleGate } from "@/components/props/role-gate";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 
 export const CompanyCard = () => {

@@ -1,11 +1,13 @@
+import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { UserInfo } from "@/components/user-info";
 import { currentManager } from "@/lib/auth";
 import { MANAGER_LOGIN_REDIRECT } from "@/routes";
+import { CompanyRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 type DashboardPageProps = {
   params: Promise<{ companyId: string }>;
-}
+};
 export default async function DashboardPage({ params }: DashboardPageProps) {
   const manager = await currentManager();
   const { companyId } = await params;
@@ -15,7 +17,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   }
 
   return (
-    <div>
+    <RoleGate allowedRole={[CompanyRole.MANAGER]}>
       <h2 className="text-2xl font-semibold mb-4">Welcome to the Dashboard</h2>
       <UserInfo label="Client component" manager={manager} />
 
@@ -29,6 +31,6 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           <p>$1,250 generated this week.</p>
         </div>
       </div>
-    </div>
+    </RoleGate>
   );
 }
