@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 //icons
-import { Circle, CalendarIcon } from "lucide-react";
+import { Circle } from "lucide-react";
 import { toast } from "sonner";
 
 //ui
@@ -19,7 +19,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -27,28 +26,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 //schema
 import { CreateDentalTechSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/card-category";
-import { SelectCategory } from "@/components/props/select-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
+import { SelectCategory } from "@/components/props/component/select-category";
 
 //actions
 import { useParams } from "next/navigation";
-import { addDays, format } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { usePatients } from "@/hooks/internal/use-patient";
-import { ComboboxCategories } from "@/components/props/combobox-categories";
+import { ComboboxCategories } from "@/components/props/component/combobox-categories";
 import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
 import { createDentalTech } from "@/actions/company/manager/dentaltech";
+import { DatePickerField } from "@/components/props/component/date-picker-field";
 
 interface CreateDentaltechFormProps {
   setOpen: (open: boolean) => void;
@@ -66,7 +59,6 @@ export const CreateDentaltechForm = ({
     useDentaltTechCategories(companyId);
 
   const [isPending, startTransition] = useTransition();
-
 
   const levelOptions = [
     { id: "#0369a1", name: "ปกติ" },
@@ -107,68 +99,7 @@ export const CreateDentaltechForm = ({
       <form onSubmit={form.handleSubmit(OnSubmit)}>
         <CardCategory icon={<Circle size={15} />} title="รายการงานทันตกรรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="deadline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">
-                    เลือกวันกำหนดรับงาน
-                  </FormLabel>
-                  <FormControl>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 size-4" />
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>เลือกวันที่</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-
-                      <PopoverContent
-                        align="start"
-                        className="flex w-auto flex-col space-y-2 p-2 bg-background"
-                      >
-                        <Select
-                          onValueChange={(value) =>
-                            field.onChange(addDays(new Date(), parseInt(value)))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="เลือกรายการ" />
-                          </SelectTrigger>
-                          <SelectContent position="popper">
-                            <SelectItem value="0">วันนี้</SelectItem>
-                            <SelectItem value="1">พรุ่งนี้</SelectItem>
-                            <SelectItem value="3">อีก 3 วัน</SelectItem>
-                            <SelectItem value="7">อีก 1 สัปดาห์</SelectItem>
-                            <SelectItem value="14">อีก 2 สัปดาห์</SelectItem>
-                            <SelectItem value="28">อีก 4 สัปดาห์</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <div className="rounded-md border">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <DatePickerField form={form} name="deadline" />
             <FormField
               control={form.control}
               name="patientId"

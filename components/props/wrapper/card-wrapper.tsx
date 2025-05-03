@@ -1,7 +1,7 @@
 "use client";
-import { Header } from "@/components/props/header";
+import { Header } from "@/components/props/component/header";
 import { Social } from "@/components/auth/social";
-import { BackButton } from "@/components/props/back-button";
+import { BackButton } from "@/components/props/component/back-button";
 import Link from "next/link";
 
 //ui
@@ -47,7 +47,9 @@ export const CardWrapper = ({
         <div className="w-16 h-1 bg-primary"></div>
         <BackButton label={backButtonLabel} href={backButtonHref} />
       </CardHeader>
-      <CardContent><ScrollArea className="h-80 md:h-[28rem]">{children}</ScrollArea></CardContent>
+      <CardContent>
+        <ScrollArea className="h-80 md:h-[28rem]">{children}</ScrollArea>
+      </CardContent>
       {showSocial && (
         <CardFooter>
           <Social />

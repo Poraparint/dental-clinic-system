@@ -24,7 +24,7 @@ import { CreateCompanySchema } from "@/schemas";
 
 //actions
 import { createCompany } from "@/actions/company/manager/company";
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { User } from "lucide-react";
 
 interface CreateMinistryFormProps {
@@ -32,9 +32,10 @@ interface CreateMinistryFormProps {
   onSuccess?: () => void;
 }
 
-export const CreateMinistryForm = ({ setOpen, onSuccess }: CreateMinistryFormProps) => {
-  
-
+export const CreateMinistryForm = ({
+  setOpen,
+  onSuccess,
+}: CreateMinistryFormProps) => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();

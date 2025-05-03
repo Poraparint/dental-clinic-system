@@ -1,22 +1,21 @@
 import { PatientInfoCard } from "@/components/companys/internal/patient/patient-info-card";
 import { TransactionInfoCard } from "@/components/companys/internal/patient/transaction/transaction-info-card";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPatientByCompanyId } from "@/data/internal/patient";
 import { currentManagerAndDentist } from "@/lib/auth";
+import { CompanyRole } from "@prisma/client";
 import { notFound } from "next/navigation";
 
 type PatientInfoCardPageProps = {
   params: Promise<{ patientId: string; companyId: string }>;
 };
 
-
 const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
   const { companyId, patientId } = await params;
-
-  
 
   const existingUser = await currentManagerAndDentist();
 
@@ -50,7 +49,15 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
         </div>
 
         <PatientInfoCard patient={patient} />
-        <TransactionInfoCard />
+        <RoleGate
+          allowedRole={[
+            CompanyRole.MANAGER,
+            CompanyRole.COMANAGER,
+            CompanyRole.DENTIST,
+          ]}
+        >
+          <TransactionInfoCard />
+        </RoleGate>
       </Tabs>
     </Card>
   );

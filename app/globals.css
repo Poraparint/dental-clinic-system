@@ -140,4 +140,8 @@
   .icon-menu{
     @apply size-7;
   }
+
+  .bg-indigo{
+    @apply bg-gradient-to-r from-indigo-700 to-indigo-500
+  }
 }

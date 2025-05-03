@@ -25,8 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 //props
-import { CardWrapper } from "@/components/props/card-wrapper";
-import { CardCategory } from "@/components/props/card-category";
+import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { User } from "lucide-react";
 
 export const RegisterForm = () => {
@@ -123,7 +123,6 @@ export const RegisterForm = () => {
               />
             </div>
           </CardCategory>
-          
 
           <FormError message={error} />
           <FormSuccess message={success} />

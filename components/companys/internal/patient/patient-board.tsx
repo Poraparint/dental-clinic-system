@@ -4,8 +4,6 @@ import { DialogCreatePatient } from "@/components/dialog/internal/dialog-create-
 import { useParams, useRouter } from "next/navigation";
 import { PatientTable } from "@/components/companys/internal/patient/patient-table";
 import { useState } from "react";
-import { RoleGate } from "@/components/props/role-gate";
-import { CompanyRole } from "@prisma/client";
 import { Card } from "@/components/ui/card";
 
 export const PatientBoard = () => {
@@ -23,7 +21,7 @@ export const PatientBoard = () => {
   };
 
   return (
-    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER, CompanyRole.DENTIST]}>
+    
       <Card className="px-5">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">รายชื่อคนไข้ / บัตรคนไข้</h1>
@@ -32,6 +30,6 @@ export const PatientBoard = () => {
         <hr />
         <PatientTable key={refreshKey} onRowClick={handleRowClick} />
       </Card>
-    </RoleGate>
+   
   );
 };

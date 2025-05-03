@@ -7,7 +7,7 @@ import { newVerification } from "@/actions/auth/new-verification";
 import { BeatLoader } from "react-spinners";
 
 //ui
-import { CardWrapper } from "@/components/props/card-wrapper";
+import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 

@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { BriefcaseBusiness } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";

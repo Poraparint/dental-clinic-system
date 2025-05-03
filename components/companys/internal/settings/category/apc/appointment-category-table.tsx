@@ -1,7 +1,7 @@
 "use client";
 
 import { Loading } from "@/components/loading";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useAppointmentCategories } from "@/hooks/internal/use-appointment";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
@@ -25,9 +25,7 @@ export const AppointmentCategoriesTable = () => {
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: AppointmentCategory) => (
-        <>{formatDate(item.createdAt)}</>
-      ),
+      render: (item: AppointmentCategory) => <>{formatDate(item.createdAt)}</>,
     },
   ];
 

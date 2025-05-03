@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/dialog-button";
+import { DialogButton } from "@/components/props/wrapper/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { CreateTransactionForm } from "@/components/companys/internal/patient/transaction/transaction-form";

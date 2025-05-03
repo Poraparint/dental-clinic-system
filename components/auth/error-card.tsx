@@ -1,7 +1,7 @@
 import { TriangleAlert } from "lucide-react";
 
 //ui
-import { CardWrapper } from "@/components/props/card-wrapper";
+import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
 
 export const ErrorCard = () => {
   return (
@@ -10,7 +10,7 @@ export const ErrorCard = () => {
       backButtonHref="/auth/login"
       backButtonLabel="Back to login page"
     >
-      <TriangleAlert className="text-destructive-foreground"/>
+      <TriangleAlert className="text-destructive-foreground" />
     </CardWrapper>
   );
 };

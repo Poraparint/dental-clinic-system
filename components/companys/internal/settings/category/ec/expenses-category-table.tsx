@@ -1,7 +1,7 @@
 "use client";
 
 import { Loading } from "@/components/loading";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useExpensesCategories } from "@/hooks/internal/use-ec";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";

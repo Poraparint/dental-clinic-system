@@ -1,7 +1,7 @@
 "use client";
 
 import { Loading } from "@/components/loading";
-import { DynamicTable } from "@/components/props/dynamic-table";
+import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { Badge } from "@/components/ui/badge";
 import { useExpenses } from "@/hooks/internal/use-expenses";
 import { useParams } from "next/navigation";
@@ -19,11 +19,11 @@ interface Expense {
   amount: number;
 }
 
-interface ExpensesTableProps{
+interface ExpensesTableProps {
   month?: string;
 }
 
-export const ExpensesTable = ({month}: ExpensesTableProps) => {
+export const ExpensesTable = ({ month }: ExpensesTableProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
   const { expenses, isLoading } = useExpenses(companyId, month);
@@ -50,7 +50,10 @@ export const ExpensesTable = ({month}: ExpensesTableProps) => {
       header: "หมวดหมู่",
       render: (item: Expense) => (
         <Badge variant="outline" className="flex gap-3">
-          <div style={{ backgroundColor: item.expensesCategory.color }} className="rounded-full size-3"/>
+          <div
+            style={{ backgroundColor: item.expensesCategory.color }}
+            className="rounded-full size-3"
+          />
           {item.expensesCategory.name}
         </Badge>
       ),
@@ -63,7 +66,7 @@ export const ExpensesTable = ({month}: ExpensesTableProps) => {
     {
       key: "amount",
       header: "จำนวนเงิน",
-      render: (item: Expense) => (<span>฿ {item.amount}</span>),
+      render: (item: Expense) => <span>฿ {item.amount}</span>,
     },
   ];
 

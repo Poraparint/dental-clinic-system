@@ -1,4 +1,4 @@
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Badge } from "@/components/ui/badge";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
@@ -23,7 +23,6 @@ interface PatientInfoCardProps {
 export const PatientInfoCard = ({ patient }: PatientInfoCardProps) => {
   return (
     <>
-      
       <TabsContent value="info">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <CardCategory icon={<UserRound />} title="ข้อมูลการติดต่อ">

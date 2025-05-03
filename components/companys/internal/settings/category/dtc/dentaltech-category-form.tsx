@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/card-category";
+import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Aperture } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -108,16 +108,16 @@ export const CreateDentalTechCategoryForm = ({
           </div>
         </CardCategory>
 
-       <div className="flex justify-end">
-                 <Button
-                   typeof="submit"
-                   size="lg"
-                   disabled={isPending}
-                   className="px-9"
-                 >
-                   เพิ่มหมวดหมู่
-                 </Button>
-               </div>
+        <div className="flex justify-end">
+          <Button
+            typeof="submit"
+            size="lg"
+            disabled={isPending}
+            className="px-9"
+          >
+            เพิ่มหมวดหมู่
+          </Button>
+        </div>
       </form>
     </Form>
   );

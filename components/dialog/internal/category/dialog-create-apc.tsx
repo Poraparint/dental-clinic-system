@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/dialog-button";
+import { DialogButton } from "@/components/props/wrapper/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { CreateAppointmentCategoryForm } from "@/components/companys/internal/settings/category/apc/appointment-category-form";
@@ -23,7 +23,10 @@ export const DialogCreateAppointmentCategory = ({
         open={open}
         setOpen={setOpen}
       >
-        <CreateAppointmentCategoryForm setOpen={setOpen} onSuccess={onSuccess} />
+        <CreateAppointmentCategoryForm
+          setOpen={setOpen}
+          onSuccess={onSuccess}
+        />
       </DialogButton>
     </>
   );
