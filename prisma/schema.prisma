@@ -28,74 +28,79 @@ model Company {
   name                       String?
   description                String?
   managerId                  String
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  isDeleted                  Boolean               @default(false)
   manager                    Manager               @relation(fields: [managerId], references: [id])
   members                    Member[]
   patients                   Patient[]
   transactionCategories      TransactionCategory[]
   DentalTechnicianCategories DentalTechCategory[]
-  expensesCategories ExpensesCategory[]
-  appointmentCategories AppointmentCategory[]
-  expenses Expenses[]
-  dentalTech Dentaltech[]
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt
-  isDeleted                  Boolean               @default(false)
-  @@index([managerId])
-  @@index([isDeleted])
+  expensesCategories         ExpensesCategory[]
+  appointmentCategories      AppointmentCategory[]
+  expenses                   Expenses[]
+  dentalTech                 Dentaltech[]
+  schedule                   Schedule[]
+  recheck                    Recheck[]
+
+  @@index([managerId], name: "idx_company_all")
+  @@index([isDeleted], name: "idx_company")
 }
 
 model User {
-  id                    String                 @id @default(uuid())
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?
-  phone                 String?
-  image                 String?
-  password              String?
-  accounts              Account[]
-  isTwoFactorEnabled    Boolean                @default(false)
+  id                 String    @id @default(uuid())
+  name               String?
+  email              String?   @unique
+  emailVerified      DateTime?
+  phone              String?
+  image              String?
+  password           String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  isTwoFactorEnabled Boolean   @default(false)
+  accounts           Account[]
+
   twoFactorConfirmation TwoFactorConfirmation?
   manager               Manager?
   member                Member?
   patient               Patient[]
   transaction           Transaction[]
   dentalTechCategory    DentalTechCategory[]
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
+  schedule              Schedule[]
+  recheck               Recheck[]
 }
 
 model Manager {
-  id                         String                @id @unique
-  role                       CompanyRole           @default(MANAGER)
-  createdAt                  DateTime              @default(now())
-  updatedAt                  DateTime              @updatedAt
-  user                       User                  @relation(fields: [id], references: [id], onDelete: Cascade)
-  companies                  Company[]
-  members                    Member[]
-  transactionCategories      TransactionCategory[]
+  id                    String                @id @unique
+  role                  CompanyRole           @default(MANAGER)
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  user                  User                  @relation(fields: [id], references: [id], onDelete: Cascade)
+  companies             Company[]
+  members               Member[]
+  transactionCategories TransactionCategory[]
   appointmentCategories AppointmentCategory[]
-  expensesCategories ExpensesCategory[]
+  expensesCategories    ExpensesCategory[]
 }
 
 model Member {
-  id                         String               @id @unique
-  memberCode                 String?
-  role                       CompanyRole          @default(PENDING)
-  companyId                  String
-  managerId                  String
-  status                     String               @default("ACTIVE")
-  isDeleted                  Boolean              @default(false)
-  createdAt                  DateTime             @default(now())
-  updatedAt                  DateTime             @updatedAt
+  id         String      @id @unique
+  memberCode String?
+  role       CompanyRole @default(PENDING)
+  companyId  String
+  managerId  String
+  status     String      @default("ACTIVE")
+  isDeleted  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
   user    User    @relation(fields: [id], references: [id])
   company Company @relation(fields: [companyId], references: [id])
   manager Manager @relation(fields: [managerId], references: [id])
 
   @@unique([id, companyId])
-  @@index([companyId, role])
-  @@index([managerId])
-  @@index([isDeleted])
+  @@index([companyId, managerId], name: "idx_member_all")
+  @@index([isDeleted, companyId, managerId], name: "idx_member")
 }
 
 model Account {
@@ -153,71 +158,82 @@ model TwoFactorConfirmation {
 }
 
 model TransactionCategory {
-  id           String        @id @default(cuid())
-  name         String
-  description  String?
-  price        Float?
-  managerId    String
-  manager      Manager       @relation(fields: [managerId], references: [id])
-  companyId    String
-  company      Company       @relation(fields: [companyId], references: [id])
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       Float?
+  managerId   String
+
+  companyId String
+
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  transactions Transaction[]
   isDeleted    Boolean       @default(false)
+  transactions Transaction[]
+
+  manager Manager @relation(fields: [managerId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
 
   @@unique([name, companyId])
-  @@index([companyId])
+  @@index([companyId, isDeleted], name: "idx_tc")
+  @@index([companyId], name: "idx_tc_all")
 }
 
 model DentalTechCategory {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
+  id            String  @id @default(cuid())
+  name          String
+  description   String?
   creatorUserId String
-  creator       User          @relation(fields: [creatorUserId], references: [id])
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  dentalTech  Dentaltech[]
+
+  companyId  String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  isDeleted  Boolean      @default(false)
+  dentalTech Dentaltech[]
+  company    Company      @relation(fields: [companyId], references: [id])
+  creator    User         @relation(fields: [creatorUserId], references: [id])
 
   @@unique([name, companyId])
-  @@index([companyId])
+  @@index([companyId, isDeleted], name: "idx_dtc")
+  @@index([companyId], name: "idx_dtc_all")
 }
 
-model ExpensesCategory{
-  id          String   @id @default(cuid())
+model ExpensesCategory {
+  id          String  @id @default(cuid())
   name        String
   description String?
-  color String?
-  managerId    String
-  manager      Manager       @relation(fields: [managerId], references: [id])
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  expenses Expenses[]
+  color       String?
+  managerId   String
+
+  companyId String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  isDeleted Boolean    @default(false)
+  expenses  Expenses[]
+  company   Company    @relation(fields: [companyId], references: [id])
+  manager   Manager    @relation(fields: [managerId], references: [id])
 
   @@unique([name, companyId])
-  @@index([companyId])
+  @@index([companyId, isDeleted], name: "idx_ex")
+  @@index([companyId], name: "idx_ex_all")
 }
 
-model AppointmentCategory{
-  id          String   @id @default(cuid())
-  name        String
-  managerId    String
-  manager      Manager       @relation(fields: [managerId], references: [id])
-  companyId   String
-  company     Company  @relation(fields: [companyId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
+model AppointmentCategory {
+  id        String     @id @default(cuid())
+  name      String
+  managerId String
+  companyId String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  isDeleted Boolean    @default(false)
+  schedule  Schedule[]
+  manager   Manager    @relation(fields: [managerId], references: [id])
+
+  company Company @relation(fields: [companyId], references: [id])
 
   @@unique([name, companyId])
-  @@index([companyId])
+  @@index([companyId, isDeleted], name: "idx_ac")
+  @@index([companyId], name: "idx_ac_all")
 }
 
 model Patient {
@@ -238,14 +254,14 @@ model Patient {
   isDeleted     Boolean       @default(false)
   transactions  Transaction[]
   dentaltech    Dentaltech[]
+  recheck       Recheck[]
   company       Company       @relation(fields: [companyId], references: [id])
   creator       User          @relation(fields: [creatorUserId], references: [id])
 
   @@unique([name, companyId])
-  @@index([companyId])
-  @@index([creatorUserId])
-  @@index([companyId, createdAt])
-  @@index([isDeleted])
+  @@index([companyId], name: "idx_patient_all")
+  @@index([creatorUserId], name: "idx_patient_creator")
+  @@index([companyId, isDeleted], name: "idx_patient")
 }
 
 model Transaction {
@@ -255,53 +271,102 @@ model Transaction {
   price                 Float
   paid                  Float
   patientId             String
-  patient               Patient             @relation(fields: [patientId], references: [id])
-  transactionCategoryId String
-  transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
-  creatorUserId         String
-  creator               User                @relation(fields: [creatorUserId], references: [id])
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   isDelete              Boolean             @default(false)
-  @@index([patientId])
-  @@index([creatorUserId])
-  @@index([isDelete])
+  creatorUserId         String
+  transactionCategoryId String
+  recheck               Recheck?
+  patient               Patient             @relation(fields: [patientId], references: [id])
+  transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+
+  creator User @relation(fields: [creatorUserId], references: [id])
+
+  @@index([patientId, isDelete], name: "idx_transaction_patient")
+  @@index([creatorUserId, isDelete], name: "idx_transaction_creator")
 }
 
 model Dentaltech {
-  id        String   @id @default(cuid())
-  detail    String?
-  level     String   @default("ปกติ")
-  status    String   @default("รอดำเนินการ")
-  deadline  DateTime @default(now())
-  price                 Float?
-  postit    String?
-  patientId String
-  dctId String
-  companyId String
-  company Company @relation(fields: [companyId], references: [id])
+  id                 String             @id @default(cuid())
+  detail             String?
+  level              String             @default("ปกติ")
+  status             String             @default("รอดำเนินการ")
+  deadline           DateTime           @default(now())
+  price              Float?
+  postit             String?
+  patientId          String
+  dctId              String
+  companyId          String
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  company            Company            @relation(fields: [companyId], references: [id])
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
-  patient   Patient  @relation(fields: [patientId], references: [id])
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  @@index([companyId])
-  @@index([companyId, status, deadline])
+  patient            Patient            @relation(fields: [patientId], references: [id])
+
+  @@index([companyId], name: "idx_dentaltech_all")
 }
 
-model Expenses{
-  id String @id @default(cuid())
+model Expenses {
+  id       String   @id @default(cuid())
   datetime DateTime @default(now())
-  name String
-  ecId String
-  payment String
-  amount Float
+  name     String
+  ecId     String
+  payment  String
+  amount   Float
+
+  companyId        String
+  createdAt        DateTime         @default(now())
   expensesCategory ExpensesCategory @relation(fields: [ecId], references: [id])
-  companyId String
-  company Company @relation(fields: [companyId], references: [id])
-  createdAt             DateTime            @default(now())
-  @@index([companyId])
-  @@index([datetime])
-  @@index([ecId])
+  company          Company          @relation(fields: [companyId], references: [id])
+
+  @@index([companyId], name: "idx_expenses_all")
+  @@index([companyId, datetime], name: "idx_expenses_datetime")
+  @@index([ecId, companyId], name: "idx_expenses_ec")
 }
 
+model Schedule {
+  id            String              @id @default(cuid())
+  datetime      DateTime            @default(now())
+  phone         String
+  patientName   String
+  detail        String?
+  appointmentId String
+  creatorUserId String
+  companyId     String
+  createdAt     DateTime            @default(now())
+  appointment   AppointmentCategory @relation(fields: [appointmentId], references: [id])
+  company       Company             @relation(fields: [companyId], references: [id])
+  creator       User                @relation(fields: [creatorUserId], references: [id])
 
+  @@index([companyId], name: "idx_schedule_all")
+  @@index([datetime, companyId], name: "idx_schedule_datetime")
+}
+
+model Recheck {
+  id            String        @id
+  patientId     String
+  companyId     String
+  creatorUserId String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  recheckList   RecheckList[]
+  transaction   Transaction   @relation(fields: [id], references: [id])
+  patient       Patient       @relation(fields: [patientId], references: [id])
+  company       Company       @relation(fields: [companyId], references: [id])
+  creator       User          @relation(fields: [creatorUserId], references: [id])
+
+  @@index([companyId], name: "idx_recheck_all")
+}
+
+model RecheckList {
+  id          String   @id @default(cuid())
+  datetime    DateTime @default(now())
+  detail      String?
+  price       Float?
+  paid        Float?
+  recheckId   String
+  isConfirmed Boolean  @default(false)
+  recheck     Recheck  @relation(fields: [recheckId], references: [id])
+
+  @@index([recheckId], name: "idx_rechecklist_all")
+}

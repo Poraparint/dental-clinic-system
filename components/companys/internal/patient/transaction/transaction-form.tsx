@@ -67,7 +67,7 @@ export const CreateTransactionForm = ({
   });
   const transactionCategoryId = form.watch("transactionCategoryId");
 
-  const selectedCategory = categories.find(
+  const selectedCategory = categories?.find?.(
     (cat) => cat.id === transactionCategoryId
   );
 
