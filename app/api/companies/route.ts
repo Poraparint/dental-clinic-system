@@ -9,6 +9,12 @@ export async function GET() {
     const companys = await db.company.findMany({
       where: {
         managerId: manager.id,
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+        name: true,
+        description: true,
       },
     });
 

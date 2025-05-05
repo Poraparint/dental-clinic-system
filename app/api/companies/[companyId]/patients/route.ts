@@ -29,6 +29,7 @@ export async function GET(
     const patients = await db.patient.findMany({
       where: {
         companyId,
+        isDeleted: false,
       },
       select: {
         id: true,

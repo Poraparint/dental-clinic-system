@@ -48,14 +48,14 @@ export const DentalTechTable = () => {
         onStatusChange={setSelectedStatus}
         onLevelChange={setSelectedLevel}
       />
-      <div className="grid md:grid-cols-2 gap-3">
+      <div className="grid xl:grid-cols-2 gap-3">
         {filtered.length > 0 ? (
           filtered.map((dentaltech) => (
             <Card key={dentaltech.id} className="md:flex-row justify-between">
               <CardHeader className="w-full">
                 <div className="flex items-center gap-2">
                   <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <BriefcaseBusiness className="size-4 text-indigo-600" />
+                    <BriefcaseBusiness className="size-4 text-muted-foreground" />
                     {dentaltech.dentalTechCategory.name}
                   </CardTitle>
                   <CardDescription className="flex items-center gap-2">

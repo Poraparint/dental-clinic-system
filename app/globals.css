@@ -54,27 +54,13 @@
 }
 
 :root {
-  /* สีม่วง (Amethyst โทน) */
-  --amethyst: oklch(0.6 0.12 290);
-  --amethyst-foreground: oklch(0.98 0.01 250);
-  --amethyst-accent: oklch(0.55 0.18 290);
-  
-  /* สีน้ำเงิน (Lapis Lazuli โทน) */
-  --lapis: oklch(0.5 0.1 250);
-  --lapis-foreground: oklch(0.87 0.0444 250);
-  --lapis-accent: oklch(0.6 0.12 245);
-  
-  /* สีฟ้า (Aquamarine โทน) */
-  --aquamarine: oklch(0.7 0.08 200);
-  --aquamarine-foreground: oklch(0.15 0.05 260);
-
   --muted-foreground: oklch(0.4 0.02 260);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --jade: oklch(0.44 0.0884 151.71);
   --primary: oklch(0.208 0.042 265.755);
-  --destructive: #F8D7DA; /* สีพื้นหลังแดงอ่อน */
+  --destructive: #f8d7da; /* สีพื้นหลังแดงอ่อน */
   --destructive-foreground: #842029; /* สีข้อความแดงเข้ม */
   --primary-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
@@ -91,39 +77,25 @@
 }
 
 .dark {
-  /* สีม่วง (Amethyst โทน - Dark Mode) */
-  --amethyst: oklch(0.45 0.15 295);
-  --amethyst-foreground: oklch(0.95 0.01 255);
-  --amethyst-accent: oklch(0.7 0.15 285);
-  
-  /* สีน้ำเงิน (Lapis Lazuli โทน - Dark Mode) */
-  --lapis: oklch(0.4 0.12 255);
-  --lapis-foreground: oklch(0.87 0.0444 250);
-  --lapis-accent: oklch(0.5 0.14 250);
-  
-  /* สีฟ้า (Aquamarine โทน - Dark Mode) */
-  --aquamarine: oklch(0.55 0.1 195);
-  --aquamarine-foreground: oklch(0.95 0.01 255);
-
   --muted-foreground: oklch(0.7 0.02 260);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --jade: oklch(0.53 0.1086 159.06);
   --primary: oklch(0.929 0.013 255.508);
-  --destructive: #4A1C1F; /* พื้นหลังแดงเข้มขึ้นในโหมดมืด */
-  --destructive-foreground: #F8D7DA; /* ข้อความสีแดงอ่อน */
+  --destructive: #4a1c1f; /* พื้นหลังแดงเข้มขึ้นในโหมดมืด */
+  --destructive-foreground: #f8d7da; /* ข้อความสีแดงอ่อน */
   --primary-foreground: oklch(0.208 0.042 265.755);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
   --sidebar: oklch(0.18 0.035 265); /* สีพื้นหลัง sidebar ที่อ่อนลงเล็กน้อย */
---sidebar-foreground: oklch(0.95 0.01 255); /* ข้อความสีขาวอมม่วงอ่อน */
---sidebar-primary: oklch(0.55 0.08 260); /* ปุ่มหลักสีเขียวอมฟ้า */
---sidebar-primary-foreground: oklch(0.95 0.01 255); /* ข้อความบนปุ่มหลัก */
---sidebar-accent: oklch(0.25 0.03 265); /* สีเน้นส่วนประกอบ */
---sidebar-accent-foreground: oklch(0.95 0.01 255); /* ข้อความบนส่วนเน้น */
---sidebar-border: oklch(0.22 0.02 260); /* เส้นขอบ */
---sidebar-ring: oklch(0.6 0.04 255); /* เอฟเฟกต์เมื่อโฟกัส */
+  --sidebar-foreground: oklch(0.95 0.01 255); /* ข้อความสีขาวอมม่วงอ่อน */
+  --sidebar-primary: oklch(0.55 0.08 260); /* ปุ่มหลักสีเขียวอมฟ้า */
+  --sidebar-primary-foreground: oklch(0.95 0.01 255); /* ข้อความบนปุ่มหลัก */
+  --sidebar-accent: oklch(0.25 0.03 265); /* สีเน้นส่วนประกอบ */
+  --sidebar-accent-foreground: oklch(0.95 0.01 255); /* ข้อความบนส่วนเน้น */
+  --sidebar-border: oklch(0.22 0.02 260); /* เส้นขอบ */
+  --sidebar-ring: oklch(0.6 0.04 255); /* เอฟเฟกต์เมื่อโฟกัส */
 }
 
 @layer base {
@@ -133,15 +105,15 @@
   body {
     @apply bg-background text-foreground;
   }
-  .fixed-button{
+  .fixed-button {
     @apply shadow-xs hover:bg-primary/90;
   }
 
-  .icon-menu{
+  .icon-menu {
     @apply size-7;
   }
 
-  .bg-indigo{
-    @apply bg-gradient-to-r from-indigo-700 to-indigo-500
+  .bg-indigo {
+    @apply bg-gradient-to-r from-indigo-700 to-indigo-500;
   }
 }

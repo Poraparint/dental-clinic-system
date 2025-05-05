@@ -82,6 +82,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const params = useParams();
   const companyId = params.companyId as string;
+  
 
   const isActive = (url: string) => {
     return pathname.startsWith(url);
