@@ -202,3 +202,25 @@ export const CreateDentalTechSchema = z.object({
   dctId: z.string().min(1, "ต้องเลือกหมวดหมู่"),
   level: z.string().min(1, "ต้องเลือกประเภทรายการ"),
 });
+
+export const CreateRecheckSchema = z.object({
+  transactionId: z.string().min(1, "ต้องมีรหัสธุรกรรม"),
+  recheckList: z
+    .array(
+      z.object({
+        datetime: z.date({
+          required_error: "ต้องระบุวันที่",
+        }),
+        tcId: z.string().min(1, "ต้องมีหมวหมู่"),
+        detail: z.string().optional().default(""),
+        price: z.preprocess(
+          (val) => (val === "" ? undefined : Number(val)),
+          z
+            .number({ required_error: "กรุณากรอกราคา" })
+            .min(0, "ราคาต้องไม่น้อยกว่า 0")
+        ),
+      })
+    )
+    .min(1, "ต้องมีอย่างน้อย 1 รายการ")
+    .max(6, "ไม่สามารถเพิ่มเกิน 6 รายการ"),
+});

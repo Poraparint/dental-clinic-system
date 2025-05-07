@@ -25,7 +25,7 @@ export const DialogContentForm = ({
 }: DialogContentFormProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
-      <DialogContent className="z-50">
+      <DialogContent>
         <DialogHeader className="bg-gradient-to-r from-indigo-400 to-indigo-200 dark:from-indigo-900 dark:to-indigo-400 absolute p-5 w-full rounded-t-md">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

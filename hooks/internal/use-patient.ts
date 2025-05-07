@@ -24,7 +24,7 @@ export const usePatients = (companyId: string) => {
         const response = await fetch(`/api/companies/${companyId}/patients`);
 
         const data = await response.json();
-        setPatients(data);
+        setPatients(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Error fetching patients:", error);
         

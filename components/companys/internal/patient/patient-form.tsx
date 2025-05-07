@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Circle } from "lucide-react";
+import { Info, User } from "lucide-react";
 import { toast } from "sonner";
 
 //schema
@@ -81,7 +81,11 @@ export const CreatePatientForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Circle size={15} />} title="ข้อมูลหลัก">
+        <CardCategory
+          icon={<User/>}
+          title="ข้อมูลหลัก"
+          description="ข้อมูลส่วนตัวพื้นฐานของคนไข้"
+        >
           <div className="grid grid-cols-4 grid-rows-2 gap-2">
             <div className="col-span-2">
               <FormField
@@ -181,7 +185,11 @@ export const CreatePatientForm = ({
             </div>
           </div>
         </CardCategory>
-        <CardCategory icon={<Circle size={15} />} title="ข้อมูลเพิ่มเติม">
+        <CardCategory
+          icon={<Info />}
+          title="ข้อมูลเพิ่มเติม"
+          description="รายละเอียดเพิ่มเติมเกี่ยวกับคนไข้"
+        >
           <div className="grid grid-cols-4 grid-rows-2 gap-2">
             <div className="col-span-2">
               <FormField

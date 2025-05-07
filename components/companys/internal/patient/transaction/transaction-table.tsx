@@ -5,6 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTransaction } from "@/hooks/internal/use-transaction";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Copy } from "lucide-react";
+import { toast } from "sonner";
 
 interface Transaction {
   id: string;
@@ -70,6 +73,23 @@ export const TransactionTable = () => {
       key: "creator",
       header: "ผู้บันทึก",
       render: (item: Transaction) => item.creator.name,
+    },
+    {
+      key: "copy",
+      header: "รหัส",
+      render: (item: Transaction) => (
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            navigator.clipboard.writeText(item.id); 
+            toast.success("คัดลอก 'รหัสธุรกรรม' สำเร็จ")
+          }}
+          title="คัดลอก ID"
+        >
+          <Copy className="size-4" />
+        </Button>
+      ),
     },
   ];
 

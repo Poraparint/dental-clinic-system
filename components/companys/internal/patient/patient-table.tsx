@@ -67,11 +67,14 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
         </div>
       ),
     },
+    
   ];
 
   if (isLoading) {
     return <Loading />;
   }
+
+  
 
   return (
     <DynamicTable

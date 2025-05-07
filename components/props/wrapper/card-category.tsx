@@ -15,16 +15,20 @@ export const CardCategory = ({
 }: CardCategoryProps) => {
   return (
     <Card className="mb-3 border-0 shadow-none">
-      <CardHeader>
-        <div className="flex gap-2 items-center">
-          {icon}
-          <CardTitle>{title}</CardTitle>
+      <CardHeader className="border-b">
+        <div className="flex space-x-3 items-center">
+          <div className="p-2 rounded-full border border-muted-foreground">
+            <span className="text-muted-foreground [&>svg]:size-4">
+              {icon}
+            </span>
+          </div>
+          <div>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription className="mt-2">{description}</CardDescription>
+          </div>
         </div>
-
-        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>{children}</CardContent>
-      <hr className="mx-15" />
     </Card>
   );
 };

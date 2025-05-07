@@ -6,7 +6,6 @@ export const getPatientByName = async (name: string, companyId: string) => {
       name_companyId: {
         name,
         companyId,
-        
       },
     },
   });
@@ -26,3 +25,4 @@ export const getPatientByCompanyId = async (
   });
   return patient;
 };
+
