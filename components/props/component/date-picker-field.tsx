@@ -32,6 +32,7 @@ interface DatePickerFieldProps<T extends FieldValues> {
   label?: string;
   withQuickSelect?: boolean;
   aboveOneWeek?: boolean;
+  isLabel?: boolean;
 }
 
 export const DatePickerField = <T extends FieldValues>({
@@ -40,6 +41,7 @@ export const DatePickerField = <T extends FieldValues>({
   label = "เลือกวันที่",
   withQuickSelect = true,
   aboveOneWeek = true,
+  isLabel = true,
 }: DatePickerFieldProps<T>) => {
   return (
     <FormField
@@ -47,7 +49,9 @@ export const DatePickerField = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-sm font-medium">{label}</FormLabel>
+          {isLabel && (
+            <FormLabel className="text-sm font-medium">{label}</FormLabel>
+          )}
           <FormControl>
             <Popover>
               <PopoverTrigger asChild>
@@ -58,9 +62,12 @@ export const DatePickerField = <T extends FieldValues>({
                     !field.value && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  <CalendarIcon className="size-4" />
+
                   {field.value ? (
-                    formatDate(field.value)
+                    <span className="ml-2">
+                      {formatDate(field.value)}
+                    </span>
                   ) : (
                     <span>เลือกวันที่</span>
                   )}

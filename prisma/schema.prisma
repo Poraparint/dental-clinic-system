@@ -170,6 +170,7 @@ model TransactionCategory {
   updatedAt    DateTime      @updatedAt
   isDeleted    Boolean       @default(false)
   transactions Transaction[]
+  recheckList RecheckList[]
 
   manager Manager @relation(fields: [managerId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
@@ -343,7 +344,7 @@ model Schedule {
 }
 
 model Recheck {
-  id            String        @id
+  id            String        @id @unique
   patientId     String
   companyId     String
   creatorUserId String
@@ -363,10 +364,11 @@ model RecheckList {
   datetime    DateTime @default(now())
   detail      String?
   price       Float?
-  paid        Float?
   recheckId   String
+  transactionCategoryId String
   isConfirmed Boolean  @default(false)
   recheck     Recheck  @relation(fields: [recheckId], references: [id])
+  transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
 
   @@index([recheckId], name: "idx_rechecklist_all")
 }

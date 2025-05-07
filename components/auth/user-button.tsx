@@ -9,13 +9,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { AvatarFallback } from "@/components/ui/avatar";
 import { LogoutButton } from "@/components/auth/manager/logout-button";
 import Link from "next/link";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { UserCard } from "@/components/props/component/user-card";
 
 export const UserButton = () => {
   const user = useCurrentUser();
@@ -49,7 +50,7 @@ export const UserButton = () => {
           <Button asChild variant="outline">
             <Link href="/auth/login">เข้าสู่ระบบ</Link>
           </Button>
-          <Button asChild variant="lapis">
+          <Button asChild>
             <Link href="/auth/register">ลงทะเบียน</Link>
           </Button>
         </div>
@@ -60,19 +61,23 @@ export const UserButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
-          <AvatarImage src={user?.image || ""} />
-          <AvatarFallback
-            className={`p-2 text-white ${getAvatarBgColor(user.role)}`}
-          >
-            <User />
-          </AvatarFallback>
-        </Avatar>
+        <UserCard
+          avatar={user?.image || ""}
+          icon={
+            <AvatarFallback
+              className={`p-1 text-white ${getAvatarBgColor(user.role)}`}
+            >
+              <User size={15}/>
+            </AvatarFallback>
+          }
+          title={user?.name}
+          
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuItem>
           <User />
-          {user.name || "USER"}
+          {user.role || "PENDING"}
         </DropdownMenuItem>
         <RoleGate
           allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}

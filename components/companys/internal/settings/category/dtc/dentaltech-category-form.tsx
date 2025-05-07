@@ -81,7 +81,7 @@ export const CreateDentalTechCategoryForm = ({
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="ครอบฟัน, ฟันปลอม, zirconium, ..."
+                      placeholder="ครอบฟันโลหะล้วน, ครอบฟันเซรามิกล้วน, ครอบฟันเซอร์โคเนีย, ..."
                     />
                   </FormControl>
                   <FormMessage />

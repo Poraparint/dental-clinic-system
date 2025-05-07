@@ -57,6 +57,7 @@ export function DynamicTable<T>({
               <TableRow
                 key={index}
                 onClick={() => onRowClick && onRowClick(item)}
+                className="hover:bg-background"
               >
                 {columns.map((column) => (
                   <TableCell
@@ -69,7 +70,7 @@ export function DynamicTable<T>({
               </TableRow>
             ))
           ) : (
-            <TableRow>
+            <TableRow className="hover:bg-background">
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 <FormNotFound
                   message={error || "ไม่พบข้อมูล"}

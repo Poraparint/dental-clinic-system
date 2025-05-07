@@ -11,7 +11,7 @@ import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //icons
-import { Circle } from "lucide-react";
+import { Notebook } from "lucide-react";
 import { toast } from "sonner";
 
 //ui
@@ -91,7 +91,7 @@ export const CreateTransactionForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Circle size={15} />} title="รายการธุรกกรม">
+        <CardCategory icon={<Notebook />} title="รายการธุรกกรม" description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <DatePickerField
               form={form}
