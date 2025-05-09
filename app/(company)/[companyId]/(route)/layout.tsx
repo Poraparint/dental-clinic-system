@@ -12,14 +12,14 @@ export default async function CompanyLayout({ children }: CompanyLayoutProps) {
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <div className="flex w-screen h-full">
+      <div className="flex w-screen max-h-full bg-company-background pb-20">
         {/* Sidebar */}
         <AppSidebar />
 
         {/* Main Content */}
         <main className="flex flex-1 flex-col overflow-auto">
           <Navbar />
-          <div className="m-3 p-5 bg-background mb-40">{children}</div>
+          <div className="p-3">{children}</div>
         </main>
       </div>
     </SidebarProvider>

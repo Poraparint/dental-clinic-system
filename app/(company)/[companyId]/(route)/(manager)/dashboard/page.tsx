@@ -1,6 +1,5 @@
+import { Dashboard } from "@/components/companys/internal/dashboard/dashboard";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
-import { UserInfo } from "@/components/user-info";
-import { currentManager } from "@/lib/auth";
 import { MANAGER_LOGIN_REDIRECT } from "@/routes";
 import { CompanyRole } from "@prisma/client";
 import { redirect } from "next/navigation";
@@ -9,7 +8,6 @@ type DashboardPageProps = {
   params: Promise<{ companyId: string }>;
 };
 export default async function DashboardPage({ params }: DashboardPageProps) {
-  const manager = await currentManager();
   const { companyId } = await params;
 
   if (!companyId) {
@@ -18,19 +16,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
   return (
     <RoleGate allowedRole={[CompanyRole.MANAGER]}>
-      <h2 className="text-2xl font-semibold mb-4">Welcome to the Dashboard</h2>
-      <UserInfo label="Client component" manager={manager} />
-
-      {/* ตัวอย่างข้อมูลที่อาจจะโหลด */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border p-4 rounded shadow">
-          <h3 className="font-semibold text-lg">{companyId}</h3>
-        </div>
-        <div className="border p-4 rounded shadow">
-          <h3 className="font-semibold text-lg">Revenue</h3>
-          <p>$1,250 generated this week.</p>
-        </div>
-      </div>
+      <Dashboard />
     </RoleGate>
   );
 }
