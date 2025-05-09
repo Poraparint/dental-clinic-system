@@ -12,9 +12,9 @@ export const Loading = () => {
       <CardHeader className="w-full">
         <div className="flex flex-col items-center gap-5">
           <PuffLoader size={120} color="#8072c2" />
-          <CardTitle>Preparing your plan</CardTitle>
+          <CardTitle>กำลังโหลด...</CardTitle>
           <CardDescription>
-            Setting up your nutrition plan and analyzing your goals...
+            การโหลดอาจใช้เวลานานขึ้นอยู่กับจำนวนข้อมูล
           </CardDescription>
         </div>
       </CardHeader>

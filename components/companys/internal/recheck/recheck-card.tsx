@@ -14,12 +14,11 @@ import {
   DrawerDescription,
 } from "@/components/ui/drawer";
 import {
-  Banknote,
-  Calendar,
   CalendarCheck,
   Clock,
 } from "lucide-react";
-import { RecheckCardUi } from "@/components/props/component/recheck-card-ui";
+import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
+import { UpComingCardUi } from "@/components/props/component/upcoming-card-ui";
 
 interface RecheckList {
   datetime: Date;
@@ -81,27 +80,11 @@ export const RecheckCard = () => {
                 creator={recheck.creator.name}
                 transaction={recheck.transaction.transactionCategory.name}
               >
-                {upComingDate && (
-                  <div className="mt-3 rounded-lg text-sm p-3 border flex justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1 text-muted-foreground">
-                        <CalendarCheck size={16} />
-                        <span className="font-medium">นัดหมายถัดไป</span>
-                      </div>
-                      <p>{formatDate(upComingDate.datetime)}</p>
-                    </div>
-                    <div className="pl-6 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Calendar size={14} className="text-muted-foreground" />
-                        <span>{upComingDate.detail}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Banknote size={14} className="text-muted-foreground" />
-                        <span>{upComingDate.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <UpComingCardUi
+                  datetime={upComingDate?.datetime}
+                  detail={upComingDate?.detail}
+                  price={upComingDate?.price}
+                />
               </RecheckCardUi>
             </DrawerTrigger>
 
