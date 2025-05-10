@@ -2,20 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-
-interface DentalTech {
-  id: string;
-  deadline: Date;
-  detail: string;
-  level: string;
-  status: string;
-  patient: {
-    name: string;
-  };
-  dentalTechCategory: {
-    name: string;
-  };
-}
+import { DentalTech } from "@/types/dentaltech";
 
 interface ApiError {
   error?: string;

@@ -5,12 +5,8 @@ import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useAppointmentCategories } from "@/hooks/internal/use-appointment";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { Category } from "@/types/category";
 
-interface AppointmentCategory {
-  id: string;
-  name: string;
-  createdAt: Date;
-}
 export const AppointmentCategoriesTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
@@ -20,12 +16,12 @@ export const AppointmentCategoriesTable = () => {
     {
       key: "name",
       header: "ชื่อรายการ",
-      render: (item: AppointmentCategory) => item.name,
+      render: (item: Category) => item.name,
     },
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: AppointmentCategory) => <>{formatDate(item.createdAt)}</>,
+      render: (item: Category) => <>{formatDate(item.createdAt)}</>,
     },
   ];
 

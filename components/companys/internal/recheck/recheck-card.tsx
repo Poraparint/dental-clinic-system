@@ -19,15 +19,7 @@ import {
 } from "lucide-react";
 import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
 import { UpComingCardUi } from "@/components/props/component/upcoming-card-ui";
-
-interface RecheckList {
-  datetime: Date;
-  detail: string;
-  price: number;
-  transactionCategory: {
-    name: string;
-  };
-}
+import { RecheckList } from "@/types/recheck";
 
 export const RecheckCard = () => {
   const params = useParams();
@@ -78,6 +70,7 @@ export const RecheckCard = () => {
                 createdAt={recheck.createdAt}
                 phone={recheck.patient.phone}
                 creator={recheck.creator.name}
+                price={recheck.transaction.price}
                 transaction={recheck.transaction.transactionCategory.name}
               >
                 <UpComingCardUi

@@ -5,31 +5,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTransaction } from "@/hooks/internal/use-transaction";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
-import { toast } from "sonner";
-
-interface Transaction {
-  id: string;
-  datetime: string;
-  transactionCategory: {
-    id: string;
-    name: string;
-  };
-  creator: {
-    name: string;
-  };
-  detail: string;
-  price: number;
-  paid: number;
-  creatorUserId: string;
-}
+import { DialogCreateRecheck } from "@/components/dialog/internal/dialog-create-recheck";
+import { useState } from "react";
+import { DialogCreateDentalTech } from "@/components/dialog/internal/dialog-create-dentaltech";
+import { Transaction } from "@/types/transaction";
 
 export const TransactionTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
   const patientId = params.patientId as string;
   const { transactions, isLoading } = useTransaction(companyId, patientId);
+
+  const [, setRefreshKey] = useState(0);
+
+  const handleRefresh = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
 
   const columns = [
     {
@@ -64,7 +55,7 @@ export const TransactionTable = () => {
       key: "paid",
       header: "จ่ายแล้ว",
       render: (item: Transaction) => (
-        <Badge variant={item.paid < item.price ? "amber" : "emerald"}>
+        <Badge variant={item.paid < item.price ? "amber" : "lapis"}>
           {item.paid} ฿
         </Badge>
       ),
@@ -75,20 +66,16 @@ export const TransactionTable = () => {
       render: (item: Transaction) => item.creator.name,
     },
     {
-      key: "copy",
-      header: "รหัส",
+      key: "list",
+      header: "",
       render: (item: Transaction) => (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            navigator.clipboard.writeText(item.id); 
-            toast.success("คัดลอก 'รหัสธุรกรรม' สำเร็จ")
-          }}
-          title="คัดลอก ID"
-        >
-          <Copy className="size-4" />
-        </Button>
+        <div className="flex gap-2">
+          <DialogCreateRecheck onSuccess={handleRefresh} transaction={item} />
+          <DialogCreateDentalTech
+            onSuccess={handleRefresh}
+            transaction={item}
+          />
+        </div>
       ),
     },
   ];

@@ -3,19 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { Pill, UserRound } from "lucide-react";
-
-interface Patient {
-  id: string;
-  name: string;
-  age?: string | null;
-  phone?: string | null;
-  address?: string | null;
-  work?: string | null;
-  worktel?: string | null;
-  cd?: string | null;
-  drug?: string | null;
-}
-
+import { Patient } from "@/types/patient";
 interface PatientInfoCardProps {
   patient: Patient;
 }

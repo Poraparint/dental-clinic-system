@@ -13,22 +13,10 @@ import {
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useMembers } from "@/hooks/internal/use-member";
-import { CompanyRole } from "@prisma/client";
 import { useParams } from "next/navigation";
 import { formatDate } from "@/lib/utils";
+import { Member } from "@/types/member";
 
-interface MemberCategory {
-  id: string;
-  createdAt: Date;
-  memberCode: string;
-  role: CompanyRole;
-  user: {
-    name: string;
-    email: string;
-    phone: string;
-    isTwoFactorEnabled: boolean;
-  };
-}
 export const MemberTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
@@ -38,7 +26,7 @@ export const MemberTable = () => {
     {
       key: "name",
       header: "ชื่อพนักงาน",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <User className="h-4 w-4 text-lapis-accent" />
           {item.user.name}
@@ -48,7 +36,7 @@ export const MemberTable = () => {
     {
       key: "phone",
       header: "เบอร์ติดต่อ",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <Phone className="h-4 w-4 text-jade" />
           {item.user.phone}
@@ -58,7 +46,7 @@ export const MemberTable = () => {
     {
       key: "email",
       header: "อีเมล",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <Mail className="h-4 w-4 text-amber-500" />
           {item.user.email}
@@ -68,7 +56,7 @@ export const MemberTable = () => {
     {
       key: "isTwoFactorEnabled",
       header: "2FA",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-jade" />
           {item.user.isTwoFactorEnabled ? "ON" : "OFF"}
@@ -78,7 +66,7 @@ export const MemberTable = () => {
     {
       key: "memberCode",
       header: "รหัสพนักงาน",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <Barcode className="h-4 w-4 text-mted-foreground" />
           {item.memberCode}
@@ -88,7 +76,7 @@ export const MemberTable = () => {
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <CalendarDays className="h-4 w-4 text-jade" />
           {formatDate(item.createdAt)}
@@ -98,7 +86,7 @@ export const MemberTable = () => {
     {
       key: "role",
       header: "ตำแหน่ง",
-      render: (item: MemberCategory) => (
+      render: (item: Member) => (
         <div className="flex items-center gap-2">
           <BriefcaseBusiness className="h-4 w-4 " />
           {item.role}

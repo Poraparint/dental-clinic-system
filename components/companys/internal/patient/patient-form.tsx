@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Info, User } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,6 +31,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 
 //actions
 import { createPatient } from "@/actions/company/public/patient";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
@@ -270,14 +270,11 @@ export const CreatePatientForm = ({
           </div>
         </CardCategory>
         <div className="flex justify-end">
-          <Button
-            className="px-9"
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-          >
-            เพิ่มบัตรใหม่
-          </Button>
+          <SubmitButton
+            label="เพิ่มบัตรใหม่"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

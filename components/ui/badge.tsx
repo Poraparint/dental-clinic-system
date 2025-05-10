@@ -20,7 +20,9 @@ const badgeVariants = cva(
         emerald:
           "bg-emerald-500/20 text-emerald-700 dark:text-emerald-600  [a&]:hover:bg-emerald-600",
         amber:
-          "bg-amber-500/20 text-amber-700 dark:text-amber-600 [a&]:hover:bg-amber-600",
+          "bg-amber-bg text-amber-text border border-amber-border [a&]:hover:bg-amber-bg/90",
+        lapis:
+          "bg-lapis-bg text-lapis-text border border-lapis-border [a&]:hover:bg-lapis-bg/90",
       },
     },
     defaultVariants: {

@@ -63,6 +63,7 @@ model User {
   twoFactorConfirmation TwoFactorConfirmation?
   manager               Manager?
   member                Member?
+  dentaltech Dentaltech[]
   patient               Patient[]
   transaction           Transaction[]
   dentalTechCategory    DentalTechCategory[]
@@ -278,6 +279,7 @@ model Transaction {
   creatorUserId         String
   transactionCategoryId String
   recheck               Recheck?
+  dentaltech            Dentaltech?
   patient               Patient             @relation(fields: [patientId], references: [id])
   transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
 
@@ -288,18 +290,23 @@ model Transaction {
 }
 
 model Dentaltech {
-  id                 String             @id @default(cuid())
+  id                 String             @id @unique
   detail             String?
   level              String             @default("ปกติ")
   status             String             @default("รอดำเนินการ")
   deadline           DateTime           @default(now())
+  teeth Float @default(1)
   price              Float?
   postit             String?
   patientId          String
   dctId              String
+  transactionId String
   companyId          String
+  creatorUserId String
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+  transaction   Transaction   @relation(fields: [id], references: [id])
+  creator User @relation(fields: [creatorUserId], references: [id])
   company            Company            @relation(fields: [companyId], references: [id])
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient            Patient            @relation(fields: [patientId], references: [id])

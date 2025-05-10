@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
@@ -26,6 +25,7 @@ import { Clock1 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CreateAppointmentCategory } from "@/actions/company/manager/appointment-category";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateAppointmentCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -90,14 +90,11 @@ export const CreateAppointmentCategoryForm = ({
           </div>
         </CardCategory>
         <div className="flex justify-end">
-          <Button
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-            className="px-9"
-          >
-            เพิ่มหมวดหมู่
-          </Button>
+          <SubmitButton
+                      label="เพิ่มหมวดหมู่"
+                      type="submit"
+                      isPending={isPending}
+                    />
         </div>
       </form>
     </Form>

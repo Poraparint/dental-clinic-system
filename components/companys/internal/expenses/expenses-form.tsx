@@ -31,7 +31,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -51,6 +50,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 import { createExpenses } from "@/actions/company/manager/expenses";
 import { useExpensesCategories } from "@/hooks/internal/use-ec";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateExpensesFormProps {
   setOpen: (open: boolean) => void;
@@ -214,14 +214,11 @@ export const CreateExpensesForm = ({
           </div>
         </CardCategory>
         <div className="flex justify-end">
-          <Button
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-            className="px-9"
-          >
-            เพิ่มรายการใหม่
-          </Button>
+          <SubmitButton
+            label="เพิ่มรายการ"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

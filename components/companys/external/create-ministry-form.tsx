@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 
@@ -26,6 +25,7 @@ import { CreateCompanySchema } from "@/schemas";
 import { createCompany } from "@/actions/company/manager/company";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 import { User } from "lucide-react";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateMinistryFormProps {
   setOpen: (open: boolean) => void;
@@ -107,14 +107,13 @@ export const CreateMinistryForm = ({
 
         <FormError message={error} />
         <FormSuccess message={success} />
-        <Button
-          typeof="submit"
-          className="flex justify-self-end px-9"
-          size="lg"
-          disabled={isPending}
-        >
-          Create Ministry
-        </Button>
+        <div className="flex justify-end">
+          <SubmitButton
+            label="สร้างบริษัทใหม่"
+            type="submit"
+            isPending={isPending}
+          />
+        </div>
       </form>
     </Form>
   );

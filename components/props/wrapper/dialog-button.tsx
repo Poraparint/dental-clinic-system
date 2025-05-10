@@ -1,15 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { DialogContentForm } from "@/components/props/wrapper/dialog-content";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
+type VariantType =
+  | "indigo"
+  | "link"
+  | "default"
+  | "destructive"
+  | "outline"
+  | "secondary"
+  | "emerald"
+  | "ghost"
+  | "amber"
+  | "lapis";
 interface DialogButtonProps {
   icon?: React.ReactNode;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   dialogTitle?: string;
   dialogDescription?: string;
   open: boolean;
+  variant?: VariantType;
   setOpen: (open: boolean) => void;
+  tooltip?: string;
 }
 
 export const DialogButton = ({
@@ -18,18 +37,33 @@ export const DialogButton = ({
   children,
   dialogTitle,
   dialogDescription,
+  variant = "indigo",
   open,
   setOpen,
+  tooltip,
 }: DialogButtonProps) => {
+
+  const button = (
+    <Button variant={variant} onClick={() => setOpen(true)}>
+      {icon}
+      {title}
+    </Button>
+  );
+
   return (
     <>
-      <Button
-        onClick={() => setOpen(true)}
-        className="tracking-wide bg-gradient-to-r from-indigo-800 to-indigo-500"
-      >
-        {icon}
-        {title}
-      </Button>
+      {tooltip ? (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>{button}</TooltipTrigger>
+            <TooltipContent>
+              <p>{tooltip}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ) : (
+        button
+      )}
       <DialogContentForm
         open={open}
         setOpen={setOpen}

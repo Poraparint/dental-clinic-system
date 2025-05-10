@@ -1,21 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Patient {
-  id: string;
-  name: string;
-  phone: string;
-  createdAt: Date;
-  creator: {
-    name: string;
-  };
-}
-
-
+import { Patients } from "@/types/patient";
 
 export const usePatients = (companyId: string) => {
-  const [patients, setPatients] = useState<Patient[]>([]);
+  const [patients, setPatients] = useState<Patients[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

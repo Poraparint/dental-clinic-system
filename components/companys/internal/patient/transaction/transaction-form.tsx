@@ -24,7 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 //schema
 import { CreateTransactionSchema } from "@/schemas";
@@ -38,6 +37,7 @@ import { createTransaction } from "@/actions/company/public/transaction";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/use-tc";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
@@ -204,14 +204,11 @@ export const CreateTransactionForm = ({
           </div>
         </CardCategory>
         <div className="flex justify-end">
-          <Button
-            className="px-9"
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-          >
-            เพิ่มรายการใหม่
-          </Button>
+          <SubmitButton
+                      label="เพิ่มรายการ"
+                      type="submit"
+                      isPending={isPending}
+                    />
         </div>
       </form>
     </Form>
