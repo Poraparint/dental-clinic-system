@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 //icons
-import { Circle } from "lucide-react";
+import { Aperture } from "lucide-react";
 import { toast } from "sonner";
 
 //ui
@@ -18,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -37,24 +36,26 @@ import { SelectCategory } from "@/components/props/component/select-category";
 //actions
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
-import { usePatients } from "@/hooks/internal/use-patient";
-import { ComboboxCategories } from "@/components/props/component/combobox-categories";
 import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
 import { createDentalTech } from "@/actions/company/manager/dentaltech";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { SubmitButton } from "@/components/props/component/submit-button";
+import { Transaction } from "@/types/transaction";
+import { Input } from "@/components/ui/input";
 
 interface CreateDentaltechFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  transaction: Transaction;
 }
 
 export const CreateDentaltechForm = ({
   setOpen,
   onSuccess,
+  transaction,
 }: CreateDentaltechFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { patients, isLoading: patientLoading } = usePatients(companyId);
   const { categories, isLoading: dctLoading } =
     useDentaltTechCategories(companyId);
 
@@ -72,7 +73,8 @@ export const CreateDentaltechForm = ({
       deadline: new Date(),
       detail: "",
       level: "ปกติ",
-      patientId: "",
+      transactionId: transaction.id,
+      teeth: 0,
       dctId: "",
     },
   });
@@ -97,30 +99,9 @@ export const CreateDentaltechForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Circle size={15} />} title="รายการงานทันตกรรม">
+        <CardCategory icon={<Aperture/>} title="รายการงานทันตกรรม" description="รายการงานทันตกรรม / ข้อมูลงานทันตกรรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DatePickerField form={form} name="deadline" />
-            <FormField
-              control={form.control}
-              name="patientId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">รายชื่อคนไข้</FormLabel>
-                  <ComboboxCategories
-                    options={patients.map((patient) => ({
-                      value: patient.id,
-                      label: patient.name,
-                    }))}
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isPending}
-                    isLoading={patientLoading}
-                    placeholder="ค้นหาคนไข้..."
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <DatePickerField form={form} name="deadline" label="เลือกวันส่งมอบงาน"/>
             <FormField
               control={form.control}
               name="dctId"
@@ -155,7 +136,28 @@ export const CreateDentaltechForm = ({
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="teeth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm text-text-muted-foreground">
+                    จำนวน (ซี่)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      placeholder="จำนวนกี่ซี่"
+                      value={field.value === 0 ? "" : field.value}
+                      disabled={isPending}
+                      className="font-medium"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="level"
@@ -197,14 +199,11 @@ export const CreateDentaltechForm = ({
           </div>
         </CardCategory>
         <div className="flex justify-end">
-          <Button
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-            className="px-9"
-          >
-            เพิ่มรายการใหม่
-          </Button>
+          <SubmitButton
+            label="เพิ่มงานใหม่"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

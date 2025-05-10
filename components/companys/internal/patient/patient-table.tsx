@@ -6,16 +6,7 @@ import { useParams } from "next/navigation";
 
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
-
-interface Patient {
-  id: string;
-  name: string;
-  phone: string;
-  createdAt: Date;
-  creator: {
-    name: string;
-  };
-}
+import { Patients } from "@/types/patient";
 
 interface PatientTableProps {
   onRowClick: (patientId: string) => void;
@@ -30,7 +21,7 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
     {
       key: "name",
       header: "ชื่อ-นามสกุล",
-      render: (item: Patient) => (
+      render: (item: Patients) => (
         <div className="flex items-center gap-2">
           <User className="size-4 text-lapis-accent" />
           <span>{item.name}</span>
@@ -40,7 +31,7 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
     {
       key: "phone",
       header: "เบอร์ติดต่อ",
-      render: (item: Patient) => (
+      render: (item: Patients) => (
         <div className="flex items-center gap-2">
           <Phone className="size-4 text-jade" />
           <span>{item.phone}</span>
@@ -50,7 +41,7 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
     {
       key: "createdAt",
       header: "วันที่บันทึก",
-      render: (item: Patient) => (
+      render: (item: Patients) => (
         <div className="flex items-center gap-2">
           <Calendar className="size-4 text-muted-foreground" />
           <span>{formatDate(item.createdAt)}</span>
@@ -60,14 +51,14 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
     {
       key: "creator",
       header: "ผู้บันทึก",
-      render: (item: Patient) => (
+      render: (item: Patients) => (
         <div className="flex items-center gap-2">
           <UserCheck className="size-4 text-amethyst-accent" />
           <span>{item.creator.name}</span>
         </div>
       ),
     },
-    
+
   ];
 
   if (isLoading) {

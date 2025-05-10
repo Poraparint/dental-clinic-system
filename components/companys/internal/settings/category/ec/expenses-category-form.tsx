@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
@@ -34,6 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -192,14 +192,11 @@ export const CreateExpensesCategoryForm = ({
         </CardCategory>
 
         <div className="flex justify-end">
-          <Button
-            typeof="submit"
-            size="lg"
-            disabled={isPending}
-            className="px-9"
-          >
-            เพิ่มหมวดหมู่
-          </Button>
+          <SubmitButton
+            label="เพิ่มหมวดหมู่"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

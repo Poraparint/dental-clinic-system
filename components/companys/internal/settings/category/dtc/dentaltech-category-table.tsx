@@ -5,16 +5,8 @@ import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { CategoryWithCreator } from "@/types/category";
 
-interface DentalTechnicianCategory {
-  id: string;
-  name: string;
-  description?: string;
-  creator: {
-    name: string;
-  };
-  createdAt: Date;
-}
 export const DentalTechCategoriesTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
@@ -24,24 +16,22 @@ export const DentalTechCategoriesTable = () => {
     {
       key: "name",
       header: "ชื่อรายการ",
-      render: (item: DentalTechnicianCategory) => item.name,
+      render: (item: CategoryWithCreator) => item.name,
     },
     {
       key: "description",
       header: "รายละเอียด",
-      render: (item: DentalTechnicianCategory) => item.description || "-",
+      render: (item: CategoryWithCreator) => item.description || "-",
     },
     {
       key: "createdAt",
       header: "บันทึกเมื่อ",
-      render: (item: DentalTechnicianCategory) => (
-        <>{formatDate(item.createdAt)}</>
-      ),
+      render: (item: CategoryWithCreator) => <>{formatDate(item.createdAt)}</>,
     },
     {
       key: "creator",
       header: "ผู้บันทึก",
-      render: (item: DentalTechnicianCategory) => item.creator.name,
+      render: (item: CategoryWithCreator) => item.creator.name,
     },
   ];
 

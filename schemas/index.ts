@@ -198,7 +198,12 @@ export const CreateDentalTechSchema = z.object({
     required_error: "A date is required.",
   }),
   detail: z.optional(z.string()),
-  patientId: z.string().min(1, "ต้องมีรายชื่อ"),
+  transactionId: z.string().min(1, "ต้องมีรหัสธุรกรรม"),
+  teeth: z
+    .optional(z.union([z.number(), z.string().transform((val) => Number(val))]))
+    .refine((val) => val === undefined || !isNaN(val), {
+      message: "Price must be a valid number",
+    }),
   dctId: z.string().min(1, "ต้องเลือกหมวดหมู่"),
   level: z.string().min(1, "ต้องเลือกประเภทรายการ"),
 });

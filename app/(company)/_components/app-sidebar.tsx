@@ -1,7 +1,7 @@
 "use client";
 
 //icon
-import { LayoutDashboard, Settings, Landmark, Calendar, LampDesk, MonitorSmartphone, UsersRound, Wallet, UserRoundCog } from "lucide-react";
+import { LayoutDashboard, Settings, Landmark, Calendar, LampDesk, UsersRound, Wallet, UserRoundCog, Aperture } from "lucide-react";
 
 //ui
 import {
@@ -42,7 +42,7 @@ export const manages = [
   {
     title: "งานทันตกรรม",
     url: (companyId: string) => `/${companyId}/dentaltech`,
-    icon: MonitorSmartphone,
+    icon: Aperture,
   },
 ];
 

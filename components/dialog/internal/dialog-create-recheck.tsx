@@ -1,29 +1,34 @@
 "use client";
 
 import { DialogButton } from "@/components/props/wrapper/dialog-button";
-import { PlusIcon } from "lucide-react";
+import { LampDesk } from "lucide-react";
 import { useState } from "react";
 import { RecheckForm } from "@/components/companys/internal/recheck/recheck-form";
+import { Transaction } from "@/types/transaction";
 
+interface DialogCreateRecheckProps {
+  onSuccess?: () => void;
+  transaction: Transaction;
+}
 // ตัวอย่างการใช้งาน
 export const DialogCreateRecheck = ({
   onSuccess,
-}: {
-  onSuccess?: () => void;
-}) => {
+  transaction,
+}: DialogCreateRecheckProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <DialogButton
-        title="เพิ่มรายการ"
-        icon={<PlusIcon />}
+        icon={<LampDesk />}
         dialogTitle="เพิ่มรายการรีเช็ค / เพิ่มรายการรีเช็ค"
         dialogDescription="กรอกข้อมูลเพื่อสร้างรายการใหม่"
         open={open}
         setOpen={setOpen}
+        variant="amber"
+        tooltip="เพิ่มลงรายการรีเช็ค / แบ่งจ่าย"
       >
-        <RecheckForm setOpen={setOpen} onSuccess={onSuccess} />
+        <RecheckForm setOpen={setOpen} onSuccess={onSuccess} transaction={transaction}/>
       </DialogButton>
     </>
   );

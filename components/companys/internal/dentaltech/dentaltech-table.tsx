@@ -53,11 +53,18 @@ export const DentalTechTable = () => {
           filtered.map((dentaltech) => (
             <Card key={dentaltech.id} className="md:flex-row justify-between">
               <CardHeader className="w-full">
-                <div className="flex items-center gap-2">
-                  <CardTitle className="text-lg font-semibold flex items-center gap-2">
-                    <BriefcaseBusiness className="size-4 text-muted-foreground" />
-                    {dentaltech.dentalTechCategory.name}
-                  </CardTitle>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <CardTitle className="text-lg font-semibold flex items-center gap-2">
+                      <BriefcaseBusiness className="size-4 text-muted-foreground" />
+                      {dentaltech.dentalTechCategory.name}
+                    </CardTitle>
+                    <CardDescription className="flex items-center gap-2">
+                      <p>• จำนวน</p>
+                      {dentaltech.teeth} ซี่
+                    </CardDescription>
+                  </div>
+
                   <CardDescription className="flex items-center gap-2">
                     <User className="size-4 text-jade" />
                     {dentaltech.patient.name}
@@ -81,6 +88,7 @@ export const DentalTechTable = () => {
                     {formatDate(dentaltech.deadline)}
                   </span>
                 </CardDescription>
+
                 <CardDescription className="flex gap-4">
                   <div className="flex items-center gap-2">
                     {renderLevelIcon(dentaltech.level)}

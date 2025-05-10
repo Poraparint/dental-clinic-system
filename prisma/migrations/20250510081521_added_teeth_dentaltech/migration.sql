@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Dentaltech" ADD COLUMN     "teeth" DOUBLE PRECISION NOT NULL DEFAULT 1;

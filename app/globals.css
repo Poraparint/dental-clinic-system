@@ -6,10 +6,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-amber-bg: var(--amber-bg);
+  --color-amber-text: var(--amber-text);
+  --color-amber-border: var(--amber-border);
+    --color-lapis-bg: var(--lapis-bg);
+  --color-lapis-text: var(--lapis-text);
+  --color-lapis-border: var(--lapis-border);
   --color-jade: var(--jade);
-  --color-amethyst: var(--amethyst);
-  --color-amethyst-foreground: var(--amethyst-foreground);
-  --color-amethyst-accent: var(--amethyst-accent);
   --color-lapis: var(--lapis);
   --color-lapis-foreground: var(--lapis-foreground);
   --color-lapis-accent: var(--lapis-accent);
@@ -68,6 +71,12 @@
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
   --company-background: oklch(0.97 0.01 250);
+  --amber-bg: oklch(0.97 0.05 77);
+  --amber-text: oklch(0.32 0.1 77);
+  --amber-border: oklch(0.85 0.1 77);
+   --lapis-bg: oklch(0.97 0.04 185);
+  --lapis-text: oklch(0.30 0.12 185);
+  --lapis-border: oklch(0.85 0.09 185);
   --sidebar: oklch(1 0 0); /* สีพื้นหลัง sidebar แบบสว่าง */
   --sidebar-foreground: oklch(0.2 0.03 260); /* สีตัวอักษร */
   --sidebar-primary: oklch(0.25 0.05 265); /* ปุ่ม/ส่วนสำคัญ */
@@ -91,7 +100,15 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);
   --company-background: oklch(0.18 0.035 265);
-  --sidebar: oklch(0.129 0.042 264.695); /* สีพื้นหลัง sidebar ที่อ่อนลงเล็กน้อย */
+  --amber-bg: oklch(0.2 0.06 77);
+  --amber-text: oklch(0.85 0.12 77);
+  --amber-border: oklch(0.4 0.15 77);
+  --lapis-bg: oklch(0.20 0.06 185);
+  --lapis-text: oklch(0.85 0.10 185);
+  --lapis-border: oklch(0.40 0.13 185);
+  --sidebar: oklch(
+    0.129 0.042 264.695
+  ); /* สีพื้นหลัง sidebar ที่อ่อนลงเล็กน้อย */
   --sidebar-foreground: oklch(0.95 0.01 255); /* ข้อความสีขาวอมม่วงอ่อน */
   --sidebar-primary: oklch(0.55 0.08 260); /* ปุ่มหลักสีเขียวอมฟ้า */
   --sidebar-primary-foreground: oklch(0.95 0.01 255); /* ข้อความบนปุ่มหลัก */

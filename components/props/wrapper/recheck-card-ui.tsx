@@ -1,7 +1,7 @@
 "use client";
 import { forwardRef } from "react";
 import { formatDate } from "@/lib/utils";
-import { Calendar, Phone, User } from "lucide-react";
+import { Banknote, NotebookTabs, Phone, User } from "lucide-react";
 
 interface RecheckCardUiProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
@@ -9,11 +9,12 @@ interface RecheckCardUiProps extends React.HTMLAttributes<HTMLDivElement> {
   phone: string;
   creator: string;
   transaction: string;
+  price: number;
   children?: React.ReactNode;
 }
 
 export const RecheckCardUi = forwardRef<HTMLDivElement, RecheckCardUiProps>(
-  ({ name, createdAt, phone, creator, transaction, children, ...props }, ref) => {
+  ({ name, createdAt, phone, creator, transaction, price, children, ...props }, ref) => {
   return (
     <div
       ref={ref}
@@ -42,14 +43,19 @@ export const RecheckCardUi = forwardRef<HTMLDivElement, RecheckCardUiProps>(
               <span>{phone}</span>
             </div>
             <div className="flex items-center gap-2">
-              <User size={16} className="text-muted-foreground" />
+              <User size={16} className="text-purple-600" />
               <span>{creator}</span>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Calendar size={14} className="text-amber-600" />
-            <span>{transaction}</span>
+          <div className="flex items-center justify-between text-sm">
+            <div className="flex items-center gap-2">
+              <NotebookTabs size={14} className="text-amber-text" />
+              <span>{transaction}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Banknote size={14} className="text-lapis-text" />
+              <span>{price}</span>
+            </div>
           </div>
           {children}
         </div>

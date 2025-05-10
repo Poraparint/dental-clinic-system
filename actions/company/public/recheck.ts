@@ -12,7 +12,7 @@ import { CreateRecheckSchema } from "@/schemas";
 import { currentManagerAndDentist } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
-import { getRecheckByCompanyId } from "@/data/internal/recheck";
+import { getRecheckByCompanyId } from "@/data/internal/recheck-dentaltech";
 
 export const Recheck = async (
   values: z.infer<typeof CreateRecheckSchema>,

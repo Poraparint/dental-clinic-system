@@ -30,36 +30,38 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
   }
 
   return (
-    <Card className="tracking-wide px-5">
-      <Tabs defaultValue="info" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="info">ข้อมูลส่วนตัว</TabsTrigger>
-          <TabsTrigger value="transactions">ประวัติการรักษา</TabsTrigger>
-        </TabsList>
-        <div className="flex items-center mb-6">
-          <Avatar className="h-16 w-16 mr-4">
-            <AvatarFallback className="text-lg">
-              {patient.name.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h1 className="text-3xl font-bold">{patient.name}</h1>
-            <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
+    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER, CompanyRole.DENTIST, CompanyRole.ASSISTANT]}>
+      <Card className="tracking-wide px-5">
+        <Tabs defaultValue="info" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="info">ข้อมูลส่วนตัว</TabsTrigger>
+            <TabsTrigger value="transactions">ประวัติการรักษา</TabsTrigger>
+          </TabsList>
+          <div className="flex items-center mb-6">
+            <Avatar className="h-16 w-16 mr-4">
+              <AvatarFallback className="text-lg">
+                {patient.name.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-3xl font-bold">{patient.name}</h1>
+              <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
+            </div>
           </div>
-        </div>
 
-        <PatientInfoCard patient={patient} />
-        <RoleGate
-          allowedRole={[
-            CompanyRole.MANAGER,
-            CompanyRole.COMANAGER,
-            CompanyRole.DENTIST,
-          ]}
-        >
-          <TransactionInfoCard />
-        </RoleGate>
-      </Tabs>
-    </Card>
+          <PatientInfoCard patient={patient} />
+          <RoleGate
+            allowedRole={[
+              CompanyRole.MANAGER,
+              CompanyRole.COMANAGER,
+              CompanyRole.DENTIST,
+            ]}
+          >
+            <TransactionInfoCard />
+          </RoleGate>
+        </Tabs>
+      </Card>
+    </RoleGate>
   );
 };
 

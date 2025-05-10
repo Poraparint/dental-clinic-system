@@ -1,38 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Rechecks {
-  id: string;
-  patientId: string;
-  createdAt: Date;
-  recheckList: {
-    datetime: Date;
-    detail: string;
-    price: number;
-    transactionCategory: {
-      name: string;
-    }
-  }[];
-  patient: {
-    name: string;
-    phone: string;
-  };
-  transaction: {
-    transactionCategory: {
-      name: string;
-    };
-    detail: string;
-    price: number;
-    paid: number;
-  };
-  creator: {
-    name: string;
-  };
-}
+import { Recheck } from "@/types/recheck";
 
 export const useRechecks = (companyId: string) => {
-  const [rechecks, setRechecks] = useState<Rechecks[]>([]);
+  const [rechecks, setRechecks] = useState<Recheck[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

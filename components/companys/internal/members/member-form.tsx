@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -35,6 +34,7 @@ import { Users } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
+import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface MemberRegisterFormProps {
   setOpen: (open: boolean) => void;
@@ -229,9 +229,11 @@ export const MemberRegisterForm = ({
         </CardCategory>
 
         <div className="flex justify-end">
-          <Button type="submit" size="lg" disabled={isPending} className="px-9">
-            สร้างบัญชี
-          </Button>
+          <SubmitButton
+            label="สร้างบัญชี"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

@@ -37,6 +37,12 @@ export async function GET(
         detail: true,
         level: true,
         status: true,
+        teeth: true,
+        creator: {
+          select: {
+          name: true
+        },
+      },
         patient: {
           select: {
             name: true,
@@ -49,7 +55,7 @@ export async function GET(
         },
       },
       orderBy: {
-        deadline: "asc",
+        deadline: "desc",
       },
     });
 

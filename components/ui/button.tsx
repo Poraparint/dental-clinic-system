@@ -23,6 +23,10 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         indigo:
           "bg-gradient-to-r from-indigo-800 to-indigo-500 text-white hover:from-indigo-700 hover:to-indigo-400 hover:text-white/90 transition duration-150",
+        amber:
+          "bg-amber-bg text-amber-text border border-amber-border hover:bg-amber-bg/90",
+        lapis:
+          "bg-lapis-bg text-lapis-text border border-lapis-border hover:bg-lapis-bg/90",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

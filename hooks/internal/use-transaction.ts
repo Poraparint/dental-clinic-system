@@ -1,23 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Transaction {
-  id: string;
-  datetime: string;
-  transactionCategory: {
-    id: string;
-    name: string;
-  };
-  creator: {
-    name: string;
-  };
-  detail: string;
-  price: number;
-  paid: number;
-  creatorUserId: string;
-}
-
+import { Transaction } from "@/types/transaction";
 
 export const useTransaction = (companyId: string, patientId: string) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
