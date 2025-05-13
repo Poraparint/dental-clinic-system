@@ -36,7 +36,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 //actions
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
-import { useDentaltTechCategories } from "@/hooks/internal/use-dtc";
+import { useDentaltTechCategories } from "@/hooks/internal/category/use-dtc";
 import { createDentalTech } from "@/actions/company/manager/dentaltech";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 import { SubmitButton } from "@/components/props/component/submit-button";
@@ -99,9 +99,17 @@ export const CreateDentaltechForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Aperture/>} title="รายการงานทันตกรรม" description="รายการงานทันตกรรม / ข้อมูลงานทันตกรรม">
+        <CardCategory
+          icon={<Aperture />}
+          title="รายการงานทันตกรรม"
+          description="รายการงานทันตกรรม / ข้อมูลงานทันตกรรม"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DatePickerField form={form} name="deadline" label="เลือกวันส่งมอบงาน"/>
+            <DatePickerField
+              form={form}
+              name="deadline"
+              label="เลือกวันส่งมอบงาน"
+            />
             <FormField
               control={form.control}
               name="dctId"

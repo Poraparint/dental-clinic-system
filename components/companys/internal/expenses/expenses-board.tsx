@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-table";
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
-import { useExpensesCategories } from "@/hooks/internal/use-ec";
+import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
 import { useParams } from "next/navigation";
 import { Loading } from "@/components/loading";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
@@ -19,8 +19,11 @@ import { formatCurrency } from "@/lib/utils";
 export const Expenses = () => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { categories, isLoading, error } = useExpensesCategories(companyId);
   const [refreshKey, setRefreshKey] = useState(0);
+  const { categories, isLoading, error } = useExpensesCategories(
+    companyId,
+    refreshKey
+  );
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const { expensesOverview, isLoading: isOverviewLoading } =
     useExpensesOverview(companyId, currentMonth, refreshKey);
@@ -68,6 +71,10 @@ export const Expenses = () => {
 
   if (isLoading || isOverviewLoading) {
     return <Loading />;
+  }
+
+  if (error) {
+    return (<FormNotFound message={error?.error} description={error?.description} />)
   }
 
   return (
@@ -125,10 +132,9 @@ export const Expenses = () => {
             <DialogCreateExpensesCategory onSuccess={handleRefresh} />
           </CardHeader>
 
-          <div className="space-y-4">
-            {Array.isArray(categories) ? (
-               categoryData?.map((category) => (
-                
+          <div>
+            {
+              categoryData?.map((category) => (
                 <div
                   key={`${category.id}-${refreshKey}`}
                   className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background/90 transition-colors"
@@ -142,7 +148,9 @@ export const Expenses = () => {
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{category.name}</p>
                     <div className="flex items-center justify-between">
-                      <p className="text-muted-foreground">{category.percentage}%</p>
+                      <p className="text-muted-foreground">
+                        {category.percentage}%
+                      </p>
                       <p>฿ {category.expenses.toLocaleString()}</p>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1.5">
@@ -157,12 +165,7 @@ export const Expenses = () => {
                   </div>
                 </div>
               ))
-            ) : (
-              <FormNotFound
-                message={error?.error}
-                description={error?.description}
-              />
-            )}
+            }
           </div>
         </Card>
       </div>

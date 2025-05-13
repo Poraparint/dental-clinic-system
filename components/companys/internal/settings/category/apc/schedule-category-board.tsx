@@ -2,7 +2,7 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import { DialogCreateAppointmentCategory } from "@/components/dialog/internal/category/dialog-create-apc";
-import { AppointmentCategoriesTable } from "./appointment-category-table";
+import { AppointmentCategoriesTable } from "./schedule-category-table";
 
 export const AppointmentCategoryBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);

@@ -153,7 +153,7 @@ export const CreateExpensesCategoryForm = ({
                             <SelectItem key={color.id} value={color.id}>
                               <div className="flex items-center gap-2">
                                 <div
-                                  className="h-4 w-4 rounded-full"
+                                  className="size-4 rounded-full"
                                   style={{ backgroundColor: color.id }}
                                 />
                                 {color.name}

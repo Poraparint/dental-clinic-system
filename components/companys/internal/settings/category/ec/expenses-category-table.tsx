@@ -2,7 +2,7 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useExpensesCategories } from "@/hooks/internal/use-ec";
+import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
 import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { Category } from "@/types/category";
@@ -10,7 +10,7 @@ import { Category } from "@/types/category";
 export const ExpensesCategoriesTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { categories, isLoading, error } = useExpensesCategories(companyId);
+  const { categories, error, isLoading } = useExpensesCategories(companyId);
 
   const columns = [
     {

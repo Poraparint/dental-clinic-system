@@ -43,7 +43,7 @@ export const CreateAppointmentCategory = async (
       return { error: "Company not found!" };
     }
 
-    await db.appointmentCategory.create({
+    await db.scheduleCategory.create({
       data: {
         name,
         companyId,

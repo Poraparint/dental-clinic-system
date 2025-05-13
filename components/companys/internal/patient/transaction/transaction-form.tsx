@@ -35,7 +35,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 //actions
 import { createTransaction } from "@/actions/company/public/transaction";
 import { Textarea } from "@/components/ui/textarea";
-import { useTransactionCategories } from "@/hooks/internal/use-tc";
+import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 import { SubmitButton } from "@/components/props/component/submit-button";
 
@@ -91,7 +91,11 @@ export const CreateTransactionForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Notebook />} title="รายการธุรกกรม" description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม">
+        <CardCategory
+          icon={<Notebook />}
+          title="รายการธุรกกรม"
+          description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <DatePickerField
               form={form}
@@ -205,10 +209,10 @@ export const CreateTransactionForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <SubmitButton
-                      label="เพิ่มรายการ"
-                      type="submit"
-                      isPending={isPending}
-                    />
+            label="เพิ่มรายการ"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

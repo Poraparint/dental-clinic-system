@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Transaction } from "@/types/transaction";
+import { ApiError } from "@/types/api-error";
 
 export const useTransaction = (companyId: string, patientId: string) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -13,11 +15,19 @@ export const useTransaction = (companyId: string, patientId: string) => {
         const response = await fetch(
           `/api/companies/${companyId}/patients/${patientId}/transaction`
         );
-
         const data = await response.json();
-        setTransactions(data);
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setTransactions(Array.isArray(data) ? data : []);
+        }
+        
       } catch (error) {
-        console.error("Error fetching transactions:", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -26,5 +36,5 @@ export const useTransaction = (companyId: string, patientId: string) => {
     fetchTransactions();
   }, [companyId, patientId]);
 
-  return { transactions, isLoading };
+  return { transactions, error, isLoading };
 };

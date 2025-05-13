@@ -82,7 +82,7 @@ export const MemberRegisterForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-6">
-        <CardCategory icon={<Users />} title="ข้อมูลพนักงาน">
+        <CardCategory icon={<Users />} title="ข้อมูลพนักงาน" description="ข้อมูลพนักงาน / สร้างบัญชีพนักงาน">
           {/* ข้อมูลส่วนตัว */}
           <div className="mb-4">
             <h3 className="font-medium text-muted-foreground mb-3">

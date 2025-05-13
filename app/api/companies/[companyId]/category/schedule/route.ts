@@ -18,7 +18,7 @@ export async function GET(
   if (!companyId) {
     return NextResponse.json(
       {
-        error: "ไม่พบ companyId",
+        error: "ไม่พบ id บริษัท",
         description: "URL ไม่ถูกต้อง",
       },
       { status: 400 }
@@ -30,7 +30,7 @@ export async function GET(
         status: 404,
       });
     }
-    const categorys = await db.appointmentCategory.findMany({
+    const categorys = await db.scheduleCategory.findMany({
       where: {
         companyId,
         isDeleted: false,
@@ -48,11 +48,11 @@ export async function GET(
 
     return NextResponse.json(categorys);
   } catch (error) {
-    console.error("Error fetching categorys:", error);
+    console.error("ไม่สามารถดึงข้อมูลหมวดหมู่ได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลหมวดหมู่",
-        description: "ไม่พบข้อมูลหมวดหมู่",
+        error: "ไม่สามารถดึงข้อมูลหมวดหมู่ได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

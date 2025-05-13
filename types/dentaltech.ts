@@ -8,6 +8,7 @@ export type DentalTech = {
   teeth: number;
   patient: {
     name: string;
+    phone: string;
   };
   creator: {
     name: string;

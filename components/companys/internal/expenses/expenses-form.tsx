@@ -12,12 +12,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 //icons
 import {
-  Circle,
   HandCoins,
   CreditCard,
   Banknote,
   QrCode,
   Smartphone,
+  Wallet,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -48,7 +48,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 
 //actions
 import { createExpenses } from "@/actions/company/manager/expenses";
-import { useExpensesCategories } from "@/hooks/internal/use-ec";
+import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 import { SubmitButton } from "@/components/props/component/submit-button";
 
@@ -106,9 +106,13 @@ export const CreateExpensesForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Circle size={15} />} title="รายการธุรกกรม">
+        <CardCategory icon={<Wallet />} title="รายการธุรกกรม">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DatePickerField form={form} name="datetime" withQuickSelect={false}/>
+            <DatePickerField
+              form={form}
+              name="datetime"
+              withQuickSelect={false}
+            />
             <FormField
               control={form.control}
               name="name"

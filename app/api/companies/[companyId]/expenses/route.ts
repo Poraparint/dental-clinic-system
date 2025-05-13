@@ -19,7 +19,7 @@ export async function GET(
   if (!companyId) {
     return NextResponse.json(
       {
-        error: "ไม่พบ companyId",
+        error: "ไม่พบ id บริษัท",
         description: "URL ไม่ถูกต้อง",
       },
       { status: 400 }
@@ -27,8 +27,7 @@ export async function GET(
   }
   try {
     const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month"); // รูปแบบ YYYY-MM
-    // 1. สร้าง where condition แบบ Type Safe
+    const month = searchParams.get("month"); 
     const whereCondition: {
       companyId: string;
       datetime?: {
@@ -88,11 +87,11 @@ export async function GET(
       count: expenses.length,
     });
   } catch (error) {
-    console.error("Error fetching expenses:", error);
+    console.error("ไม่สามารถดึงข้อมูลธุรกรรมได้", error);
     return NextResponse.json(
       {
-        error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
-        description: "กรุณาลองใหม่อีกครั้งในภายหลัง",
+        error: "ไม่สามารถดึงข้อมูลธุรกรรมได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

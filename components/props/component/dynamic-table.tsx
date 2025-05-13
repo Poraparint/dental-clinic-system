@@ -42,7 +42,7 @@ export function DynamicTable<T>({
     <ScrollArea className="h-96">
       <Table className={className}>
         <TableHeader>
-          <TableRow>
+          <TableRow className="hover:bg-background">
             {columns.map((column) => (
               <TableHead key={column.key} className={column.className}>
                 {column.header}
@@ -57,7 +57,6 @@ export function DynamicTable<T>({
               <TableRow
                 key={index}
                 onClick={() => onRowClick && onRowClick(item)}
-                className="hover:bg-background"
               >
                 {columns.map((column) => (
                   <TableCell
@@ -73,8 +72,8 @@ export function DynamicTable<T>({
             <TableRow className="hover:bg-background">
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 <FormNotFound
-                  message={error || "ไม่พบข้อมูล"}
-                  description={description || "ลองตรวจสอบหรือเพิ่มข้อมูลใหม่"}
+                  message={error}
+                  description={description}
                 />
               </TableCell>
             </TableRow>

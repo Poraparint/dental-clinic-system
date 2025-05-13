@@ -14,7 +14,7 @@ interface ExpensesTableProps {
 export const ExpensesTable = ({ month }: ExpensesTableProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { expenses, isLoading } = useExpenses(companyId, month);
+  const { expenses, error, isLoading } = useExpenses(companyId, month);
 
   const columns = [
     {
@@ -65,8 +65,8 @@ export const ExpensesTable = ({ month }: ExpensesTableProps) => {
     <DynamicTable
       data={expenses}
       columns={columns}
-      error="เริ่มต้นด้วยการเพิ่มรายการรายจ่าย"
-      description="เหมือนคุณยังไม่มีรายการรายจ่าย"
+      error={error?.error}
+      description={error?.description}
     />
   );
 };

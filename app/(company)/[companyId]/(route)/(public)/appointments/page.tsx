@@ -1,4 +1,4 @@
-import { ScheduleBoard } from "@/components/companys/internal/appointment/schedule-board";
+import { ScheduleBoard } from "@/components/companys/internal/schedule/schedule-board";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 

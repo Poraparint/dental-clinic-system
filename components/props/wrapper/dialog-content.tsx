@@ -30,7 +30,7 @@ export const DialogContentForm = ({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div className="mt-14">{children}</div>
+        <div className="mt-16">{children}</div>
       </DialogContent>
     </Dialog>
   );

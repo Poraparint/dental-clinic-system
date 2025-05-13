@@ -20,7 +20,7 @@ import { Member } from "@/types/member";
 export const MemberTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { members, isLoading } = useMembers(companyId);
+  const { members, error, isLoading } = useMembers(companyId);
 
   const columns = [
     {
@@ -28,7 +28,7 @@ export const MemberTable = () => {
       header: "ชื่อพนักงาน",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <User className="h-4 w-4 text-lapis-accent" />
+          <User className="size-4 text-lapis-text" />
           {item.user.name}
         </div>
       ),
@@ -38,7 +38,7 @@ export const MemberTable = () => {
       header: "เบอร์ติดต่อ",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <Phone className="h-4 w-4 text-jade" />
+          <Phone className="size-4 text-jade" />
           {item.user.phone}
         </div>
       ),
@@ -48,7 +48,7 @@ export const MemberTable = () => {
       header: "อีเมล",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <Mail className="h-4 w-4 text-amber-500" />
+          <Mail className="size-4 text-amber-text" />
           {item.user.email}
         </div>
       ),
@@ -58,7 +58,7 @@ export const MemberTable = () => {
       header: "2FA",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-jade" />
+          <ShieldCheck className="size-4 text-blue-500" />
           {item.user.isTwoFactorEnabled ? "ON" : "OFF"}
         </div>
       ),
@@ -68,7 +68,7 @@ export const MemberTable = () => {
       header: "รหัสพนักงาน",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <Barcode className="h-4 w-4 text-mted-foreground" />
+          <Barcode className="size-4 text-muted-foreground" />
           {item.memberCode}
         </div>
       ),
@@ -78,7 +78,7 @@ export const MemberTable = () => {
       header: "บันทึกเมื่อ",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <CalendarDays className="h-4 w-4 text-jade" />
+          <CalendarDays className="size-4" />
           {formatDate(item.createdAt)}
         </div>
       ),
@@ -88,7 +88,7 @@ export const MemberTable = () => {
       header: "ตำแหน่ง",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <BriefcaseBusiness className="h-4 w-4 " />
+          <BriefcaseBusiness className="size-4" />
           {item.role}
         </div>
       ),
@@ -102,8 +102,8 @@ export const MemberTable = () => {
     <DynamicTable
       data={members}
       columns={columns}
-      error="ไม่พบข้อมูลสมาชิก"
-      description="เริ่มต้นด้วยการสร้างบัญชีสมาชิกใหม่"
+      error={error?.error}
+      description={error?.description}
     />
   );
 };

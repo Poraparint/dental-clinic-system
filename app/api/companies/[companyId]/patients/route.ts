@@ -58,11 +58,11 @@ export async function GET(
 
     return NextResponse.json(patients);
   } catch (error) {
-    console.error("Error fetching patients:", error);
+    console.error("ไม่สามารถดึงข้อมูลคนไข้ได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลคนไข้",
-        description: "เริ่มต้นด้วยการสร้างบัตรคนไข้แรก",
+        error: "ไม่สามารถดึงข้อมูลคนไข้ได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );
