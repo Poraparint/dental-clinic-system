@@ -24,7 +24,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Clock1 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { CreateAppointmentCategory } from "@/actions/company/manager/appointment-category";
+import { CreateAppointmentCategory } from "@/actions/company/manager/schedule-category";
 import { SubmitButton } from "@/components/props/component/submit-button";
 
 interface CreateAppointmentCategoryFormProps {

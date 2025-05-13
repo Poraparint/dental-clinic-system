@@ -3,7 +3,7 @@
 import { DialogButton } from "@/components/props/wrapper/dialog-button";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-import { CreateAppointmentCategoryForm } from "@/components/companys/internal/settings/category/apc/appointment-category-form";
+import { CreateAppointmentCategoryForm } from "@/components/companys/internal/settings/category/apc/schedule-category-form";
 
 interface DialogCreateAppointmentCategoryProps {
   onSuccess?: () => void;

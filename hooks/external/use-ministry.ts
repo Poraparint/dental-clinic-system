@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ApiError } from "@/types/api-error";
 
 interface Ministry {
   id: string;
@@ -8,13 +9,9 @@ interface Ministry {
   description: string;
 }
 
-interface ApiError {
-  error?: string;
-  description?: string;
-}
-
 export const useMinistry = () => {
-  const [ministries, setMinistries] = useState<Ministry[] | ApiError>([]);
+  const [ministries, setMinistries] = useState<Ministry[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,15 +20,23 @@ export const useMinistry = () => {
         const response = await fetch("/api/companies");
 
         const data = await response.json();
-        setMinistries(data);
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setMinistries(Array.isArray(data) ? data : []);
+        }
       } catch (error) {
-        console.error("ไม่พบข้อมูลบริษัท", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
       } finally {
         setIsLoading(false);
       }
     };
-      fetchMinistry();
+    fetchMinistry();
   }, []);
 
-  return { ministries, isLoading };
+  return { ministries, error, isLoading };
 };

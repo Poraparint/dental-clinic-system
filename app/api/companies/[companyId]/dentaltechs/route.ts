@@ -46,6 +46,7 @@ export async function GET(
         patient: {
           select: {
             name: true,
+            phone: true,
           },
         },
         dentalTechCategory: {
@@ -61,18 +62,18 @@ export async function GET(
 
     if (dentalTech.length < 1) {
       return NextResponse.json({
-        error: "ไม่พบข้อมูล",
+        error: "ไม่พบข้อมูลงานทันตกรรม",
         description: "เริ่มต้นด้วยการสร้างรายการทันตกรรม",
       });
     }
 
     return NextResponse.json(dentalTech);
   } catch (error) {
-    console.error("Error fetching patients:", error);
+    console.error("ไม่สามารถดึงข้อมูลงานทันตกรรมได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลพนักงาน",
-        description: "เริ่มต้นด้วยการสร้างบัญชีพนักงาน",
+        error: "ไม่สามารถดึงข้อมูลงานทันตกรรมได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

@@ -13,18 +13,16 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import {
-  CalendarCheck,
-  Clock,
-} from "lucide-react";
+import { CalendarCheck, Clock } from "lucide-react";
 import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
 import { UpComingCardUi } from "@/components/props/component/upcoming-card-ui";
 import { RecheckList } from "@/types/recheck";
+import { FormNotFound } from "@/components/form-not-found";
 
 export const RecheckCard = () => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { rechecks, isLoading } = useRechecks(companyId);
+  const { rechecks, error, isLoading } = useRechecks(companyId);
 
   const getUpComingDate = (recheckList: RecheckList[]) => {
     if (!recheckList || recheckList.length < 1) return null;
@@ -57,11 +55,16 @@ export const RecheckCard = () => {
     return <Loading />;
   }
 
+  if (error) {
+    return (
+      <FormNotFound message={error?.error} description={error?.description} />
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {rechecks.map((recheck) => {
         const upComingDate = getUpComingDate(recheck.recheckList);
-
         return (
           <Drawer key={recheck.id}>
             <DrawerTrigger asChild>

@@ -14,7 +14,7 @@ export const TransactionTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
   const patientId = params.patientId as string;
-  const { transactions, isLoading } = useTransaction(companyId, patientId);
+  const { transactions, error, isLoading } = useTransaction(companyId, patientId);
 
   const [, setRefreshKey] = useState(0);
 
@@ -86,8 +86,8 @@ export const TransactionTable = () => {
     <DynamicTable
       data={transactions}
       columns={columns}
-      error="ไม่พบข้อมูลธุรกรรม"
-      description="เริ่มต้นด้วยการสร้างรายการธุรกรรม"
+      error={error?.error}
+      description={error?.description}
     />
   );
 };

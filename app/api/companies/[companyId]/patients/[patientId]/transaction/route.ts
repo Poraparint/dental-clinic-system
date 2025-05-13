@@ -19,7 +19,7 @@ export async function GET(
   if (!companyId) {
     return NextResponse.json(
       {
-        error: "ไม่พบ companyId",
+        error: "ไม่พบ id บริษัท",
         description: "URL ไม่ถูกต้อง",
       },
       { status: 400 }
@@ -31,7 +31,7 @@ export async function GET(
   if (!patientId) {
     return NextResponse.json(
       {
-        error: "ไม่พบ pateintId",
+        error: "ไม่พบ id คนไข้",
         description: "URL ไม่ถูกต้อง",
       },
       { status: 400 }
@@ -40,7 +40,7 @@ export async function GET(
   try {
     if (!companyId || !patientId) {
       return NextResponse.json(
-        { error: "Missing companyId or patientId" },
+        { error: "ไม่ข้อมูลบริษัทหรือคนไข้", description: "โปรดติดต่อผู้ดูแลระบบ", },
         { status: 400 }
       );
     }
@@ -76,11 +76,11 @@ export async function GET(
 
     return NextResponse.json(transactions);
   } catch (error) {
-    console.error("Error fetching transactions:", error);
+    console.error("ไม่สามารถดึงข้อมูลธุรกรรมได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลธุรกรรม",
-        description: "เริ่มต้นด้วยการสร้างรายการธุรกรรม",
+        error: "ไม่สามารถดึงข้อมูลธุรกรรมได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

@@ -1,24 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Expense {
-  id: string;
-  datetime: string;
-  name: string;
-  expensesCategory: {
-    id: string;
-    name: string;
-    color: string;
-  }
-  payment: string;
-  amount: number;
-}
-
-
+import { Expenses } from "@/types/expenses";
+import { ApiError } from "@/types/api-error";
 
 export const useExpenses = (companyId: string, month?: string) => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [expenses, setExpenses] = useState<Expenses[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -30,14 +18,18 @@ export const useExpenses = (companyId: string, month?: string) => {
         const response = await fetch(url);
 
         const json = await response.json();
-        if (Array.isArray(json.data)) {
-          setExpenses(json.data);
+        if (!response.ok || json.error) {
+          setError(json)
         } else {
-          setExpenses([]);
+          setExpenses(Array.isArray(json.data) ? json.data : []);
         }
 
       } catch (error) {
-        console.error("ไม่พบข้อมูล", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -48,5 +40,5 @@ export const useExpenses = (companyId: string, month?: string) => {
     }
   }, [companyId, month]);
 
-  return { expenses, isLoading };
+  return { expenses, error, isLoading };
 };

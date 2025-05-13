@@ -15,7 +15,10 @@ interface SelectCategoryProps {
   disabled?: boolean;
   placeholder?: string;
   isLoading?: boolean;
-  categories: { id: string; name: string }[];
+  categories: {
+    id: string; name?: string; color?: string; user?: {
+      name: string;
+    } }[];
 }
 
 export const SelectCategory = ({
@@ -45,7 +48,13 @@ export const SelectCategory = ({
         ) : categories.length > 0 ? (
           categories.map((cat) => (
             <SelectItem key={cat.id} value={cat.id}>
-              {cat.name}
+              {cat.color && (
+                <div
+                  className="size-4 rounded-full"
+                  style={{ backgroundColor: cat.color }}
+                />
+              )}
+              <span>{ cat.name || cat.user?.name }</span>
             </SelectItem>
           ))
         ) : (

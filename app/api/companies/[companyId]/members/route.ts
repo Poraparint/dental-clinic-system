@@ -19,7 +19,7 @@ export async function GET(
   if (!companyId) {
     return NextResponse.json(
       {
-        error: "ไม่พบ companyId",
+        error: "ไม่พบ id บริษัท",
         description: "URL ไม่ถูกต้อง",
       },
       { status: 400 }
@@ -59,11 +59,11 @@ export async function GET(
 
     return NextResponse.json(members);
   } catch (error) {
-    console.error("Error fetching patients:", error);
+    console.error("ไม่สามารถดึงข้อมูลหมวดหมู่ได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลพนักงาน",
-        description: "เริ่มต้นด้วยการสร้างบัญชีพนักงาน",
+        error: "ไม่สามารถดึงข้อมูลหมวดหมู่ได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

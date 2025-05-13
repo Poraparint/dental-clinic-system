@@ -37,7 +37,7 @@ model Company {
   transactionCategories      TransactionCategory[]
   DentalTechnicianCategories DentalTechCategory[]
   expensesCategories         ExpensesCategory[]
-  appointmentCategories      AppointmentCategory[]
+  scheduleCategories      ScheduleCategory[]
   expenses                   Expenses[]
   dentalTech                 Dentaltech[]
   schedule                   Schedule[]
@@ -67,7 +67,8 @@ model User {
   patient               Patient[]
   transaction           Transaction[]
   dentalTechCategory    DentalTechCategory[]
-  schedule              Schedule[]
+  scheduleCreator              Schedule[] @relation("idx_schedule_creator")
+  scheduleDentist       Schedule[]@relation("idx_schedule_dentist")
   recheck               Recheck[]
 }
 
@@ -80,7 +81,7 @@ model Manager {
   companies             Company[]
   members               Member[]
   transactionCategories TransactionCategory[]
-  appointmentCategories AppointmentCategory[]
+  scheduleCategories ScheduleCategory[]
   expensesCategories    ExpensesCategory[]
 }
 
@@ -172,6 +173,7 @@ model TransactionCategory {
   isDeleted    Boolean       @default(false)
   transactions Transaction[]
   recheckList RecheckList[]
+  schedule Schedule[]
 
   manager Manager @relation(fields: [managerId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
@@ -220,7 +222,7 @@ model ExpensesCategory {
   @@index([companyId], name: "idx_ex_all")
 }
 
-model AppointmentCategory {
+model ScheduleCategory {
   id        String     @id @default(cuid())
   name      String
   managerId String
@@ -335,16 +337,20 @@ model Expenses {
 model Schedule {
   id            String              @id @default(cuid())
   datetime      DateTime            @default(now())
-  phone         String
+  phone         String?
   patientName   String
+  tcId String
   detail        String?
-  appointmentId String
+  scheduleId String
   creatorUserId String
+  memberId String
   companyId     String
   createdAt     DateTime            @default(now())
-  appointment   AppointmentCategory @relation(fields: [appointmentId], references: [id])
+  transactionCategory TransactionCategory @relation(fields: [tcId], references: [id])
+  scheduleCategory   ScheduleCategory @relation(fields: [scheduleId], references: [id])
   company       Company             @relation(fields: [companyId], references: [id])
-  creator       User                @relation(fields: [creatorUserId], references: [id])
+  dentist User @relation(fields: [memberId], references: [id], name: "idx_schedule_dentist")
+  creator       User                @relation(fields: [creatorUserId], references: [id], name: "idx_schedule_creator")
 
   @@index([companyId], name: "idx_schedule_all")
   @@index([datetime, companyId], name: "idx_schedule_datetime")

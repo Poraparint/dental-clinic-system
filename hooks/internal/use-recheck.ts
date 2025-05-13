@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Recheck } from "@/types/recheck";
+import { ApiError } from "@/types/api-error";
 
 export const useRechecks = (companyId: string) => {
   const [rechecks, setRechecks] = useState<Recheck[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -13,14 +15,23 @@ export const useRechecks = (companyId: string) => {
         const response = await fetch(`/api/companies/${companyId}/rechecks`);
 
         const data = await response.json();
-        setRechecks(Array.isArray(data) ? data : []);
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setRechecks(Array.isArray(data) ? data : []);
+        }
       } catch (error) {
-        console.error("Error fetching rechecks", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
+        
       } finally {
         setIsLoading(false);
       }
     };
     fetchRechecks();
   }, [companyId]);
-  return { rechecks, isLoading };
+  return { rechecks, error, isLoading };
 };

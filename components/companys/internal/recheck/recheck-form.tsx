@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { Recheck } from "@/actions/company/public/recheck";
 
 // hooks
-import { useTransactionCategories } from "@/hooks/internal/use-tc";
+import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 
 // ui
 import {
@@ -40,11 +40,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 
 // icons
-import {
-  FilePenLine,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 import { SubmitButton } from "@/components/props/component/submit-button";
 import { Transaction } from "@/types/transaction";
@@ -118,7 +114,7 @@ export const RecheckForm = ({
                   <h3 className="text-base font-medium muted-foreground">
                     รายการรีเช็ค / แบ่งจ่าย
                   </h3>
-                  
+
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -198,13 +194,9 @@ export const RecheckForm = ({
                             />
 
                             <div className="mb-4">
-                              <FormLabel className="text-sm text-text-muted-foreground">
-                                วันที่
-                              </FormLabel>
                               <DatePickerField
                                 form={form}
                                 name={`recheckList.${index}.datetime`}
-                                isLabel={false}
                               />
                             </div>
 

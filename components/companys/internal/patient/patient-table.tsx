@@ -15,7 +15,7 @@ interface PatientTableProps {
 export const PatientTable = ({ onRowClick }: PatientTableProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { patients, isLoading } = usePatients(companyId);
+  const { patients, error, isLoading } = usePatients(companyId);
 
   const columns = [
     {
@@ -65,15 +65,13 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
     return <Loading />;
   }
 
-  
-
   return (
     <DynamicTable
       data={patients}
       columns={columns}
       onRowClick={(patient) => onRowClick(patient.id)}
-      error="เริ่มต้นด้วยการสร้างบัตรใหม่"
-      description="เหมือนคุณยังไม่มีบัตรใหม่"
+      error={error?.error}
+      description={error?.description}
     />
   );
 };

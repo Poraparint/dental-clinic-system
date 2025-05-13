@@ -1,23 +1,12 @@
 "use client";
 
-import { CompanyRole } from "@prisma/client";
 import { useEffect, useState } from "react";
-
-interface Member {
-  id: string;
-  createdAt: Date;
-  memberCode: string;
-  role: CompanyRole;
-  user: {
-    name: string;
-    email: string;
-    phone: string;
-    isTwoFactorEnabled: boolean;
-  };
-}
+import { Member } from "@/types/member";
+import { ApiError } from "@/types/api-error";
 
 export const useMembers = (companyId: string) => {
   const [members, setMembers] = useState<Member[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,9 +15,18 @@ export const useMembers = (companyId: string) => {
         const response = await fetch(`/api/companies/${companyId}/members`);
 
         const data = await response.json();
-        setMembers(data);
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setMembers(Array.isArray(data) ? data : []);
+        }
+
       } catch (error) {
-        console.error("Error fetching members:", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -37,5 +35,5 @@ export const useMembers = (companyId: string) => {
     fetchMembers();
   }, [companyId]);
 
-  return { members, isLoading };
+  return { members, error, isLoading };
 };

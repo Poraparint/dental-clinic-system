@@ -22,12 +22,12 @@ export const FilterBar = ({
 
   return (
     <div className="flex flex-wrap justify-between gap-4">
-      <Tabs defaultValue="ทั้งหมด" onValueChange={onStatusChange}>
+      <Tabs defaultValue="รอดำเนินการ" onValueChange={onStatusChange}>
         <TabsList>
-          <TabsTrigger value="ทั้งหมด">ทั้งหมด</TabsTrigger>
           <TabsTrigger value="รอดำเนินการ">รอดำเนินการ</TabsTrigger>
           <TabsTrigger value="รับงานเรียบร้อย">รับงานแล้ว</TabsTrigger>
           <TabsTrigger value="เสร็จสิ้น">เสร็จสิ้น</TabsTrigger>
+          <TabsTrigger value="ทั้งหมด">ทั้งหมด</TabsTrigger>
         </TabsList>
       </Tabs>
 

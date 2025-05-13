@@ -40,10 +40,10 @@ export async function GET(
             price: true,
             transactionCategory: {
               select: {
-                name: true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
         patient: {
           select: {
@@ -69,7 +69,6 @@ export async function GET(
           },
         },
       },
-      
     });
     if (rechecks.length < 1) {
       return NextResponse.json({
@@ -79,11 +78,11 @@ export async function GET(
     }
     return NextResponse.json(rechecks);
   } catch (error) {
-    console.error("Error fetching rechecks:", error);
+    console.error("ไม่สามารถดึงข้อมูลรายการรีเช็คได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลรายการ",
-        description: "เริ่มต้นด้วยการสร้างรายการรีเช็ค / แบ่งจ่าย",
+        error: "ไม่สามารถดึงข้อมูลรายการรีเช็คได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

@@ -3,14 +3,11 @@
 
 import { useEffect, useState } from "react";
 import { DentalTech } from "@/types/dentaltech";
-
-interface ApiError {
-  error?: string;
-  description?: string;
-}
+import { ApiError } from "@/types/api-error";
 
 export const useDentalTechs = (companyId: string) => {
-  const [dentalTechs, setMembers] = useState<DentalTech[] | ApiError>([]);
+  const [dentalTechs, setDentaltechs] = useState<DentalTech[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -19,9 +16,19 @@ export const useDentalTechs = (companyId: string) => {
         const response = await fetch(`/api/companies/${companyId}/dentaltechs`);
 
         const data = await response.json();
-        setMembers(data);
+        if (!response.ok || data.error) {
+          setError(data)
+        } else {
+          setDentaltechs(Array.isArray(data) ? data : []);
+        }
+        
       } catch (error) {
-        console.error("Error fetching techs:", error);
+        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
+        
       } finally {
         setIsLoading(false);
       }
@@ -30,5 +37,5 @@ export const useDentalTechs = (companyId: string) => {
     fetchDentalTechs();
   }, [companyId]);
 
-  return { dentalTechs, isLoading };
+  return { dentalTechs, error, isLoading };
 };

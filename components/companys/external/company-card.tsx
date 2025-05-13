@@ -12,9 +12,15 @@ import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 
 export const CompanyCard = () => {
-  const { ministries, isLoading } = useMinistry();
+  const { ministries, error, isLoading } = useMinistry();
 
   if (isLoading) return <Loading />;
+
+  if (error) {
+    return (
+      <FormNotFound message={error?.error} description={error?.description} />
+    );
+  }
 
   return (
     <RoleGate allowedRole={[CompanyRole.MANAGER]}>
@@ -24,21 +30,14 @@ export const CompanyCard = () => {
         description="Manage your dental clinic"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.isArray(ministries) ? (
-            ministries.map((ministry) => (
-              <CardMinistry
-                key={ministry.id}
-                linkname={`/${ministry.id}${DEFAULT_LOGIN_REDIRECT}`}
-                name={ministry.name}
-                description={ministry.description}
-              />
-            ))
-          ) : (
-            <FormNotFound
-              message={ministries?.error}
-              description={ministries?.description}
+          {ministries.map((ministry) => (
+            <CardMinistry
+              key={ministry.id}
+              linkname={`/${ministry.id}${DEFAULT_LOGIN_REDIRECT}`}
+              name={ministry.name}
+              description={ministry.description}
             />
-          )}
+          ))}
         </div>
       </CardCategory>
     </RoleGate>
