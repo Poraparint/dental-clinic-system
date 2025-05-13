@@ -8,16 +8,27 @@ import {
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+
+type MinimalCalendarProps = React.ComponentProps<typeof DayPicker> & {
+  eventCounts?: Record<string, number>;
+  onMonthChange?: (month: Date) => void;
+};
 
 function MinimalCalendar({
   className,
   classNames,
   showOutsideDays = true,
+  onMonthChange,
+  eventCounts = {},
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: MinimalCalendarProps) {
+  
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      onMonthChange={onMonthChange}
       className={cn("", className)}
       classNames={{
         months: "flex flex-col space-y-4 sm:space-x-4 sm:space-y-0",
@@ -36,7 +47,7 @@ function MinimalCalendar({
         head_cell:
           "w-full h-10 flex items-center justify-center text-xl font-medium",
         row: "flex w-full border-b border-r",
-        cell: "text-center border-l p-0 w-full h-20 md:h-22 relative [&:has([aria-selected])]:bg-transparent",
+        cell: "text-center border-l p-0 w-full h-20 md:h-24 relative [&:has([aria-selected])]:bg-transparent",
         day: cn(
           buttonVariants({ variant: "ghost" }),
           "h-full w-full text-lg rounded-none flex items-start justify-end py-1 px-3 text-muted-foreground/90"
@@ -61,6 +72,26 @@ function MinimalCalendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("size-6", className)} {...props} />
         ),
+        DayContent: ({ date }) => {
+          const key = format(date, "yyyy-MM-dd");
+          const count = eventCounts[key] || 0;
+
+          return (
+            <div className="relative w-full h-full">
+              <div className="absolute top-1 left-1 text-xs">
+                {format(date, "d")}
+              </div>
+              {count > 0 && (
+                <Badge
+                  variant={"lapis"}
+                  className="absolute bottom-1 text-[8px] md:text-xs flex items-center justify-center"
+                >
+                  {count} <span className="max-md:sr-only ">รายการนัด</span>
+                </Badge>
+              )}
+            </div>
+          );
+        },
       }}
       {...props}
     />

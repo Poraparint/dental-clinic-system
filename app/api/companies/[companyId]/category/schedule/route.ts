@@ -41,7 +41,7 @@ export async function GET(
       return NextResponse.json(
         {
           error: "ไม่พบข้อมูลหมวดหมู่",
-          description: "ไม่พบข้อมูลหมวดหมู่",
+          description: "เริ่มต้นด้วยการสร้างหมวดหมู่รายการนัด",
         }
       );
     }
