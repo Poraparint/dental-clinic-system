@@ -51,12 +51,10 @@ export async function GET(
     });
 
     if (categorys.length < 1) {
-      return NextResponse.json(
-        {
-          error: "ไม่พบข้อมูลหมวดหมู่",
-          description: "ไม่พบข้อมูลหมวดหมู่",
-        }
-      );
+      return NextResponse.json({
+        error: "ไม่พบข้อมูลหมวดหมู่",
+        description: "เริ่มต้นด้วยการสร้างหมวดหมู่งานทันตกรรม",
+      });
     }
 
     return NextResponse.json(categorys);

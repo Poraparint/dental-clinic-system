@@ -1,9 +1,19 @@
 export type Schedule = {
-    datetime: Date;
-    patientName: string;
-    phone: string;
-    detail: string;
-    tcId: string;
-    scheduleId: string;
-    memberId: string;
-}
+  id: string;
+  datetime: Date;
+  patientName: string;
+  phone?: string;
+  detail?: string;
+  transactionCategory: {
+    name?: string;
+  };
+  scheduleCategory: {
+    name?: string;
+  };
+  dentist: {
+    name?: string;
+  };
+  creator: {
+    name?: string;
+  };
+};

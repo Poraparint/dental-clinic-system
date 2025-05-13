@@ -27,7 +27,7 @@ export async function GET(
   }
 
   try {
-    const rechecks = await db.schedule.findMany({
+    const schedules = await db.schedule.findMany({
       where: { companyId },
       select: {
         id: true,
@@ -57,13 +57,18 @@ export async function GET(
         },
       },
     });
-    if (rechecks.length < 1) {
+    if (schedules.length < 1) {
       return NextResponse.json({
         error: "ไม่พบข้อมูลรายการ",
         description: "เริ่มต้นด้วยการสร้างรายการรีเช็ค / แบ่งจ่าย",
       });
     }
-    return NextResponse.json(rechecks);
+    return NextResponse.json(
+      schedules.map((item) => ({
+        ...item,
+        datetime: item.datetime.toISOString(), 
+      }))
+    );
   } catch (error) {
     console.error("Error fetching rechecks:", error);
     return NextResponse.json(

@@ -73,10 +73,6 @@ export const Expenses = () => {
     return <Loading />;
   }
 
-  if (error) {
-    return (<FormNotFound message={error?.error} description={error?.description} />)
-  }
-
   return (
     <div className="lg:flex gap-4 space-y-4">
       <div className="space-y-4 lg:w-8/12">
@@ -131,10 +127,11 @@ export const Expenses = () => {
             </CardTitle>
             <DialogCreateExpensesCategory onSuccess={handleRefresh} />
           </CardHeader>
-
-          <div>
-            {
-              categoryData?.map((category) => (
+          {error ? (
+            <FormNotFound message={error?.error} description={error?.description} />
+          ) : (
+            <div>
+              {categoryData?.map((category) => (
                 <div
                   key={`${category.id}-${refreshKey}`}
                   className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background/90 transition-colors"
@@ -164,9 +161,8 @@ export const Expenses = () => {
                     </div>
                   </div>
                 </div>
-              ))
-            }
-          </div>
+              ))}
+            </div>)}
         </Card>
       </div>
     </div>
