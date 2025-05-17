@@ -25,7 +25,7 @@ import { Clock1 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CreateAppointmentCategory } from "@/actions/company/manager/schedule-category";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateAppointmentCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -91,10 +91,10 @@ export const CreateAppointmentCategoryForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <SubmitButton
-                      label="เพิ่มหมวดหมู่"
-                      type="submit"
-                      isPending={isPending}
-                    />
+            label="เพิ่มหมวดหมู่"
+            type="submit"
+            isPending={isPending}
+          />
         </div>
       </form>
     </Form>

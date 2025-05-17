@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/drawer";
 import { CalendarCheck, Clock } from "lucide-react";
 import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
-import { UpComingCardUi } from "@/components/props/component/upcoming-card-ui";
+import { UpComingCardUi } from "@/components/props/component/card/upcoming-card-ui";
 import { RecheckList } from "@/types/recheck";
 import { FormNotFound } from "@/components/form-not-found";
 

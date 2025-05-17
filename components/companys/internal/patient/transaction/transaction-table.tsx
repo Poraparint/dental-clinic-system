@@ -55,7 +55,7 @@ export const TransactionTable = () => {
       key: "paid",
       header: "จ่ายแล้ว",
       render: (item: Transaction) => (
-        <Badge variant={item.paid < item.price ? "amber" : "lapis"}>
+        <Badge variant={item.paid < item.price ? "amber" : "azurite"}>
           {item.paid} ฿
         </Badge>
       ),

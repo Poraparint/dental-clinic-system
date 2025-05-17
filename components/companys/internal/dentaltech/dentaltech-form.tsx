@@ -39,7 +39,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useDentaltTechCategories } from "@/hooks/internal/category/use-dtc";
 import { createDentalTech } from "@/actions/company/manager/dentaltech";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
 import { Input } from "@/components/ui/input";
 

@@ -3,7 +3,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Hospital } from "lucide-react";
 
 //props
-import { CardMinistry } from "@/components/props/component/card-ministry";
+import { CardMinistry } from "@/components/props/component/card/card-ministry";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";

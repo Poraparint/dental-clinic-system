@@ -27,7 +27,7 @@ export function renderLevelIcon(level: string) {
       case "ทั้งหมด":
         return <Aperture className="size-4 text-muted-foreground" />;
       case "ปกติ":
-        return <Gauge className="size-4 text-lapis-text" />;
+        return <Gauge className="size-4 text-blue-500" />;
       case "เร่งด่วน":
         return <Timer className="size-4 text-orange-500" />;
       case "ด่วนมาก":

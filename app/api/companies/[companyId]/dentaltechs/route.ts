@@ -56,7 +56,7 @@ export async function GET(
         },
       },
       orderBy: {
-        deadline: "desc",
+        deadline: "asc",
       },
     });
 
@@ -67,7 +67,12 @@ export async function GET(
       });
     }
 
-    return NextResponse.json(dentalTech);
+    return NextResponse.json(
+      dentalTech.map((item) => ({
+        ...item,
+        deadline: item.deadline
+      }))
+    );
   } catch (error) {
     console.error("ไม่สามารถดึงข้อมูลงานทันตกรรมได้", error);
     return NextResponse.json(

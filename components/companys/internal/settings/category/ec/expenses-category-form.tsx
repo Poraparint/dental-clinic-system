@@ -33,7 +33,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -94,7 +94,11 @@ export const CreateExpensesCategoryForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-        <CardCategory icon={<BriefcaseBusiness />} title="หมวดหมู่ค่าใช้จ่าย">
+        <CardCategory
+          icon={<BriefcaseBusiness />}
+          title="หมวดหมู่ค่าใช้จ่าย"
+          description="เพิ่มหมวดหมู่การใช้จ่าย"
+        >
           <div className="space-y-3 mb-5">
             <FormField
               control={form.control}

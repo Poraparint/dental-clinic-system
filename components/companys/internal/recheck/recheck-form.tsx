@@ -42,7 +42,7 @@ import { DatePickerField } from "@/components/props/component/date-picker-field"
 // icons
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { CardCategory } from "@/components/props/wrapper/card-category";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
 
 interface RecheckFormProps {

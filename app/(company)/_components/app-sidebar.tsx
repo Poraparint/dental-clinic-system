@@ -18,9 +18,10 @@ import {
 
 //next
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { NavigatingUi } from "@/components/props/component/navigating";
 
 // Menu items.
 export const manages = [
@@ -82,6 +83,19 @@ export function AppSidebar() {
   const pathname = usePathname();
   const params = useParams();
   const companyId = params.companyId as string;
+  const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  const handleNavigation = (url: string) => {
+    if (pathname !== url) {
+      setIsNavigating(true);
+      router.push(url);
+    }
+  };
+
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
   
 
   const isActive = (url: string) => {
@@ -89,109 +103,120 @@ export function AppSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Image
-                src="/favicon.ico"
-                height={25}
-                width={25}
-                alt="Dental-clinic-system"
-                className="rounded-md"
-              />
-              <span>DentalClinicSystem</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <hr className="my-2" />
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {manages.map((manage) => (
-                <SidebarMenuItem key={manage.title}>
-                  <SidebarMenuButton
-                    asChild
-                    variant={
-                      isActive(manage.url(companyId)) ? "indigo" : "default"
-                    }
-                  >
-                    <Link
-                      href={manage.url(companyId)}
-                      className="flex items-center gap-3"
-                    >
-                      <manage.icon className="size-20" />
-                      <span>{manage.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-              <hr className="my-2" />
-              {views.map((view) => (
-                <SidebarMenuItem key={view.title}>
-                  <SidebarMenuButton
-                    asChild
-                    variant={
-                      isActive(view.url(companyId)) ? "indigo" : "default"
-                    }
-                  >
-                    <Link
-                      href={view.url(companyId)}
-                      className="flex items-center gap-3"
-                    >
-                      <view.icon className="size-20" />
-                      <span>{view.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-              <hr className="my-2" />
-              {settings.map((setting) => (
-                <SidebarMenuItem key={setting.title}>
-                  <SidebarMenuButton
-                    asChild
-                    variant={
-                      isActive(setting.url(companyId)) ? "indigo" : "default"
-                    }
-                  >
-                    <Link
-                      href={setting.url(companyId)}
-                      className="flex items-center gap-3"
-                    >
-                      <setting.icon className="size-20" />
-                      <span>{setting.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Link href="#" className="flex items-center gap-3 w-full">
+    <>
+      {isNavigating && <NavigatingUi />}
+      <Sidebar collapsible="icon">
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
                 <Image
-                  src="/ceo.png"
+                  src="/favicon.ico"
                   height={25}
                   width={25}
-                  alt="Designer-profile"
+                  alt="Dental-clinic-system"
                   className="rounded-md"
                 />
-                <div className="flex flex-col ">
-                  <span>Poraparint</span>
-                  <span className="text-muted-foreground text-sm">Creator</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+                <span>DentalClinicSystem</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <hr className="my-2" />
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {manages.map((manage) => (
+                  <SidebarMenuItem key={manage.title}>
+                    <SidebarMenuButton
+                      asChild
+                      variant={
+                        isActive(manage.url(companyId)) ? "charoite" : "default"
+                      }
+                      onClick={() => handleNavigation(manage.url(companyId))}
+                    >
+                      <div className="flex items-center gap-3">
+                        <manage.icon className="size-20" />
+                        <span>{manage.title}</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+                <hr className="my-2" />
+                {views.map((view) => (
+                  <SidebarMenuItem key={view.title}>
+                    <SidebarMenuButton
+                      asChild
+                      variant={
+                        isActive(view.url(companyId)) ? "charoite" : "default"
+                      }
+                      onClick={() => handleNavigation(view.url(companyId))}
+                    >
+                      <div className="flex items-center gap-3">
+                        <view.icon className="size-20" />
+                        <span>{view.title}</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+                <hr className="my-2" />
+                {settings.map((setting) => (
+                  <SidebarMenuItem key={setting.title}>
+                    <SidebarMenuButton
+                      asChild
+                      variant={
+                        isActive(setting.url(companyId))
+                          ? "charoite"
+                          : "default"
+                      }
+                      onClick={() => handleNavigation(setting.url(companyId))}
+                    >
+                      <div className="flex items-center gap-3">
+                        <setting.icon className="size-20" />
+                        <span>{setting.title}</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <Link
+                  href="https://poraparint-portfolio.vercel.app" 
+                  passHref
+                  legacyBehavior 
+                >
+                  <a
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-3 w-full"
+                  >
+                    <Image
+                      src="/ceo.png"
+                      height={25}
+                      width={25}
+                      alt="Designer-profile"
+                      className="rounded-md"
+                    />
+                    <div className="flex flex-col">
+                      <span>Poraparint</span>
+                      <span className="text-muted-foreground text-sm">
+                        Creator
+                      </span>
+                    </div>
+                  </a>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    </>
   );
 }

@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80",
-        emerald: "bg-jade shadow-xs text-white hover:bg-jade/90",
+        emerald: "bg-emerald-bg shadow-xs text-emerald-text border border-emerald-border hover:bg-jade/90",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
@@ -25,8 +25,12 @@ const buttonVariants = cva(
           "bg-gradient-to-r from-indigo-800 to-indigo-500 text-white hover:from-indigo-700 hover:to-indigo-400 hover:text-white/90 transition duration-150",
         amber:
           "bg-amber-bg text-amber-text border border-amber-border hover:bg-amber-bg/90",
-        lapis:
-          "bg-lapis-bg text-lapis-text border border-lapis-border hover:bg-lapis-bg/90",
+        amethyst:
+          "bg-amethyst-bg text-amethyst-text border border-amethyst-border hover:bg-amethyst-bg/90",
+        charoite:
+          "bg-charoite text-white hover:bg-charoite/90 hover:text-white/90",
+        azurite:
+          "bg-azurite-bg text-azurite-text border border-azurite-border hover:bg-azurite-bg/90",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -36,7 +40,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "indigo",
+      variant: "charoite",
       size: "default",
     },
   }

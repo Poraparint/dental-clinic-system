@@ -25,7 +25,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Album } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;

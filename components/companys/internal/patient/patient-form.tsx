@@ -31,7 +31,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 
 //actions
 import { createPatient } from "@/actions/company/public/patient";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
@@ -82,7 +82,7 @@ export const CreatePatientForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
         <CardCategory
-          icon={<User/>}
+          icon={<User />}
           title="ข้อมูลหลัก"
           description="ข้อมูลส่วนตัวพื้นฐานของคนไข้"
         >

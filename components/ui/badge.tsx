@@ -18,11 +18,13 @@ const badgeVariants = cva(
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         emerald:
-          "bg-emerald-500/20 text-emerald-700 dark:text-emerald-600  [a&]:hover:bg-emerald-600",
+          "bg-emerald-bg text-emerald-text [a&]:hover:bg-emerald-bg/90 border border-emerald-border",
         amber:
           "bg-amber-bg text-amber-text border border-amber-border [a&]:hover:bg-amber-bg/90",
-        lapis:
-          "bg-lapis-bg text-lapis-text border border-lapis-border [a&]:hover:bg-lapis-bg/90",
+        azurite:
+          "bg-azurite-bg text-azurite-text border border-azurite-border [a&]:hover:bg-azurite-bg/90",
+        amethyst:
+          "bg-amethyst-bg text-amethyst-text border border-amethyst-border [a&]:hover:bg-amethyst-bg/90",
       },
     },
     defaultVariants: {

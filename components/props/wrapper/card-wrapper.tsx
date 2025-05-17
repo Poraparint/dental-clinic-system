@@ -1,7 +1,7 @@
 "use client";
 import { Header } from "@/components/props/component/header";
 import { Social } from "@/components/auth/social";
-import { BackButton } from "@/components/props/component/back-button";
+import { BackButton } from "@/components/props/component/button/back-button";
 import Link from "next/link";
 
 //ui

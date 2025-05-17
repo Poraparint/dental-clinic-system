@@ -2,55 +2,76 @@
 
 import * as React from "react";
 import {
+  Calendar,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayPickerSingleProps } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
+import { renderStatusIcon } from "@/components/props/render/render-icons";
+import { BadgeDate } from "@/components/props/component/badge-date";
 
-type MinimalCalendarProps = React.ComponentProps<typeof DayPicker> & {
-  eventCounts?: Record<string, number>;
+interface ItemWithStatus {
+  status?: "รอดำเนินการ" | "รับงานเรียบร้อย" | "เสร็จสิ้น" | string;
+  [key: string]: unknown;
+}
+
+type MinimalCalendarProps<T extends ItemWithStatus> = Omit<DayPickerSingleProps, "mode" | "onSelect" | "selected"> & {
+  data?: T[];
+  getDate?: (item: T) => Date;
   onMonthChange?: (month: Date) => void;
+  selected: Date | undefined;
+  onSelect: (date: Date | undefined) => void;
 };
 
-function MinimalCalendar({
+function MinimalCalendar<T extends ItemWithStatus>({
   className,
   classNames,
   showOutsideDays = true,
+  data,
+  getDate,
   onMonthChange,
-  eventCounts = {},
+  selected,
+  onSelect,
   ...props
-}: MinimalCalendarProps) {
-  
+}: MinimalCalendarProps<T>) {
+
+  const thaiDayFormat = (date: Date) => {
+    const days = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
+    return days[date.getDay()];
+  };
+
   return (
     <DayPicker
+      mode="single"
+      formatters={{ formatWeekdayName: thaiDayFormat }}
+      selected={selected}
+      onSelect={onSelect}
       showOutsideDays={showOutsideDays}
       onMonthChange={onMonthChange}
       className={cn("", className)}
       classNames={{
-        months: "flex flex-col space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-6",
-        caption: "flex justify-between relative items-center mb-4",
+        months: "flex flex-col sm:space-x-4 sm:space-y-0",
+        month: "",
+        caption: "flex items-center justify-start gap-4 px-5", // เพิ่ม gap สำหรับระยะห่าง
         caption_label: "text-xl font-semibold",
+        nav_button_previous: "", // ย้ายปุ่มย้อนเดือนไปด้านซ้ายสุด
+        nav_button_next: "", // ย้ายปุ่มถัดไปไปด้านขวาสุด
         nav: "flex items-center gap-2",
         nav_button: cn(
           buttonVariants({ variant: "ghost" }),
           "h-10 w-10 p-0 rounded-full hover:bg-slate-100"
         ),
-        nav_button_previous: "",
-        nav_button_next: "",
-        table: "w-full border-collapse shadow-md",
-        head_row: "flex border rounded-t-md bg-primary-foreground",
-        head_cell:
-          "w-full h-10 flex items-center justify-center text-xl font-medium",
-        row: "flex w-full border-b border-r",
-        cell: "text-center border-l p-0 w-full h-20 md:h-24 relative [&:has([aria-selected])]:bg-transparent",
+        table: "w-full border-collapse",
+        head_row: "flex text-muted-foreground",
+        head_cell: "w-full h-14 flex p-2 items-end justify-end font-medium",
+        row: "flex w-full gap-2 mb-2",
+        cell: "text-center gap-2 p-0 w-full h-20 md:h-26 relative [&:has([aria-selected])]:bg-transparent",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-full w-full text-lg rounded-none flex items-start justify-end py-1 px-3 text-muted-foreground/90"
+          "h-full w-full text-lg border rounded-md flex items-start justify-end py-1 px-3 text-muted-foreground/90"
         ),
         day_selected:
           "relative bg-muted-foreground/30 hover:bg-muted-foreground/40 text-primary font-semibold after:content-[''] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:w-6 after:h-6 after:rounded-full after:z-[-1]",
@@ -74,20 +95,64 @@ function MinimalCalendar({
         ),
         DayContent: ({ date }) => {
           const key = format(date, "yyyy-MM-dd");
-          const count = eventCounts[key] || 0;
+          const items = data?.filter((item) => {
+            const itemDate = getDate?.(item);
+            return itemDate && format(itemDate, "yyyy-MM-dd") === key;
+          });
+
+          if (!items || items.length === 0) {
+            return (
+              <div className="relative w-full h-full">
+                <div className="absolute top-1 right-1 text-xs">
+                  {format(date, "d")}
+                </div>
+              </div>
+            );
+          }
+
+          const hasStatus = "status" in items[0];
 
           return (
             <div className="relative w-full h-full">
-              <div className="absolute top-1 left-1 text-xs">
+              <div className="absolute top-1 right-1 text-xs">
                 {format(date, "d")}
               </div>
-              {count > 0 && (
-                <Badge
-                  variant={"lapis"}
-                  className="absolute bottom-1 text-[8px] md:text-xs flex items-center justify-center"
-                >
-                  {count} <span className="max-md:sr-only ">รายการนัด</span>
-                </Badge>
+              {hasStatus ? (
+                // ✅ กรณีมี status
+                Object.entries(
+                  items.reduce((acc: Record<string, number>, item) => {
+                    const status = item.status;
+                    if (!status) return acc;
+                    acc[status] = (acc[status] || 0) + 1;
+                    return acc;
+                  }, {})
+                ).map(([status, count], i) => {
+                  const icon = renderStatusIcon(status);
+                  const color =
+                    status === "รอดำเนินการ"
+                      ? "amber"
+                      : status === "รับงานเรียบร้อย"
+                        ? "azurite"
+                        : status === "เสร็จสิ้น"
+                          ? "emerald"
+                          : "default";
+
+                  return (
+                    <BadgeDate
+                      key={status}
+                      icon={icon}
+                      count={count}
+                      variant={color}
+                      className={cn({ 
+                        "": i === 0,
+                        "bottom-6 md:bottom-7": i === 1,
+                        "bottom-11 md:bottom-13": i === 2,
+                      })}
+                    />
+                  );
+                })
+              ) : (
+                <BadgeDate icon={<Calendar />} count={items.length} />
               )}
             </div>
           );

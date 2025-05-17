@@ -11,6 +11,7 @@ import { CreateScheduleSchema } from "@/schemas";
 //lib
 import { currentAllStaffExceptTechnician } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
+import { formatDateOnly } from "@/lib/utils";
 
 export const Schedule = async (
   values: z.infer<typeof CreateScheduleSchema>,
@@ -35,20 +36,9 @@ export const Schedule = async (
   }
 
   try {
-    const selectedDate = datetime
-      ? new Date(datetime.setHours(0, 0, 0, 0))
-      : new Date();
-    const datetimeString = new Date(
-      Date.UTC(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate()
-      )
-    );
-    
     await db.schedule.create({
         data: {
-          datetime: datetimeString,
+          datetime: formatDateOnly(datetime),
             patientName,
             phone,
             detail,

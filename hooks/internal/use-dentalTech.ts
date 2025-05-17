@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { DentalTech } from "@/types/dentaltech";
 import { ApiError } from "@/types/api-error";
 
-export const useDentalTechs = (companyId: string) => {
+export const useDentalTechs = (companyId: string, refreshKey?: number) => {
   const [dentalTechs, setDentaltechs] = useState<DentalTech[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export const useDentalTechs = (companyId: string) => {
     };
 
     fetchDentalTechs();
-  }, [companyId]);
+  }, [companyId, refreshKey]);
 
   return { dentalTechs, error, isLoading };
 };

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 //icons
-import { Aperture } from "lucide-react";
+import { Clock } from "lucide-react";
 import { toast } from "sonner";
 
 //ui
@@ -30,7 +30,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { Schedule } from "@/actions/company/public/schedule";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Input } from "@/components/ui/input";
 import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 import { useDentists } from "@/hooks/internal/use-dentist";
@@ -91,11 +91,11 @@ export const ScheduleForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
         <CardCategory
-          icon={<Aperture />}
+          icon={<Clock />}
           title="รายการนัดหมาย"
           description="รายการนัดหมาย / ข้อมูลการนัดหมาย"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="scheduleId"
@@ -149,6 +149,23 @@ export const ScheduleForm = ({
             />
             <FormField
               control={form.control}
+              name="memberId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-medium">เลือกทันตแพทย์</FormLabel>
+                  <SelectCategory
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isPending}
+                    isLoading={dentistLoading}
+                    categories={dentists}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="phone"
               render={({ field }) => (
                 <FormItem>
@@ -177,23 +194,6 @@ export const ScheduleForm = ({
                       placeholder="รายละเอียด"
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="memberId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-medium">เลือกทันตแพทย์</FormLabel>
-                  <SelectCategory
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isPending}
-                    isLoading={dentistLoading}
-                    categories={dentists}
-                  />
                   <FormMessage />
                 </FormItem>
               )}
