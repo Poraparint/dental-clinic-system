@@ -28,8 +28,6 @@ export const ScheduleBoard = () => {
       setIsRefreshing(false);
     }
   }, [isLoading, isRefreshing]);
-
-  console.log(date);
   return (
     <Card className="w-full">
       <CardContent className="p-0">
