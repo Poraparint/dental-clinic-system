@@ -18,10 +18,16 @@ export function formatCurrency(value?: number) {
   return typeof value === "number" ? value.toLocaleString() : "-";
 }
 
-export function DateOnly(date: Date | null | undefined): Date | null {
-  if (!date) return null;
-
-  const newDate = new Date(date);
-  newDate.setHours(0, 0, 0, 0);
-  return newDate;
+export function formatDateOnly(date: Date) {
+  const selectedDate = date
+    ? new Date(date.setHours(0, 0, 0, 0))
+    : new Date();
+  const dateOnly = new Date(
+    Date.UTC(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate()
+    )
+  );
+  return dateOnly;
 }

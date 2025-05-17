@@ -25,7 +25,7 @@ import { CreateCompanySchema } from "@/schemas";
 import { createCompany } from "@/actions/company/manager/company";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 import { User } from "lucide-react";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateMinistryFormProps {
   setOpen: (open: boolean) => void;

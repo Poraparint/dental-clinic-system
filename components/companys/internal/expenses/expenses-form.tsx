@@ -50,7 +50,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 import { createExpenses } from "@/actions/company/manager/expenses";
 import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateExpensesFormProps {
   setOpen: (open: boolean) => void;
@@ -106,7 +106,11 @@ export const CreateExpensesForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>
-        <CardCategory icon={<Wallet />} title="รายการธุรกกรม">
+        <CardCategory
+          icon={<Wallet />}
+          title="รายการรายจ่าย"
+          description="เพิ่มรายการธุรกรรม / รายการรายจ่าย"
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <DatePickerField
               form={form}

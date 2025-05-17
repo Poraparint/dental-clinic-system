@@ -6,16 +6,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-charoite: var(--charoite);
   --color-amber-bg: var(--amber-bg);
   --color-amber-text: var(--amber-text);
   --color-amber-border: var(--amber-border);
-    --color-lapis-bg: var(--lapis-bg);
-  --color-lapis-text: var(--lapis-text);
-  --color-lapis-border: var(--lapis-border);
-  --color-jade: var(--jade);
-  --color-lapis: var(--lapis);
-  --color-lapis-foreground: var(--lapis-foreground);
-  --color-lapis-accent: var(--lapis-accent);
+  --color-azurite-bg: var(--azurite-bg);
+  --color-azurite-text: var(--azurite-text);
+  --color-azurite-border: var(--azurite-border);
+  --color-emerald-bg: var(--emerald-bg);
+  --color-emerald-text: var(--emerald-text);
+  --color-emerald-border: var(--emerald-border);
+  --color-amethyst-bg: var(--amethyst-bg);
+  --color-amethyst-text: var(--amethyst-text);
+  --color-amethyst-border: var(--amethyst-border);
   --color-aquamarine: var(--aquamarine);
   --color-aquamarine-foreground: var(--aquamarine-foreground);
   --font-sans: var(--font-geist-sans);
@@ -62,21 +65,27 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
-  --jade: oklch(0.44 0.0884 151.71);
-  --primary: oklch(0.208 0.042 265.755);
+  --primary: oklch(30% 0.02 260);
   --destructive: #f8d7da; /* สีพื้นหลังแดงอ่อน */
   --destructive-foreground: #842029; /* สีข้อความแดงเข้ม */
   --primary-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
-  --company-background: oklch(0.97 0.01 250);
+  --company-background: #F5F8FC;
+  --charoite: #3A52CC;
   --amber-bg: oklch(0.97 0.05 77);
   --amber-text: oklch(0.32 0.1 77);
   --amber-border: oklch(0.85 0.1 77);
-   --lapis-bg: oklch(0.97 0.04 185);
-  --lapis-text: oklch(0.30 0.12 185);
-  --lapis-border: oklch(0.85 0.09 185);
+  --azurite-bg: oklch(95% 0.02 240);
+  --azurite-text: oklch(25% 0.12 240);
+  --azurite-border: oklch(85% 0.08 240);
+  --emerald-bg: oklch(95% 0.02 160);
+  --emerald-text: oklch(25% 0.12 160);
+  --emerald-border: oklch(85% 0.08 160);
+  --amethyst-bg: oklch(95% 0.02 290);
+  --amethyst-text: oklch(25% 0.12 290);
+  --amethyst-border: oklch(85% 0.08 290);
   --sidebar: oklch(1 0 0); /* สีพื้นหลัง sidebar แบบสว่าง */
   --sidebar-foreground: oklch(0.2 0.03 260); /* สีตัวอักษร */
   --sidebar-primary: oklch(0.25 0.05 265); /* ปุ่ม/ส่วนสำคัญ */
@@ -91,7 +100,6 @@
   --muted-foreground: oklch(0.7 0.02 260);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
-  --jade: oklch(0.53 0.1086 159.06);
   --primary: oklch(0.929 0.013 255.508);
   --destructive: #4a1c1f; /* พื้นหลังแดงเข้มขึ้นในโหมดมืด */
   --destructive-foreground: #f8d7da; /* ข้อความสีแดงอ่อน */
@@ -103,9 +111,15 @@
   --amber-bg: oklch(0.2 0.06 77);
   --amber-text: oklch(0.85 0.12 77);
   --amber-border: oklch(0.4 0.15 77);
-  --lapis-bg: oklch(0.20 0.06 185);
-  --lapis-text: oklch(0.85 0.10 185);
-  --lapis-border: oklch(0.40 0.13 185);
+  --azurite-bg: oklch(20% 0.08 240);
+  --azurite-text: oklch(90% 0.02 240);
+  --azurite-border: oklch(30% 0.12 240);
+  --emerald-bg: oklch(20% 0.08 160);
+  --emerald-text: oklch(90% 0.02 160);
+  --emerald-border: oklch(30% 0.12 160);
+  --amethyst-bg: oklch(20% 0.08 290);
+  --amethyst-text: oklch(90% 0.02 290);
+  --amethyst-border: oklch(30% 0.12 290);
   --sidebar: oklch(
     0.129 0.042 264.695
   ); /* สีพื้นหลัง sidebar ที่อ่อนลงเล็กน้อย */

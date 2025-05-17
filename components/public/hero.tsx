@@ -6,7 +6,7 @@ import { ShieldCheck, Rocket, ArrowBigLeft } from "lucide-react";
 import Image from "next/image";
 import { RoleGate } from "../props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
-import { LinkButton } from "@/components/props/component/link-button";
+import { LinkButton } from "@/components/props/component/button/link-button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const HeroSection = () => {

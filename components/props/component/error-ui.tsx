@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, AlertCircle, Ban, FileX, WifiOff } from "lucide-react";
+import { ArrowLeft, AlertCircle, LockKeyhole, FileX, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -31,34 +31,36 @@ const ERROR_CONFIG: Record<ErrorType, ErrorConfig> = {
   notFound: {
     icon: <FileX className="size-28 text-muted-foreground" />,
     title: "Page Not Found",
-    description: "We couldn't find the page you were looking for.",
+    description: "ไม่พบหน้าที่คุณกำลังค้นหา",
     color: "border-slate-200 bg-slate-50 text-black",
   },
   error: {
-    icon: <AlertCircle className="size-28 text-red-500" />,
+    icon: <AlertCircle className="size-28 text-red-600" />,
     title: "Something Went Wrong",
-    description: "An error occurred while processing your request.",
-    color: "border-red-200 bg-red-50 text-red-700",
+    description: "เกิดข้อผิดพลาดขณะดำเนินการคำขอของคุณ",
+    color: "border-red-200 bg-red-bg text-red-text",
   },
   permissionDenied: {
-    icon: <Ban className="size-28 text-amber-500" />,
+    icon: <LockKeyhole className="size-28 text-amber-600" />,
     title: "Permission Denied",
-    description: "You don't have permission to access this resource.",
-    color: "border-amber-200 bg-amber-50 text-amber-700",
+    description: "คุณไม่มีสิทธิ์ในการเข้าถึงทรัพยากรนี้",
+    color: "border-amber-border bg-amber-bg text-amber-text",
   },
   offline: {
-    icon: <WifiOff className="size-28 text-blue-500" />,
+    icon: <WifiOff className="size-28 text-blue-600" />,
     title: "You're Offline",
-    description: "Please check your internet connection and try again.",
-    color: "border-blue-200 bg-blue-50 text-blue-700",
+    description:
+      "โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ แล้วลองใหม่อีกครั้ง",
+    color: "border-blue-200 bg-blue-50 text-blue-text",
   },
   custom: {
-    icon: <AlertCircle className="size-28 text-purple-500" />,
+    icon: <AlertCircle className="size-28 text-purple-600" />,
     title: "Notice",
-    description: "Custom message",
-    color: "border-purple-200 bg-purple-50 text-purple-700",
+    description: "ข้อความที่กำหนดเอง",
+    color: "border-purple-border bg-purple-50 text-purple-text",
   },
 };
+
 
 export default function ErrorUI({
   type,

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 //props
-import { CardFeatures } from "@/components/props/component/card-features";
+import { CardFeatures } from "@/components/props/component/card/card-features";
 export const Features = () => {
   return (
     <div className="container">

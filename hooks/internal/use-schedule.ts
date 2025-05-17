@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Schedule } from "@/types/schedule";
 import { ApiError } from "@/types/api-error";
 
-export const useSchedules = (companyId: string) => {
+export const useSchedules = (companyId: string, refreshkey?: number) => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +33,7 @@ export const useSchedules = (companyId: string) => {
     };
 
     fetchSchedules();
-  }, [companyId]);
+  }, [companyId, refreshkey]);
 
   return { schedules, error, isLoading };
 };

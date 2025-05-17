@@ -12,7 +12,7 @@ export const FormNotFound = ({ message, description }: FormNotFoundProps) => {
 
   return (
     <Card className="p-8 flex flex-col items-center justify-center text-center col-span-full">
-      <div className="size-20 rounded-full flex items-center justify-center flex-shrink-0 bg-gradient-to-r from-indigo-800 to-indigo-500">
+      <div className="size-20 rounded-full flex items-center justify-center flex-shrink-0 bg-charoite">
         <Search className="size-10 text-white" />
       </div>
 

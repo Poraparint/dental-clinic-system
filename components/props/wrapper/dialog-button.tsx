@@ -8,17 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type VariantType =
-  | "indigo"
-  | "link"
-  | "default"
-  | "destructive"
-  | "outline"
-  | "secondary"
-  | "emerald"
-  | "ghost"
-  | "amber"
-  | "lapis";
+import { VariantType } from "@/types/variant";
 interface DialogButtonProps {
   icon?: React.ReactNode;
   title?: string;
@@ -37,7 +27,7 @@ export const DialogButton = ({
   children,
   dialogTitle,
   dialogDescription,
-  variant = "indigo",
+  variant = "charoite",
   open,
   setOpen,
   tooltip,

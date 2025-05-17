@@ -16,7 +16,7 @@ import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { UserCard } from "@/components/props/component/user-card";
+import { UserCard } from "@/components/props/component/card/user-card";
 
 export const UserButton = () => {
   const user = useCurrentUser();
@@ -67,11 +67,10 @@ export const UserButton = () => {
             <AvatarFallback
               className={`p-1 text-white ${getAvatarBgColor(user.role)}`}
             >
-              <User size={15}/>
+              <User size={15} />
             </AvatarFallback>
           }
           title={user?.name}
-          
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">

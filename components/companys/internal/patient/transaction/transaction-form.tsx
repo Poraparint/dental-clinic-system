@@ -37,7 +37,7 @@ import { createTransaction } from "@/actions/company/public/transaction";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;

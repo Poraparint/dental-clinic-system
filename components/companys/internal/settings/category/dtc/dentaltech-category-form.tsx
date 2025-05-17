@@ -25,7 +25,7 @@ import { Aperture } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CreateDentalTechCategory } from "@/actions/company/public/dentaltech-category";
-import { SubmitButton } from "@/components/props/component/submit-button";
+import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;

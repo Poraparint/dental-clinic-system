@@ -56,25 +56,30 @@ export async function GET(
           },
         },
       },
+      orderBy: {
+        scheduleCategory: {
+          name: "asc",
+        },
+      },
     });
     if (schedules.length < 1) {
       return NextResponse.json({
         error: "ไม่พบข้อมูลรายการ",
-        description: "เริ่มต้นด้วยการสร้างรายการรีเช็ค / แบ่งจ่าย",
+        description: "เริ่มต้นด้วยการสร้างรายการนัดหมายในวันนี้",
       });
     }
     return NextResponse.json(
       schedules.map((item) => ({
         ...item,
-        datetime: item.datetime.toISOString(), 
+        datetime: item.datetime
       }))
     );
   } catch (error) {
-    console.error("Error fetching rechecks:", error);
+    console.error("ไม่สามารถดึงข้อมูลงานทันตกรรมได้", error);
     return NextResponse.json(
       {
-        error: "ไม่พบข้อมูลรายการ",
-        description: "เริ่มต้นด้วยการสร้างรายการรีเช็ค / แบ่งจ่าย",
+        error: "ไม่สามารถดึงข้อมูลงานทันตกรรมได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }
     );

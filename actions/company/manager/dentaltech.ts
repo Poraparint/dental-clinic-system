@@ -13,6 +13,7 @@ import { currentManagerAndDentist } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
 import { getDentalTechByCompanyId } from "@/data/internal/recheck-dentaltech";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
+import { formatDateOnly } from "@/lib/utils";
 
 export const createDentalTech = async (
   values: z.infer<typeof CreateDentalTechSchema>,
@@ -56,7 +57,7 @@ const patientId = await getPatientByTransactionId(transactionId);
     await db.dentaltech.create({
       data: {
         id: transactionId,
-        deadline: new Date(deadline),
+        deadline: formatDateOnly(deadline),
         transactionId,
         dctId,
         detail,
