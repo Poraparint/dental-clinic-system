@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { toDate } from "date-fns-tz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,15 +20,19 @@ export function formatCurrency(value?: number) {
 }
 
 export function formatDateOnly(date: Date) {
-  const selectedDate = date
-    ? new Date(date.setHours(0, 0, 0, 0))
-    : new Date();
-  const dateOnly = new Date(
+  const timeZone = "Asia/Bangkok";
+
+  const zonedDate = toDate(date, { timeZone });
+
+  return new Date(
     Date.UTC(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate()
+      zonedDate.getFullYear(),
+      zonedDate.getMonth(),
+      zonedDate.getDate(),
+      0,
+      0,
+      0,
+      0
     )
   );
-  return dateOnly;
 }
