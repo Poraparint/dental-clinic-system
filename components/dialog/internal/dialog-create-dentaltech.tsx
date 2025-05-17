@@ -25,7 +25,7 @@ export const DialogCreateDentalTech = ({
         dialogDescription="กรอกข้อมูลเพื่อสร้างงานทันตกรรม"
         open={open}
         setOpen={setOpen}
-        variant="lapis"
+        variant="azurite"
         tooltip="เพิ่มเป็นงานทันตกรรม"
       >
         <CreateDentaltechForm setOpen={setOpen} onSuccess={onSuccess} transaction={transaction}/>
