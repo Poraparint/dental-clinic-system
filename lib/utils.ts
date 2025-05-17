@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toDate } from "date-fns-tz";
+import { toZonedTime } from "date-fns-tz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,17 +22,18 @@ export function formatCurrency(value?: number) {
 export function formatDateOnly(date: Date) {
   const timeZone = "Asia/Bangkok";
 
-  const zonedDate = toDate(date, { timeZone });
+  const zoned = toZonedTime(date, timeZone);
 
-  return new Date(
-    Date.UTC(
-      zonedDate.getFullYear(),
-      zonedDate.getMonth(),
-      zonedDate.getDate(),
-      0,
-      0,
-      0,
-      0
-    )
+  const midnightLocal = new Date(
+    zoned.getFullYear(),
+    zoned.getMonth(),
+    zoned.getDate(),
+    0,
+    0,
+    0
   );
+
+  const utcTimestamp =
+    midnightLocal.getTime() - midnightLocal.getTimezoneOffset() * 60 * 1000;
+  return new Date(utcTimestamp);
 }
