@@ -13,6 +13,7 @@ import { currentManagerAndDentist } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
 import { getRecheckByCompanyId } from "@/data/internal/recheck-dentaltech";
+import { formatDateOnly } from "@/lib/utils";
 
 export const Recheck = async (
   values: z.infer<typeof CreateRecheckSchema>,
@@ -61,7 +62,7 @@ export const Recheck = async (
     
     const recheckListData = recheckList.map((item) => ({
       recheckId: recheck.id,
-      datetime: item.datetime,
+      datetime: formatDateOnly(item.datetime),
       detail: item.detail,
       price: item.price,
       transactionCategoryId: item.tcId,

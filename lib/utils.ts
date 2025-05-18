@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toZonedTime } from "date-fns-tz";
+import { isToday } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -32,8 +33,11 @@ export function formatDateOnly(date: Date) {
     0,
     0
   );
-
   const utcTimestamp =
     midnightLocal.getTime() - midnightLocal.getTimezoneOffset() * 60 * 1000;
   return new Date(utcTimestamp);
+}
+
+export function getDisplayDate(date: Date) {
+  return isToday(date) ? new Date() : formatDateOnly(date);
 }

@@ -18,10 +18,10 @@ import {
 
 //next
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { NavigatingUi } from "@/components/props/component/navigating";
+import { useNavigation } from "@/hooks/use-navigation";
 
 // Menu items.
 export const manages = [
@@ -79,28 +79,9 @@ export const settings = [
 ];
 
 export function AppSidebar() {
-
-  const pathname = usePathname();
   const params = useParams();
   const companyId = params.companyId as string;
-  const router = useRouter();
-  const [isNavigating, setIsNavigating] = useState(false);
-
-  const handleNavigation = (url: string) => {
-    if (pathname !== url) {
-      setIsNavigating(true);
-      router.push(url);
-    }
-  };
-
-  useEffect(() => {
-    setIsNavigating(false);
-  }, [pathname]);
-  
-
-  const isActive = (url: string) => {
-    return pathname.startsWith(url);
-  }
+  const { navigateTo, isNavigating, isActive } = useNavigation();
 
   return (
     <>
@@ -134,7 +115,7 @@ export function AppSidebar() {
                       variant={
                         isActive(manage.url(companyId)) ? "charoite" : "default"
                       }
-                      onClick={() => handleNavigation(manage.url(companyId))}
+                      onClick={() => navigateTo(manage.url(companyId))}
                     >
                       <div className="flex items-center gap-3">
                         <manage.icon className="size-20" />
@@ -151,7 +132,7 @@ export function AppSidebar() {
                       variant={
                         isActive(view.url(companyId)) ? "charoite" : "default"
                       }
-                      onClick={() => handleNavigation(view.url(companyId))}
+                      onClick={() => navigateTo(view.url(companyId))}
                     >
                       <div className="flex items-center gap-3">
                         <view.icon className="size-20" />
@@ -170,7 +151,7 @@ export function AppSidebar() {
                           ? "charoite"
                           : "default"
                       }
-                      onClick={() => handleNavigation(setting.url(companyId))}
+                      onClick={() => navigateTo(setting.url(companyId))}
                     >
                       <div className="flex items-center gap-3">
                         <setting.icon className="size-20" />
@@ -188,13 +169,13 @@ export function AppSidebar() {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <Link
-                  href="https://poraparint-portfolio.vercel.app" 
+                  href="https://poraparint-portfolio.vercel.app"
                   passHref
-                  legacyBehavior 
+                  legacyBehavior
                 >
                   <a
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-3 w-full"
                   >
                     <Image
