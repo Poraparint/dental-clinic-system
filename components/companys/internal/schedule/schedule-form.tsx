@@ -49,11 +49,9 @@ export const ScheduleForm = ({
 }: ScheduleFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { categories: tc, isLoading: tcLoading } =
-    useTransactionCategories(companyId);
+  const { categories: tc, isLoading: tcLoading } = useTransactionCategories(companyId);
   const { dentists, isLoading: dentistLoading } = useDentists(companyId);
-  const { categories: schedule, isLoading: scheduleLoading } =
-    useScheduleCategories(companyId);
+  const { categories: schedule, isLoading: scheduleLoading } = useScheduleCategories(companyId);
 
   const [isPending, startTransition] = useTransition();
 
@@ -101,7 +99,7 @@ export const ScheduleForm = ({
               name="scheduleId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-medium">เลือกวันที่</FormLabel>
+                  <FormLabel className="font-medium">เลือกเวลา</FormLabel>
                   <SelectCategory
                     value={field.value}
                     onValueChange={field.onChange}

@@ -11,6 +11,7 @@ import { CreateTransactionSchema } from "@/schemas";
 //lib
 import { currentManagerAndDentist } from "@/lib/auth";
 import { getPatientByCompanyId } from "@/data/internal/patient";
+import { getDisplayDate } from "@/lib/utils";
 
 export const createTransaction = async (
   values: z.infer<typeof CreateTransactionSchema>,
@@ -42,7 +43,7 @@ export const createTransaction = async (
 
     await db.transaction.create({
       data: {
-        datetime: new Date(datetime),
+        datetime: getDisplayDate(datetime),
         transactionCategoryId,
         detail,
         price,

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Card,
   CardDescription,
@@ -9,15 +8,13 @@ import {
 import { ChevronRight, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 interface CardMinistryProps {
-  linkname?: string | null;
+  onClick?: () => void;
   name?: string | null;
   description?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export const CardMinistry = ({
-  linkname,
+  onClick,
   name,
   description,
 }: CardMinistryProps) => {
@@ -33,11 +30,11 @@ export const CardMinistry = ({
         </div>
       </CardHeader>
       <CardFooter className="pt-4">
-        <Button asChild className="group px-0">
-          <Link href={linkname || "#"} className="flex items-center gap-1">
+        <Button  className="group px-0" onClick={onClick} >
+          
             <span>Access to dashboard</span>
             <ChevronRight className="h-4 w-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
-          </Link>
+         
         </Button>
       </CardFooter>
     </Card>

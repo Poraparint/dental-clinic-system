@@ -11,6 +11,7 @@ import { CreateExpensesSchema } from "@/schemas";
 //lib
 import { currentManager } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
+import { getDisplayDate } from "@/lib/utils";
 
 export const createExpenses = async (
   values: z.infer<typeof CreateExpensesSchema>,
@@ -37,7 +38,7 @@ export const createExpenses = async (
   try {
     await db.expenses.create({
       data: {
-        datetime: new Date(datetime),
+        datetime: getDisplayDate(datetime),
         ecId,
         name,
         payment,
