@@ -225,12 +225,14 @@ model ExpensesCategory {
 model ScheduleCategory {
   id        String     @id @default(cuid())
   name      String
+  order     Int
   managerId String
   companyId String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   isDeleted Boolean    @default(false)
   schedule  Schedule[]
+  recheckList RecheckList[]
   manager   Manager    @relation(fields: [managerId], references: [id])
 
   company Company @relation(fields: [companyId], references: [id])
@@ -377,9 +379,11 @@ model RecheckList {
   datetime    DateTime @default(now())
   detail      String?
   price       Float?
+  scheduleId String
   recheckId   String
   transactionCategoryId String
   isConfirmed Boolean  @default(false)
+  scheduleCategory    ScheduleCategory @relation(fields: [scheduleId], references: [id])
   recheck     Recheck  @relation(fields: [recheckId], references: [id])
   transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
 

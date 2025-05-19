@@ -6,19 +6,30 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import React from "react";
 
 interface ProfileCardProps {
-    icon?: React.ReactNode;
-    avatar?: string;
+  icon?: React.ReactNode;
+  avatar?: string;
   title?: string;
-    description?: string;
+  description?: string;
   className?: string;
+  badge?: React.ReactNode;
+  badgeTooltip?: string;
   tooltip?: string;
 }
-export const ProfileCard = ({ icon, avatar, title, description, className, tooltip }: ProfileCardProps) => {
-
+export const ProfileCard = ({
+  icon,
+  avatar,
+  title,
+  description,
+  badge,
+  badgeTooltip,
+  className,
+  tooltip,
+}: ProfileCardProps) => {
   const card = (
-    <CardHeader className={`border-b ${className}`}>
+    <CardHeader className={`border-b relative ${className}`}>
       <div className="flex space-x-3 items-center">
         <div className="p-2 rounded-full border border-primary-foreground shadow-sm">
           {avatar ? (
@@ -32,6 +43,20 @@ export const ProfileCard = ({ icon, avatar, title, description, className, toolt
           {description && <CardDescription>{description}</CardDescription>}
         </div>
       </div>
+      {badge && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              
+                {badge}
+          
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{badgeTooltip}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </CardHeader>
   );
   return (

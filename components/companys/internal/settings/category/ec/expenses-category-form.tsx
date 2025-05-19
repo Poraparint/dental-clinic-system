@@ -24,7 +24,6 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { BriefcaseBusiness } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { CreateExpensesCategory } from "@/actions/company/manager/expenses-category";
 import {
   Select,
   SelectContent,
@@ -34,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createExpensesCategory } from "@/hooks/internal/category/use-ec";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -76,19 +76,18 @@ export const CreateExpensesCategoryForm = ({
   const watchColor = form.watch("color");
 
   const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
-    startTransition(() => {
-      CreateExpensesCategory(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+    startTransition(async () => {
+      const data = await createExpensesCategory(values, companyId);
+
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

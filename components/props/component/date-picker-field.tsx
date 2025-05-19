@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils/utils";
 import { addDays } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -65,9 +65,7 @@ export const DatePickerField = <T extends FieldValues>({
                   <CalendarIcon className="size-4" />
 
                   {field.value ? (
-                    <span className="ml-2">
-                      {formatDate(field.value)}
-                    </span>
+                    <span className="ml-2">{formatDate(field.value)}</span>
                   ) : (
                     <span>เลือกวันที่</span>
                   )}

@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/utils";
 import { ProfileCard } from "@/components/props/component/card/profile-card";
 import {
   Calendar,
@@ -23,6 +23,8 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 
 interface CalendarEventProp {
   avatar?: string;
+  badge?: React.ReactNode;
+  badgeTooltip?: string;
   name: string;
   phone?: string;
   levelIcon?: React.ReactNode;
@@ -36,10 +38,13 @@ interface CalendarEventProp {
   datetime: Date;
   creator?: string;
   dentist?: string;
+  extraLabel?: string;
 }
 
 export const CalendarEventCard = ({
   avatar,
+  badge,
+  badgeTooltip,
   name,
   phone,
   levelIcon,
@@ -53,6 +58,7 @@ export const CalendarEventCard = ({
   datetime,
   creator,
   dentist,
+  extraLabel,
 }: CalendarEventProp) => {
   return (
     <Dialog>
@@ -62,9 +68,12 @@ export const CalendarEventCard = ({
             avatar={avatar}
             icon={levelIcon}
             title={name}
+            badge={badge}
+            badgeTooltip={badgeTooltip}
             description={`${categoryName} ${teeth ? ` • ${teeth} ซี่` : ""}`}
             className="pt-5 hover:bg-primary-foreground cursor-pointer rounded-t-md"
           />
+         
         </div>
       </DialogTrigger>
       <DialogContent>
@@ -152,6 +161,11 @@ export const CalendarEventCard = ({
                   className="bg-background border-none focus-visible:ring-0"
                 />
               </div>
+            )}
+            {extraLabel && (
+              <span className="text-xs bg-foreground/10 text-foreground px-2 py-0.5 rounded-full">
+                {extraLabel}
+              </span>
             )}
           </div>
         </CardCategory>

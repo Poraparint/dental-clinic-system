@@ -4,19 +4,23 @@ import {
   Clock,
   Flame,
   Gauge,
+  LampDesk,
   Timer,
   UserCheck,
 } from "lucide-react";
 
 export function renderStatusIcon(status: string) {
     switch (status) {
-      
       case "รอดำเนินการ":
-        return <Clock className="size-4 text-yellow-500" />;
+        return <Clock className="size-4 text-yellow-600" />;
       case "รับงานเรียบร้อย":
-        return <UserCheck className="size-4 text-blue-500" />;
+        return <UserCheck className="size-4 text-blue-600" />;
       case "เสร็จสิ้น":
-        return <CheckCircle2 className="size-4 text-green-500" />;
+        return <CheckCircle2 className="size-4 text-green-600" />;
+      case "รอยืนยัน":
+        return <LampDesk className="size-4 text-purple-600" />;
+      case "ยืนยันแล้ว":
+        return <LampDesk className="size-4 text-green-600" />;
       default:
         return null;
     }

@@ -14,7 +14,7 @@ import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useMembers } from "@/hooks/internal/use-member";
 import { useParams } from "next/navigation";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/utils";
 import { Member } from "@/types/member";
 
 export const MemberTable = () => {

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { CategoryWithCreator } from "@/types/category";
 import { ApiError } from "@/types/api-error";
+import { CreateDentalTechCategorySchema } from "@/schemas";
+import * as z from "zod";
 
 
 export const useDentaltTechCategories = (companyId: string) => {
@@ -24,7 +26,7 @@ export const useDentaltTechCategories = (companyId: string) => {
           setCategories(Array.isArray(data) ? data : []);
         }
       } catch (error) {
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        console.error("GET_DENTALTECH_CATEGORY", error);
         setError({
           error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
           description: "โปรดลองใหม่อีกครั้ง",
@@ -38,3 +40,33 @@ export const useDentaltTechCategories = (companyId: string) => {
 
   return { categories, error, isLoading };
 };
+
+export const createDentalTechCategory = async (
+  values: z.infer<typeof CreateDentalTechCategorySchema>,
+  companyId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/dentaltech`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error};
+    }
+
+    return { success: data.success };
+  } catch (error) { 
+    console.error("[CREATE_DENTALTECH_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถสร้างหมวดหมู่ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+   }
+}

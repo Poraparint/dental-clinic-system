@@ -13,11 +13,11 @@ import { currentManagerAndDentist } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
 import { getDentalTechByCompanyId } from "@/data/internal/recheck-dentaltech";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
-import { formatDateOnly } from "@/lib/utils";
+import { formatDateOnly } from "@/lib/utils/utils";
 
 export const createDentalTech = async (
   values: z.infer<typeof CreateDentalTechSchema>,
-  companyId: string,
+  companyId: string
 ) => {
   const validateFields = CreateDentalTechSchema.safeParse(values);
 
@@ -25,7 +25,8 @@ export const createDentalTech = async (
     return { error: "Invalid fields!" };
   }
 
-  const { deadline, transactionId, dctId, detail, teeth, level } = validateFields.data;
+  const { deadline, transactionId, dctId, detail, teeth, level } =
+    validateFields.data;
   const existingDentaltech = await getDentalTechByCompanyId(
     transactionId,
     companyId
@@ -47,12 +48,12 @@ export const createDentalTech = async (
   if (!existingCompany) {
     return { error: "ไม่มีบริษัทที่อยู่" };
   }
-const patientId = await getPatientByTransactionId(transactionId);
+  const patientId = await getPatientByTransactionId(transactionId);
 
   if (!patientId) {
     return { error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้" };
   }
-  
+
   try {
     await db.dentaltech.create({
       data: {

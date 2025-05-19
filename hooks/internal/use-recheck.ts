@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Recheck } from "@/types/recheck";
+import { Recheck } from "@/types/appointment";
 import { ApiError } from "@/types/api-error";
 
-export const useRechecks = (companyId: string) => {
+export const useRechecks = (companyId: string, refreshKey?: number) => {
   const [rechecks, setRechecks] = useState<Recheck[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +32,6 @@ export const useRechecks = (companyId: string) => {
       }
     };
     fetchRechecks();
-  }, [companyId]);
+  }, [companyId, refreshKey]);
   return { rechecks, error, isLoading };
 };

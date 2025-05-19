@@ -20,12 +20,12 @@ import { Input } from "@/components/ui/input";
 import { CreateTransactionCategorySchema } from "@/schemas";
 
 //actions
-import { CreateTransactionCategory } from "@/actions/company/manager/transaction-category";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Album } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createTransactionCategory } from "@/hooks/internal/category/use-tc";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -53,22 +53,21 @@ export const CreateTransactionCategoryForm = ({
   const OnSubmit = (
     values: z.infer<typeof CreateTransactionCategorySchema>
   ) => {
-    startTransition(() => {
-      CreateTransactionCategory(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createTransactionCategory(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">

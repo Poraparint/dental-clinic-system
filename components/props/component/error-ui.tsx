@@ -32,13 +32,13 @@ const ERROR_CONFIG: Record<ErrorType, ErrorConfig> = {
     icon: <FileX className="size-28 text-muted-foreground" />,
     title: "Page Not Found",
     description: "ไม่พบหน้าที่คุณกำลังค้นหา",
-    color: "border-slate-200 bg-slate-50 text-black",
+    color: "border-slate-200 bg-slate-50",
   },
   error: {
     icon: <AlertCircle className="size-28 text-red-600" />,
     title: "Something Went Wrong",
     description: "เกิดข้อผิดพลาดขณะดำเนินการคำขอของคุณ",
-    color: "border-red-200 bg-red-bg text-red-text",
+    color: "border-red-200 bg-red-50 text-red-600",
   },
   permissionDenied: {
     icon: <LockKeyhole className="size-28 text-amber-600" />,

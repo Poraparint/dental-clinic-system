@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateRecheckSchema } from "@/schemas";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 // actions
 import { Recheck } from "@/actions/company/public/recheck";
@@ -44,6 +44,7 @@ import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
+import { useScheduleCategories } from "@/hooks/internal/category/use-sc";
 
 interface RecheckFormProps {
   setOpen: (open: boolean) => void;
@@ -59,7 +60,10 @@ export const RecheckForm = ({
   const params = useParams();
   const companyId = params.companyId as string;
   const [isPending, startTransition] = useTransition();
-  const { categories, isLoading } = useTransactionCategories(companyId);
+  const { categories: tcCategories, isLoading: transactionLoading } =
+    useTransactionCategories(companyId);
+  const { categories: scCategories, isLoading: scheduleLoading } =
+    useScheduleCategories(companyId);
 
   const form = useForm<z.infer<typeof CreateRecheckSchema>>({
     resolver: zodResolver(CreateRecheckSchema),
@@ -71,6 +75,7 @@ export const RecheckForm = ({
           detail: "",
           price: 0,
           tcId: "",
+          scheduleId: "",
         },
       ],
     },
@@ -128,6 +133,7 @@ export const RecheckForm = ({
                               detail: "",
                               price: 0,
                               tcId: "",
+                              scheduleId: "",
                             })
                           }
                           disabled={fields.length >= 6 || isPending}
@@ -141,20 +147,19 @@ export const RecheckForm = ({
                           เพิ่มรายการ
                         </Button>
                       </TooltipTrigger>
-                      {fields.length >= 6 && (
-                        <TooltipContent>
-                          <p>สามารถเพิ่มได้สูงสุด 6 รายการ</p>
-                        </TooltipContent>
-                      )}
+
+                      <TooltipContent>
+                        <p>สามารถเพิ่มได้สูงสุด 6 รายการ</p>
+                      </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </div>
 
                 {/* Items List */}
                 <ScrollArea className="border h-72 rounded-md">
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     {fields.map((field, index) => (
-                      <div key={field.id} className="p-4 relative">
+                      <div key={field.id} className="p-4 space-y-2 relative">
                         <Button
                           type="button"
                           size="icon"
@@ -170,85 +175,88 @@ export const RecheckForm = ({
                           <Trash2 size={16} />
                         </Button>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          {/* Category & Date */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <FormField
+                            control={form.control}
+                            name={`recheckList.${index}.tcId`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>หมวดหมู่</FormLabel>
+                                <SelectCategory
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                  disabled={isPending}
+                                  isLoading={transactionLoading}
+                                  categories={tcCategories}
+                                />
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
                           <div>
-                            <FormField
-                              control={form.control}
-                              name={`recheckList.${index}.tcId`}
-                              render={({ field }) => (
-                                <FormItem className="mb-4">
-                                  <FormLabel className="text-sm text-text-muted-foreground">
-                                    หมวดหมู่
-                                  </FormLabel>
-                                  <SelectCategory
-                                    value={field.value}
-                                    onValueChange={field.onChange}
+                            <DatePickerField
+                              form={form}
+                              name={`recheckList.${index}.datetime`}
+                            />
+                          </div>
+                          <FormField
+                            control={form.control}
+                            name={`recheckList.${index}.scheduleId`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>เวลานัด</FormLabel>
+                                <SelectCategory
+                                  value={field.value}
+                                  onValueChange={field.onChange}
+                                  disabled={isPending}
+                                  isLoading={scheduleLoading}
+                                  categories={scCategories}
+                                />
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`recheckList.${index}.price`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>ราคา (บาท)</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="number"
+                                    placeholder="0.00"
+                                    value={field.value === 0 ? "" : field.value}
                                     disabled={isPending}
-                                    isLoading={isLoading}
-                                    categories={categories}
+                                    className="font-medium"
                                   />
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <div className="mb-4">
-                              <DatePickerField
-                                form={form}
-                                name={`recheckList.${index}.datetime`}
-                              />
-                            </div>
-
-                            <FormField
-                              control={form.control}
-                              name={`recheckList.${index}.price`}
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel className="text-sm text-text-muted-foreground">
-                                    ราคา (บาท)
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Input
-                                      {...field}
-                                      type="number"
-                                      placeholder="0.00"
-                                      value={
-                                        field.value === 0 ? "" : field.value
-                                      }
-                                      disabled={isPending}
-                                      className="font-medium"
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-
-                          {/* Details */}
-                          <div>
-                            <FormField
-                              control={form.control}
-                              name={`recheckList.${index}.detail`}
-                              render={({ field }) => (
-                                <FormItem className="h-full">
-                                  <FormLabel className="text-sm text-muted-foreground">
-                                    รายละเอียด
-                                  </FormLabel>
-                                  <FormControl>
-                                    <Textarea
-                                      {...field}
-                                      disabled={isPending}
-                                      placeholder="กรอกรายละเอียด..."
-                                      className="h-[calc(100%-30px)] min-h-[120px]"
-                                    />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        <div>
+                          <FormField
+                            control={form.control}
+                            name={`recheckList.${index}.detail`}
+                            render={({ field }) => (
+                              <FormItem className="h-full">
+                                <FormLabel>รายละเอียด</FormLabel>
+                                <FormControl>
+                                  <Textarea
+                                    {...field}
+                                    disabled={isPending}
+                                    placeholder="กรอกรายละเอียด..."
+                                    className="h-[calc(100%-30px)] min-h-[90px]"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
                         <hr className="mt-5" />
                       </div>

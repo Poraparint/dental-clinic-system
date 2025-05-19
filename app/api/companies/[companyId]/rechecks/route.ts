@@ -38,13 +38,22 @@ export async function GET(
             datetime: true,
             detail: true,
             price: true,
+            isConfirmed: true,
             transactionCategory: {
               select: {
+                id: true,
                 name: true,
+              },
+            },
+            scheduleCategory: {
+              select: {
+                name: true,
+                order: true,
               },
             },
           },
         },
+
         patient: {
           select: {
             name: true,

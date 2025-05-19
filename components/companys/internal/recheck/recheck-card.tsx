@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useRechecks } from "@/hooks/internal/use-recheck";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/utils";
 import { Loading } from "@/components/loading";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -16,7 +16,7 @@ import {
 import { CalendarCheck, Clock } from "lucide-react";
 import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
 import { UpComingCardUi } from "@/components/props/component/card/upcoming-card-ui";
-import { RecheckList } from "@/types/recheck";
+import { RecheckList } from "@/types/appointment";
 import { FormNotFound } from "@/components/form-not-found";
 
 export const RecheckCard = () => {
