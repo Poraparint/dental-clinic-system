@@ -216,6 +216,7 @@ export const CreateRecheckSchema = z.object({
         datetime: z.date({
           required_error: "ต้องระบุวันที่",
         }),
+        scheduleId: z.string().min(1, "ต้องเลือกเวลา"),
         tcId: z.string().min(1, "ต้องมีหมวหมู่"),
         detail: z.string().optional().default(""),
         price: z.preprocess(

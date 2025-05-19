@@ -1,14 +1,12 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { CalendarClock } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DialogCreateSchedule } from "@/components/dialog/internal/dialog-create-schedule";
 import { ScheduleCard } from "@/components/companys/internal/schedule/schedule-card";
 import { useSchedules } from "@/hooks/internal/use-schedule";
 import { useParams } from "next/navigation";
-import { RefreshButton } from "@/components/props/component/button/refresh-button";
-import { MinimalCalendar } from "@/components/ui/minimalcalendar";
+import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
+import { useRechecks } from "@/hooks/internal/use-recheck";
 
 export const ScheduleBoard = () => {
   const params = useParams();
@@ -16,7 +14,13 @@ export const ScheduleBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const { schedules, error, isLoading } = useSchedules(companyId, refreshKey);
+  
+  const { schedules, error: scheduleError, isLoading: scheduleLoading } = useSchedules(companyId, refreshKey);
+  const {
+    rechecks,
+    error: recheckError,
+    isLoading: recheckLoading,
+  } = useRechecks(companyId);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -24,57 +28,85 @@ export const ScheduleBoard = () => {
   };
 
   useEffect(() => {
-    if (!isLoading && isRefreshing) {
+    if (!recheckLoading && !scheduleLoading && isRefreshing) {
       setIsRefreshing(false);
     }
-  }, [isLoading, isRefreshing]);
+  }, [recheckLoading , scheduleLoading, isRefreshing]);
+
+  const combinedEvents = useMemo(() => {
+    const recheckItems =
+      rechecks?.flatMap((recheck) =>
+        recheck.recheckList.map((item) => ({
+          type: "recheck" as const,
+          id: `${recheck.id}-${item.datetime}`,
+          patientName: recheck.patient.name,
+          phone: recheck.patient.phone,
+          datetime: new Date(item.datetime),
+
+          detail: item.detail,
+          transactionCategory: {
+            name: item.transactionCategory.name,
+          },
+          scheduleCategory: {
+            name: item.scheduleCategory.name,
+            order: item.scheduleCategory.order,
+          },
+          price: item?.price,
+
+          dentist: recheck.creator,
+          creator: recheck.creator,
+          isRecheck: true,
+
+          isConfirmed: item.isConfirmed, // ✅ raw field
+          status: item.isConfirmed === true ? "ยืนยันแล้ว" : "รอยืนยัน",
+        }))
+      ) ?? [];
+
+    const scheduleItems =
+      schedules?.map((s) => ({
+        type: "schedule" as const,
+        ...s,
+        scheduleCategory: {
+          ...s.scheduleCategory,
+          order: s.scheduleCategory?.order, 
+        },
+        isRecheck: false,
+      })) ?? [];
+
+    const all = [...scheduleItems, ...recheckItems];
+
+    return all.sort((a, b) => {
+      const orderA = a.scheduleCategory?.order || 0;
+      const orderB = b.scheduleCategory?.order || 0;
+      return orderA - orderB; 
+    });
+  }, [schedules, rechecks]);
+
+  const isLoading = scheduleLoading && recheckLoading;
+  const hasError = scheduleError && recheckError;
+
   return (
-    <Card className="w-full">
-      <CardContent className="p-0">
-        <div className="md:flex space-y-2">
-          <div className="md:w-4/6 px-3 relative">
-            <MinimalCalendar
-              data={schedules}
-              getDate={(s) => new Date(s.datetime)}
-              selected={date}
-              onSelect={setDate}
-            />
-            <div className="absolute top-1 right-4 flex gap-2">
-              <RefreshButton
-                onClick={handleRefresh}
-                isLoading={isLoading}
-                isRefreshing={isRefreshing}
-              />
-              <DialogCreateSchedule
-                datetime={date || new Date()}
-                onSuccess={handleRefresh}
-              />
-            </div>
-          </div>
-          <div className="p-6 space-y-4 md:w-2/6">
-            <div className="flex items-center">
-              <div className="flex gap-2">
-                <CalendarClock className="text-muted-foreground" />
-                <h3 className="text-xl font-medium">
-                  {date
-                    ? date.toLocaleDateString("th-TH", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    : "เลือกวันที่"}
-                </h3>
-              </div>
-            </div>
-            <ScheduleCard
-              date={date || new Date()}
-              error={error}
-              isLoading={isLoading}
-              schedules={schedules}
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <CalendarBoard
+      data={combinedEvents}
+      date={date}
+      onDateChange={setDate}
+      onRefresh={handleRefresh}
+      isLoading={isLoading}
+      isRefreshing={isRefreshing}
+      getDateFromItem={(item) => new Date(item.datetime)}
+      headerActions={
+        <DialogCreateSchedule
+          datetime={date || new Date()}
+          onSuccess={handleRefresh}
+        />
+      }
+    >
+      <ScheduleCard
+        date={date || new Date()}
+        error={hasError}
+        isLoading={isLoading}
+        events={combinedEvents}
+      />
+    </CalendarBoard>
   );
 };

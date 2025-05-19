@@ -3,6 +3,8 @@
 import { ApiError } from "@/types/api-error";
 import { useEffect, useState } from "react";
 import { Category } from "@/types/category";
+import { CreateDentalTechCategorySchema } from "@/schemas";
+import * as z from "zod";
 
 export const useExpensesCategories = (companyId: string, refreshKey?: number) => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,7 +24,7 @@ export const useExpensesCategories = (companyId: string, refreshKey?: number) =>
          setCategories(Array.isArray(data) ? data : []);
        }
       } catch (error){
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        console.error("[GET_EXPENSES_CATEGORY]", error);
         setError({
           error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
           description: "โปรดลองใหม่อีกครั้ง",
@@ -37,3 +39,33 @@ export const useExpensesCategories = (companyId: string, refreshKey?: number) =>
 
   return { categories, error, isLoading };
 };
+
+export const createExpensesCategory = async (
+  values: z.infer<typeof CreateDentalTechCategorySchema>,
+  companyId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/expenses`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error};
+    }
+
+    return { success: data.success };
+  } catch (error) { 
+    console.error("[CREATE_EXPENSES_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถสร้างหมวดหมู่ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+   }
+}

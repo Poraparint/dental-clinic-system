@@ -14,7 +14,7 @@ import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/utils";
 
 export const Expenses = () => {
   const params = useParams();
@@ -128,7 +128,10 @@ export const Expenses = () => {
             <DialogCreateExpensesCategory onSuccess={handleRefresh} />
           </CardHeader>
           {error ? (
-            <FormNotFound message={error?.error} description={error?.description} />
+            <FormNotFound
+              message={error?.error}
+              description={error?.description}
+            />
           ) : (
             <div>
               {categoryData?.map((category) => (
@@ -162,7 +165,8 @@ export const Expenses = () => {
                   </div>
                 </div>
               ))}
-            </div>)}
+            </div>
+          )}
         </Card>
       </div>
     </div>

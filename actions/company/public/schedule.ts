@@ -11,7 +11,7 @@ import { CreateScheduleSchema } from "@/schemas";
 //lib
 import { currentAllStaffExceptTechnician } from "@/lib/auth";
 import { getCompanyById } from "@/data/internal/company";
-import { formatDateOnly } from "@/lib/utils";
+import { formatDateOnly } from "@/lib/utils/utils";
 
 export const Schedule = async (
   values: z.infer<typeof CreateScheduleSchema>,
@@ -23,7 +23,8 @@ export const Schedule = async (
     return { error: "Invalid fields!" };
   }
 
-  const { datetime, scheduleId, tcId, phone, patientName, detail, memberId } = validateFields.data;
+  const { datetime, scheduleId, tcId, phone, patientName, detail, memberId } =
+    validateFields.data;
 
   const existingUser = await currentAllStaffExceptTechnician();
   if (!existingUser) {
@@ -37,16 +38,16 @@ export const Schedule = async (
 
   try {
     await db.schedule.create({
-        data: {
-          datetime: formatDateOnly(datetime),
-            patientName,
-            phone,
-            detail,
-            scheduleId,
-            tcId,
-            memberId,
-            creatorUserId: existingUser.id,
-          companyId
+      data: {
+        datetime: formatDateOnly(datetime),
+        patientName,
+        phone,
+        detail,
+        scheduleId,
+        tcId,
+        memberId,
+        creatorUserId: existingUser.id,
+        companyId,
       },
     });
     return { success: "เพิ่มรายการใหม่สำเร็จ" };

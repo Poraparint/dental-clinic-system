@@ -1,24 +1,23 @@
 "use client";
 
 import * as React from "react";
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker, DayPickerSingleProps } from "react-day-picker";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { format } from "date-fns";
 import { renderStatusIcon } from "@/components/props/render/render-icons";
 import { BadgeDate } from "@/components/props/component/badge-date";
 
 interface ItemWithStatus {
-  status?: "รอดำเนินการ" | "รับงานเรียบร้อย" | "เสร็จสิ้น" | string;
+  status?: "รอดำเนินการ" | "รับงานเรียบร้อย" | "เสร็จสิ้น" | "รอยืนยัน" | "ยืนยันแล้ว" | string;
   [key: string]: unknown;
 }
 
-type MinimalCalendarProps<T extends ItemWithStatus> = Omit<DayPickerSingleProps, "mode" | "onSelect" | "selected"> & {
+type MinimalCalendarProps<T extends ItemWithStatus> = Omit<
+  DayPickerSingleProps,
+  "mode" | "onSelect" | "selected"
+> & {
   data?: T[];
   getDate?: (item: T) => Date;
   onMonthChange?: (month: Date) => void;
@@ -37,7 +36,6 @@ function MinimalCalendar<T extends ItemWithStatus>({
   onSelect,
   ...props
 }: MinimalCalendarProps<T>) {
-
   const thaiDayFormat = (date: Date) => {
     const days = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"];
     return days[date.getDay()];
@@ -98,7 +96,7 @@ function MinimalCalendar<T extends ItemWithStatus>({
           const items = data?.filter((item) => {
             const itemDate = getDate?.(item);
             return itemDate && format(itemDate, "yyyy-MM-dd") === key;
-          });
+          }) ?? [];
 
           if (!items || items.length === 0) {
             return (
@@ -110,49 +108,69 @@ function MinimalCalendar<T extends ItemWithStatus>({
             );
           }
 
-          const hasStatus = "status" in items[0];
+          const withStatus = items.filter((i) => i.status);
+          const withoutStatus = items.filter((i) => !i.status);
+
+          const statusCounts = withStatus.reduce(
+            (acc: Record<string, number>, item) => {
+              const status = item.status!;
+              acc[status] = (acc[status] || 0) + 1;
+              return acc;
+            },
+            {}
+          );
 
           return (
             <div className="relative w-full h-full">
               <div className="absolute top-1 right-1 text-xs">
                 {format(date, "d")}
               </div>
-              {hasStatus ? (
-                // ✅ กรณีมี status
-                Object.entries(
-                  items.reduce((acc: Record<string, number>, item) => {
-                    const status = item.status;
-                    if (!status) return acc;
-                    acc[status] = (acc[status] || 0) + 1;
-                    return acc;
-                  }, {})
-                ).map(([status, count], i) => {
-                  const icon = renderStatusIcon(status);
-                  const color =
-                    status === "รอดำเนินการ"
-                      ? "amber"
-                      : status === "รับงานเรียบร้อย"
-                        ? "azurite"
-                        : status === "เสร็จสิ้น"
-                          ? "emerald"
-                          : "default";
 
-                  return (
-                    <BadgeDate
-                      key={status}
-                      icon={icon}
-                      count={count}
-                      variant={color}
-                      className={cn({ 
-                        "": i === 0,
-                        "bottom-6 md:bottom-7": i === 1,
-                        "bottom-11 md:bottom-13": i === 2,
-                      })}
-                    />
-                  );
-                })
-              ) : (
-                <BadgeDate icon={<Calendar />} count={items.length} />
+              {Object.entries(statusCounts).map(([status, count], i) => {
+                const icon = renderStatusIcon(status);
+                const color =
+                  status === "รอดำเนินการ"
+                    ? "amber"
+                    : status === "รับงานเรียบร้อย"
+                      ? "azurite"
+                      : status === "เสร็จสิ้น"
+                        ? "emerald"
+                        : status === "รอยืนยัน"
+                          ? "amethyst"
+                          : status === "ยืนยันแล้ว"
+                            ? "emerald"
+                        : "default";
+
+                return (
+                  <BadgeDate
+                    key={status}
+                    icon={icon}
+                    count={count}
+                    variant={color}
+                    className={cn({
+                      "": i === 0,
+                      "bottom-6 md:bottom-7": i === 1,
+                      "bottom-11 md:bottom-13": i === 2,
+                    })}
+                  />
+                );
+              })}
+
+              {/* เพิ่ม badge สำหรับรายการที่ไม่มี status */}
+              {withoutStatus.length > 0 && (
+                <BadgeDate
+                  icon={<Calendar className="size-4"/>}
+                  count={withoutStatus.length}
+                  variant="azurite"
+                  className={cn({
+                    "bottom-6 md:bottom-7":
+                      Object.keys(statusCounts).length >= 1,
+                    "bottom-11 md:bottom-13":
+                      Object.keys(statusCounts).length >= 2,
+                    "bottom-16 md:bottom-19":
+                      Object.keys(statusCounts).length >= 3,
+                  })}
+                />
               )}
             </div>
           );

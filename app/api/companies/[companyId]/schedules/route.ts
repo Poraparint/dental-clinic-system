@@ -43,6 +43,7 @@ export async function GET(
         scheduleCategory: {
           select: {
             name: true,
+            order: true,
           },
         },
         creator: {
@@ -56,11 +57,7 @@ export async function GET(
           },
         },
       },
-      orderBy: {
-        scheduleCategory: {
-          name: "asc",
-        },
-      },
+      
     });
     if (schedules.length < 1) {
       return NextResponse.json({

@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 
 interface BadgeDateProps {
   icon?: React.ReactNode;
@@ -12,12 +12,18 @@ interface BadgeDateProps {
     | "destructive"
     | "outline"
     | "amber"
-  | "azurite"
-  | "amethyst";
+    | "azurite"
+    | "amethyst";
   className?: string;
 }
 
-export const BadgeDate = ({icon, count, label = "รายการ", variant = "emerald", className}: BadgeDateProps) => {
+export const BadgeDate = ({
+  icon,
+  count,
+  label = "รายการ",
+  variant = "emerald",
+  className,
+}: BadgeDateProps) => {
   return (
     <Badge
       variant={variant}
@@ -29,9 +35,8 @@ export const BadgeDate = ({icon, count, label = "รายการ", variant = 
       {icon}
       <div className="flex gap-1">
         {count}
-      <span className="max-xl:sr-only">{label}</span>
+        <span className="max-xl:sr-only">{label}</span>
       </div>
-      
     </Badge>
   );
 };

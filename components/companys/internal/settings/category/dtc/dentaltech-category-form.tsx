@@ -24,8 +24,8 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Aperture } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { CreateDentalTechCategory } from "@/actions/company/public/dentaltech-category";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createDentalTechCategory } from "@/hooks/internal/category/use-dtc";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -50,20 +50,18 @@ export const CreateDentalTechCategoryForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
-    startTransition(() => {
-      CreateDentalTechCategory(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createDentalTechCategory(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

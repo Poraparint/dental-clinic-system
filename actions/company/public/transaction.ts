@@ -11,7 +11,7 @@ import { CreateTransactionSchema } from "@/schemas";
 //lib
 import { currentManagerAndDentist } from "@/lib/auth";
 import { getPatientByCompanyId } from "@/data/internal/patient";
-import { getDisplayDate } from "@/lib/utils";
+import { getDisplayDate } from "@/lib/utils/utils";
 
 export const createTransaction = async (
   values: z.infer<typeof CreateTransactionSchema>,
@@ -33,8 +33,6 @@ export const createTransaction = async (
       console.log(`Manager with ID ${existingUser} not found`);
       return { error: "คุณไม่มีสิทธิเข้าถึงข้อมูลน้ี" };
     }
-      
-      
 
     const existingCompany = await getPatientByCompanyId(patientId, companyId);
     if (!existingCompany) {

@@ -3,57 +3,71 @@
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import { ApiError } from "@/types/api-error";
-import { Schedule } from "@/types/schedule";
 import { useMemo } from "react";
+import { DentalAppointment } from "@/types/appointment";
 import { CalendarEventCard } from "@/components/props/component/card/event-card";
+import { Calendar, LampDesk } from "lucide-react";
 
 export const ScheduleCard = ({
   date,
-  schedules,
+  events,
   error,
   isLoading,
 }: {
-  date: Date;
-  schedules: Schedule[];
+  date: Date ;
+  events: DentalAppointment[];
   error: ApiError | null;
   isLoading: boolean;
 }) => {
-  const filteredSchedules = useMemo(() => {
-    return schedules.filter((schedule) => {
-      const scheduleDate = new Date(schedule.datetime);
+  const filtered = useMemo(() => {
+    return events.filter((item) => {
+      const itemDate = new Date(item.datetime);
       return (
-        scheduleDate.getFullYear() === date.getFullYear() &&
-        scheduleDate.getMonth() === date.getMonth() &&
-        scheduleDate.getDate() === date.getDate()
+        itemDate.getFullYear() === date.getFullYear() &&
+        itemDate.getMonth() === date.getMonth() &&
+        itemDate.getDate() === date.getDate()
       );
     });
-  }, [schedules, date]);
+  }, [events, date]);
 
   if (isLoading) return <Loading />;
 
-  if (error || !filteredSchedules.length) {
+  if (error || !filtered.length) {
     return (
       <FormNotFound
         message={error?.error || "ไม่พบข้อมูล"}
-        description={error?.description || "ไม่มีรายการนัดหมายในวันนี้"}
+        description={"ไม่มีรายการในวันนี้"}
       />
     );
   }
 
   return (
     <div className="space-y-3">
-      {filteredSchedules.map((schedule) => (
+      {filtered.map((item) => (
         <CalendarEventCard
-          key={schedule.id}
-          avatar={schedule.scheduleCategory.name}
-          datetime={schedule.datetime}
-          name={schedule.patientName}
-          phone={schedule.phone}
-          detail={schedule.detail}
-          categoryName={schedule.transactionCategory.name || "-"}
-          schedule={schedule.scheduleCategory.name || "-"}
-          dentist={schedule.dentist.name || "-"}
-          creator={schedule.creator.name || "-"}
+          key={item.id}
+          avatar={item.scheduleCategory?.name}
+          badge={
+            item.isRecheck ? (
+              <div className="absolute top-2 right-2 bg-amethyst-bg border border-amethyst-border p-2 rounded-full">
+                <LampDesk size={12} className="text-amethyst-text" />
+              </div>
+            ) : (
+              <div className="absolute top-2 right-2 bg-azurite-bg border border-azurite-border p-2 rounded-full">
+                <Calendar size={12} className="text-azurite-text" />
+              </div>
+            )
+          }
+          badgeTooltip={item.isRecheck ? "รายการรีเช็ค / แบ่งชำระ" : "รายการนัด"}
+          datetime={item.datetime}
+          name={item.patientName}
+          phone={item.phone}
+          detail={item.detail}
+          categoryName={item.transactionCategory.name || "-"}
+          schedule={item.scheduleCategory.name || "-"}
+          dentist={item.isRecheck ? item.creator?.name : item.dentist?.name}
+          creator={item.creator.name}
+          extraLabel={item.isRecheck ? "🩺 Recheck" : undefined}
         />
       ))}
     </div>

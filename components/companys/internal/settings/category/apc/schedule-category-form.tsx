@@ -24,8 +24,8 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { Clock1 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { CreateAppointmentCategory } from "@/actions/company/manager/schedule-category";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createScheduleCategory } from "@/hooks/internal/category/use-sc";
 
 interface CreateAppointmentCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -49,22 +49,21 @@ export const CreateAppointmentCategoryForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
-    startTransition(() => {
-      CreateAppointmentCategory(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createScheduleCategory(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">

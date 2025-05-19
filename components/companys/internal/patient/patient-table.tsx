@@ -5,7 +5,7 @@ import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
 
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/utils";
 import { Patients } from "@/types/patient";
 
 interface PatientTableProps {
@@ -58,7 +58,6 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
         </div>
       ),
     },
-
   ];
 
   if (isLoading) {

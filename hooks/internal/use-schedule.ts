@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Schedule } from "@/types/schedule";
+import { Schedule } from "@/types/appointment";
 import { ApiError } from "@/types/api-error";
 
 export const useSchedules = (companyId: string, refreshkey?: number) => {
@@ -20,7 +20,6 @@ export const useSchedules = (companyId: string, refreshkey?: number) => {
         } else {
           setSchedules(Array.isArray(data) ? data : []);
         }
-
       } catch (error) {
         console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
         setError({

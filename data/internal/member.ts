@@ -34,6 +34,9 @@ try {
       id: memberId,
       companyId
     },
+    include: {
+      company: true,
+    }
   });
   return member;
 } catch {
