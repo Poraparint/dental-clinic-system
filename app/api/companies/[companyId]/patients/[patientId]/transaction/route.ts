@@ -96,7 +96,10 @@ export async function POST(
 
   const existingCompany = await getPatientByCompanyId(companyId, patientId);
   if (!existingCompany) {
-    return { error: "คนไข้ไม่ได้มีชื่ออยู่ในบริษัทนี้" };
+    return NextResponse.json(
+      { error: "คนไข้ไม่ได้มีชื่ออยู่ในบริษัทนี้" },
+      { status: 400 }
+    );
   }
 
   const validation = CreateTransactionSchema.safeParse(values);
