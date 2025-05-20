@@ -47,7 +47,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { SelectCategory } from "@/components/props/component/select-category";
 
 //actions
-import { createExpenses } from "@/actions/company/manager/expenses";
+import { createExpenses } from "@/hooks/internal/use-expenses";
 import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
@@ -87,20 +87,18 @@ export const CreateExpensesForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateExpensesSchema>) => {
-    startTransition(() => {
-      createExpenses(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createExpenses(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

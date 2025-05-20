@@ -1,12 +1,96 @@
 import { CompanyRole } from "@prisma/client";
 import * as z from "zod";
 
+// ======== Base schemas (common fields) ========
+const baseNameSchema = {
+  name: z.string().min(1, {
+    message: "กรุณากรอกชื่อ",
+  }),
+};
+
+// Schema สำหรับอีเมล
+const emailSchema = {
+  email: z.string().email({
+    message: "กรุณากรอกอีเมล",
+  }),
+};
+
+// Schema สำหรับรหัสผ่าน
+const passwordSchema = {
+  password: z.string().min(6, {
+    message: "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
+  }),
+};
+
+// Schema สำหรับรหัสผ่านที่ใช้ในการ login (ไม่ต้องมี min length)
+const loginPasswordSchema = {
+  password: z.string().min(1, {
+    message: "กรุณากรอกรหัสผ่าน",
+  }),
+};
+
+// Schema สำหรับ datetime
+const datetimeSchema = {
+  datetime: z.preprocess(
+    (val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    },
+    z.date({ required_error: "กรุณากรอกวันที่" })
+  ),
+};
+
+// Schema สำหรับราคา
+const priceSchema = {
+  price: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "กรุณากรอกราคา" })
+      .min(0, "ราคาต้องไม่น้อยกว่า 0")
+  ),
+};
+
+// Schema สำหรับ optional price
+const optionalPriceSchema = {
+  price: z
+    .optional(z.union([z.number(), z.string().transform((val) => Number(val))]))
+    .refine((val) => val === undefined || !isNaN(val), {
+      message: "ราคาต้องเป็นตัวเลข",
+    }),
+};
+
+// Schema สำหรับรายละเอียด
+const detailSchema = {
+  detail: z.optional(z.string()),
+};
+
+// Schema สำหรับ description
+const descriptionSchema = {
+  description: z.optional(z.string()),
+};
+
+// ======== คำสั่งฟังก์ชั่นช่วยสร้าง Schema ========
+
+// ฟังก์ชั่นสำหรับสร้าง Schema ที่มีการจ่ายเงิน
+const createPaymentSchema = () => ({
+  paid: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "กรุณากรอกจำนวนเงินที่ชำระ" })
+      .min(0, "จำนวนเงินที่ชำระต้องไม่น้อยกว่า 0")
+  ),
+});
+
+// ======== Actual schemas ========
+
 export const SettingSchema = z
   .object({
-    name: z.optional(z.string()),
+    ...baseNameSchema,
     isTwoFactorEnabled: z.optional(z.boolean()),
-    email: z.optional(z.string().email()),
-    password: z.optional(z.string().min(6)),
+    ...emailSchema,
+    ...loginPasswordSchema,
     newPassword: z.optional(z.string().min(6)),
   })
   .refine(
@@ -35,53 +119,33 @@ export const SettingSchema = z
   );
 
 export const NewPasswordSchema = z.object({
-  password: z.string().min(6, {
-    message: "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
-  }),
+  ...passwordSchema,
 });
 
 export const ResetSchema = z.object({
-  email: z.string().email({
-    message: "กรุณากรอกอีเมล",
-  }),
+  ...emailSchema,
 });
 
 export const LoginSchema = z.object({
-  email: z.string().email({
-    message: "กรุณากรอกอีเมล",
-  }),
-  password: z.string().min(1, {
-    message: "กรุณากรอกรหัสผ่าน",
-  }),
+  ...emailSchema,
+  ...loginPasswordSchema,
   code: z.optional(z.string()),
 });
 
 export const RegisterSchema = z.object({
-  email: z.string().email({
-    message: "กรุณากรอกอีเมล",
-  }),
-  password: z.string().min(6, {
-    message: "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
-  }),
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
+  ...emailSchema,
+  ...passwordSchema,
+  ...baseNameSchema,
 });
 
 export const CreateCompanySchema = z.object({
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
-  description: z.optional(z.string()),
+  ...baseNameSchema,
+  ...descriptionSchema,
 });
 
 export const MemberLoginSchema = z.object({
-  email: z.string().email({
-    message: "กรุณากรอกอีเมล",
-  }),
-  password: z.string().min(1, {
-    message: "กรุณากรอกรหัสผ่าน",
-  }),
+  ...emailSchema,
+  ...loginPasswordSchema,
   memberCode: z.string().min(1, {
     message: "กรุณากรอกรหัสพนักงาน",
   }),
@@ -89,15 +153,9 @@ export const MemberLoginSchema = z.object({
 });
 
 export const MemberRegisterSchema = z.object({
-  email: z.string().email({
-    message: "กรุณากรอกอีเมล",
-  }),
-  password: z.string().min(6, {
-    message: "รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร",
-  }),
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
+  ...emailSchema,
+  ...passwordSchema,
+  ...baseNameSchema,
   phone: z.optional(z.string()),
   memberCode: z.string().min(4, {
     message: "รหัสพนักงานต้องมีความยาวอย่างน้อย 4 ตัวอักษร",
@@ -108,29 +166,19 @@ export const MemberRegisterSchema = z.object({
 });
 
 export const CreateTransactionCategorySchema = z.object({
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
-  description: z.optional(z.string()),
-  price: z
-    .optional(z.union([z.number(), z.string().transform((val) => Number(val))]))
-    .refine((val) => val === undefined || !isNaN(val), {
-      message: "ราคาต้องเป็นตัวเลข",
-    }),
+  ...baseNameSchema,
+  ...descriptionSchema,
+  ...optionalPriceSchema,
 });
 
 export const CreateDentalTechCategorySchema = z.object({
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
-  description: z.optional(z.string()),
+  ...baseNameSchema,
+  ...descriptionSchema,
   color: z.optional(z.string()),
 });
 
 export const CreatePatientSchema = z.object({
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
+  ...baseNameSchema,
   phone: z.optional(z.string()),
   age: z.optional(z.string()),
   address: z.optional(z.string()),
@@ -143,24 +191,11 @@ export const CreatePatientSchema = z.object({
 
 export const CreateTransactionSchema = z
   .object({
-    datetime: z.date({
-      required_error: "กรุณากรอกวันที่",
-    }),
+    ...datetimeSchema,
     transactionCategoryId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
-    detail: z.optional(z.string()),
-
-    price: z.preprocess(
-      (val) => (val === "" ? undefined : Number(val)),
-      z
-        .number({ required_error: "กรุณากรอกราคา" })
-        .min(0, "ราคาต้องไม่น้อยกว่า 0")
-    ),
-    paid: z.preprocess(
-      (val) => (val === "" ? undefined : Number(val)),
-      z
-        .number({ required_error: "กรุณากรอกจำนวนเงินที่ชำระ" })
-        .min(0, "จำนวนเงินที่ชำระต้องไม่น้อยกว่า 0")
-    ),
+    ...detailSchema,
+    ...priceSchema,
+    ...createPaymentSchema(),
   })
   .superRefine((data, ctx) => {
     if (
@@ -177,12 +212,8 @@ export const CreateTransactionSchema = z
   });
 
 export const CreateExpensesSchema = z.object({
-  datetime: z.date({
-    required_error: "กรุณากรอกวันที่",
-  }),
-  name: z.string().min(1, {
-    message: "กรุณากรอกชื่อ",
-  }),
+  ...datetimeSchema,
+  ...baseNameSchema,
   ecId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
   payment: z.string().min(1, "ต้องเลือกประเภทรายการ"),
   amount: z.preprocess(
@@ -194,10 +225,16 @@ export const CreateExpensesSchema = z.object({
 });
 
 export const CreateDentalTechSchema = z.object({
-  deadline: z.date({
-    required_error: "กรุณากรอกวันที่",
-  }),
-  detail: z.optional(z.string()),
+  deadline: z.preprocess(
+    (val) => {
+      if (typeof val === "string" || val instanceof Date) {
+        return new Date(val);
+      }
+      return val;
+    },
+    z.date({ required_error: "กรุณากรอกวันที่" })
+  ),
+  ...detailSchema,
   transactionId: z.string().min(1, "ต้องมีรหัสธุรกรรม"),
   teeth: z
     .optional(z.union([z.number(), z.string().transform((val) => Number(val))]))
@@ -213,18 +250,11 @@ export const CreateRecheckSchema = z.object({
   recheckList: z
     .array(
       z.object({
-        datetime: z.date({
-          required_error: "ต้องระบุวันที่",
-        }),
+        ...datetimeSchema,
         scheduleId: z.string().min(1, "ต้องเลือกเวลา"),
         tcId: z.string().min(1, "ต้องมีหมวหมู่"),
         detail: z.string().optional().default(""),
-        price: z.preprocess(
-          (val) => (val === "" ? undefined : Number(val)),
-          z
-            .number({ required_error: "กรุณากรอกราคา" })
-            .min(0, "ราคาต้องไม่น้อยกว่า 0")
-        ),
+        ...priceSchema,
       })
     )
     .min(1, "ต้องมีอย่างน้อย 1 รายการ")
@@ -232,15 +262,13 @@ export const CreateRecheckSchema = z.object({
 });
 
 export const CreateScheduleSchema = z.object({
-  datetime: z.date({
-    required_error: "กรุณากรอกวันที่",
-  }),
+  ...datetimeSchema,
   scheduleId: z.string().min(1, "กรุณาเลือกเวลานัด"),
   phone: z.optional(z.string()),
   patientName: z.string().min(1, {
     message: "กรุณากรอกชื่อ",
   }),
-  detail: z.optional(z.string()),
+  ...detailSchema,
   tcId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
   memberId: z.string().min(1, "กรุณาเลือกทันตแพทย์ผู้รับผิดชอบ"),
 });

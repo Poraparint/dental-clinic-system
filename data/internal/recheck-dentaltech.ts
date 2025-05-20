@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
 
 export const getRecheckByCompanyId = async (
-  transactionId: string,
-  companyId: string
+  companyId: string,
+  transactionId: string
 ) => {
   const transaction = await db.recheck.findUnique({
     where: {
@@ -14,8 +14,9 @@ export const getRecheckByCompanyId = async (
 };
 
 export const getDentalTechByCompanyId = async (
-  transactionId: string,
-companyId: string
+  companyId: string,
+  transactionId: string
+
 ) => {
   const transaction = await db.dentaltech.findUnique({
     where: {

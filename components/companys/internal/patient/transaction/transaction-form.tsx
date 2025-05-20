@@ -33,7 +33,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { SelectCategory } from "@/components/props/component/select-category";
 
 //actions
-import { createTransaction } from "@/actions/company/public/transaction";
+import { createTransaction } from "@/hooks/internal/use-transaction";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
@@ -72,20 +72,18 @@ export const CreateTransactionForm = ({
   );
 
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
-    startTransition(() => {
-      createTransaction(values, patientId, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createTransaction(values, companyId, patientId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

@@ -1,30 +1,22 @@
-import { currentAllStaffExceptTechnician } from "@/lib/auth";
+import { getRecheckByCompanyId } from "@/data/internal/recheck-dentaltech";
+import { getPatientByTransactionId } from "@/data/internal/transaction";
 import { db } from "@/lib/db";
+import { formatDateOnly } from "@/lib/utils/utils";
+import { validateAllExceptTechnician, validateManagerAndDentist } from "@/lib/utils/validation/member";
+import { CreateRecheckSchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ companyId: string }> }
 ) {
-  const existingUser = await currentAllStaffExceptTechnician();
-
-  if (!existingUser) {
-    return NextResponse.json({
-      status: 403,
-    });
-  }
-
   const { companyId } = await params;
-
-  if (!companyId) {
-    return NextResponse.json(
-      {
-        error: "ไม่พบ companyId",
-        description: "URL ไม่ถูกต้อง",
-      },
-      { status: 400 }
-    );
-  }
+  
+    const accessToGet = await validateAllExceptTechnician(companyId);
+  
+    if (accessToGet instanceof Response) {
+      return accessToGet;
+    }
 
   try {
     const rechecks = await db.recheck.findMany({
@@ -87,10 +79,95 @@ export async function GET(
     }
     return NextResponse.json(rechecks);
   } catch (error) {
-    console.error("ไม่สามารถดึงข้อมูลรายการรีเช็คได้", error);
+    console.error("[RECHECK_GET]", error);
     return NextResponse.json(
       {
         error: "ไม่สามารถดึงข้อมูลรายการรีเช็คได้",
+        description: "โปรดติดต่อผู้ดูแลระบบ",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ companyId: string }> }
+) {
+  const values = await request.json();
+
+  const { companyId } = await params;
+
+  const accessToPost = await validateManagerAndDentist(companyId);
+
+  if (accessToPost instanceof Response) {
+    return accessToPost;
+  }
+
+  const { member } = accessToPost;
+
+  const validation = CreateRecheckSchema.safeParse(values);
+
+  if (!validation.success) {
+    return NextResponse.json(
+      {
+        error: "ข้อมูลไม่ถูกต้อง",
+        description: "โปรดตรวจสอบข้อมูลที่กรอก",
+      },
+      { status: 400 }
+    );
+  }
+
+  const { transactionId, recheckList } = validation.data;
+
+  const existingRecheck = await getRecheckByCompanyId(companyId, transactionId);
+
+  if (existingRecheck) {
+    return NextResponse.json({ error: "รหัสธุรกรรมนี้ถูกใช้ไปแล้ว" });
+  }
+
+  const patientId = await getPatientByTransactionId(transactionId);
+
+  if (!patientId) {
+    return NextResponse.json({
+      error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้",
+    });
+  }
+
+  try {
+    const recheck = await db.recheck.create({
+      data: {
+        id: transactionId,
+        companyId,
+        patientId: patientId.patient.id,
+        creatorUserId: member.id,
+      },
+    });
+
+    const recheckListData = recheckList.map((item) => ({
+      recheckId: recheck.id,
+      datetime: formatDateOnly(item.datetime),
+      detail: item.detail,
+      price: item.price,
+      transactionCategoryId: item.tcId,
+      scheduleId: item.scheduleId,
+    }));
+
+    await db.$transaction([
+      ...recheckListData.map((data) => db.recheckList.create({ data })),
+    ]);
+
+    return NextResponse.json(
+      {
+        success: "เพิ่มรายการใหม่สำเร็จ",
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("[RECHECK_POST]", error);
+    return NextResponse.json(
+      {
+        error: "เกิดข้อผิดพลาดขณะสร้างรายการ",
         description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }

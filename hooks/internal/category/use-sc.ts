@@ -6,6 +6,7 @@ import { ApiError } from "@/types/api-error";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 import * as z from "zod";
 
+//GET
 export const useScheduleCategories = (companyId: string) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
@@ -43,6 +44,7 @@ export const useScheduleCategories = (companyId: string) => {
   return { categories, error, isLoading };
 };
 
+//CREATE
 export const createScheduleCategory = async (
   values: z.infer<typeof CreateDentalTechCategorySchema>,
   companyId: string
@@ -72,3 +74,35 @@ export const createScheduleCategory = async (
     };
    }
 }
+
+//UPDATE
+export const onReorderScheduleCategory = async (
+  companyId: string,
+  orderedIds: string[]
+) => {
+  try {
+    const response = await fetch(`/api/companies/${companyId}/category/schedule/reorder`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ orderedIds }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || data.error) {
+      return { error: data.error || "เกิดข้อผิดพลาดไม่สามารถอัปเดตข้อมูลได้" };
+    }
+
+    return { success: data.success }
+  } catch (error) {
+    console.error("[UPDATE_SCHEDULE_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถอัปเดตข้อมูลได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};

@@ -7,9 +7,6 @@ import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MemberRegisterSchema } from "@/schemas";
 
-//action
-import { MemberRegister } from "@/actions/auth/register";
-
 //ui
 import {
   Form,
@@ -35,6 +32,7 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createMembers } from "@/hooks/internal/use-member";
 
 interface MemberRegisterFormProps {
   setOpen: (open: boolean) => void;
@@ -62,20 +60,18 @@ export const MemberRegisterForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof MemberRegisterSchema>) => {
-    startTransition(() => {
-      MemberRegister(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createMembers(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
 
