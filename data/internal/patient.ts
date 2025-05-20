@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 
-export const getPatientByName = async (name: string, companyId: string) => {
+export const getPatientByName = async (companyId: string, name: string) => {
   const patient = await db.patient.findUnique({
     where: {
       name_companyId: {
@@ -13,8 +13,8 @@ export const getPatientByName = async (name: string, companyId: string) => {
 };
 
 export const getPatientByCompanyId = async (
-  patientId: string,
-  companyId: string
+  companyId: string,
+  patientId: string
 ) => {
   const patient = await db.patient.findUnique({
     where: {
@@ -25,4 +25,3 @@ export const getPatientByCompanyId = async (
   });
   return patient;
 };
-

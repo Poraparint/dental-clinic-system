@@ -30,7 +30,7 @@ import { CreatePatientSchema } from "@/schemas";
 import { CardCategory } from "@/components/props/wrapper/card-category";
 
 //actions
-import { createPatient } from "@/actions/company/public/patient";
+import { createPatient } from "@/hooks/internal/use-patient";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreatePatientFormProps {
@@ -62,20 +62,18 @@ export const CreatePatientForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreatePatientSchema>) => {
-    startTransition(() => {
-      createPatient(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createPatient(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

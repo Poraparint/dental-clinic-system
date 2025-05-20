@@ -15,7 +15,6 @@ export const PatientBoard = () => {
   const { navigateTo, isNavigating } = useNavigation();
 
   const handleRowClick = (patientId: string) => {
-    
     navigateTo(`/${companyId}/patients/${patientId}`);
   };
 

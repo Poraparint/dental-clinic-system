@@ -29,12 +29,12 @@ import { SelectCategory } from "@/components/props/component/select-category";
 //actions
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
-import { Schedule } from "@/actions/company/public/schedule";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Input } from "@/components/ui/input";
 import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 import { useDentists } from "@/hooks/internal/use-dentist";
 import { useScheduleCategories } from "@/hooks/internal/category/use-sc";
+import { createSchedule } from "@/hooks/internal/use-schedule";
 
 interface ScheduleFormProps {
   setOpen: (open: boolean) => void;
@@ -49,9 +49,11 @@ export const ScheduleForm = ({
 }: ScheduleFormProps) => {
   const params = useParams();
   const companyId = params.companyId as string;
-  const { categories: tc, isLoading: tcLoading } = useTransactionCategories(companyId);
+  const { categories: tc, isLoading: tcLoading } =
+    useTransactionCategories(companyId);
   const { dentists, isLoading: dentistLoading } = useDentists(companyId);
-  const { categories: schedule, isLoading: scheduleLoading } = useScheduleCategories(companyId);
+  const { categories: schedule, isLoading: scheduleLoading } =
+    useScheduleCategories(companyId);
 
   const [isPending, startTransition] = useTransition();
 
@@ -69,20 +71,18 @@ export const ScheduleForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateScheduleSchema>) => {
-    startTransition(() => {
-      Schedule(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createSchedule(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

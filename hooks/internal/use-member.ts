@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Member } from "@/types/member";
 import { ApiError } from "@/types/api-error";
+import { MemberRegisterSchema } from "@/schemas";
+import * as z from "zod";
 
 export const useMembers = (companyId: string) => {
   const [members, setMembers] = useState<Member[]>([]);
@@ -22,7 +24,7 @@ export const useMembers = (companyId: string) => {
         }
 
       } catch (error) {
-        console.error("เกิดข้อผิดพลาดในการดึงข้อมูล", error);
+        console.error("GET_MEMBER_ACCOUNT", error);
         setError({
           error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
           description: "โปรดลองใหม่อีกครั้ง",
@@ -37,3 +39,33 @@ export const useMembers = (companyId: string) => {
 
   return { members, error, isLoading };
 };
+
+export const createMembers = async (
+  values: z.infer<typeof MemberRegisterSchema>,
+  companyId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/members`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error};
+    }
+
+    return { success: data.success };
+  } catch (error) { 
+    console.error("[CREATE_MEMBER_ACCOUNT]", error);
+    return {
+      error: "ไม่สามารถสร้างบัญชีพนักงานได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+   }
+}

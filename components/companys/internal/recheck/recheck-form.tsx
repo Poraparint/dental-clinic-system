@@ -9,9 +9,6 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils/utils";
 
-// actions
-import { Recheck } from "@/actions/company/public/recheck";
-
 // hooks
 import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
 
@@ -45,6 +42,7 @@ import { CardCategory } from "@/components/props/wrapper/card-category";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
 import { useScheduleCategories } from "@/hooks/internal/category/use-sc";
+import { createRecheck } from "@/hooks/internal/use-recheck";
 
 interface RecheckFormProps {
   setOpen: (open: boolean) => void;
@@ -87,19 +85,18 @@ export const RecheckForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateRecheckSchema>) => {
-    startTransition(() => {
-      Recheck(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+    startTransition(async () => {
+      const data = await createRecheck(values, companyId);
+
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (

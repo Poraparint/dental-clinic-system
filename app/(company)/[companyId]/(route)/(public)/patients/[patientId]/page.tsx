@@ -23,7 +23,7 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
     notFound();
   }
 
-  const patient = await getPatientByCompanyId(patientId, companyId);
+  const patient = await getPatientByCompanyId(companyId, patientId);
 
   if (!patient) {
     notFound();

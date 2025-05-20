@@ -3,7 +3,7 @@
 import * as z from "zod";
 
 import { useForm } from "react-hook-form";
-import { useTransition, useState } from "react";
+import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //ui
@@ -16,16 +16,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FormError } from "@/components/form-error";
-import { FormSuccess } from "@/components/form-success";
 
 import { CreateCompanySchema } from "@/schemas";
 
 //actions
-import { createCompany } from "@/actions/company/manager/company";
 import { CardCategory } from "@/components/props/wrapper/card-category";
-import { User } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createMinistry } from "@/hooks/external/use-ministry";
+import { toast } from "sonner";
 
 interface CreateMinistryFormProps {
   setOpen: (open: boolean) => void;
@@ -36,8 +35,6 @@ export const CreateMinistryForm = ({
   setOpen,
   onSuccess,
 }: CreateMinistryFormProps) => {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateCompanySchema>>({
@@ -49,35 +46,31 @@ export const CreateMinistryForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateCompanySchema>) => {
-    setError("");
-    setSuccess("");
+    startTransition(async () => {
+      const data = await createMinistry(values);
 
-    startTransition(() => {
-      createCompany(values)
-        .then((data) => {
-          if (data?.error) {
-            setError(data.error);
-          }
-          if (data?.success) {
-            setSuccess(data.success);
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => setError("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-        <CardCategory icon={<User />} title="ข้อมูลผู้ใช้">
+        <CardCategory icon={<Building2 />} title="ข้อมูลบอร์ด / บริษัท" description="กรอกข้อมูลเพื่อสร้างบริษัท">
           <div className="space-y-3">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ministry name</FormLabel>
+                  <FormLabel>ชื่อบอร์ด / บริษัท</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -96,7 +89,7 @@ export const CreateMinistryForm = ({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="des" />
+                    <Input {...field} disabled={isPending} placeholder="รายละเอียด" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,9 +97,6 @@ export const CreateMinistryForm = ({
             />
           </div>
         </CardCategory>
-
-        <FormError message={error} />
-        <FormSuccess message={success} />
         <div className="flex justify-end">
           <SubmitButton
             label="สร้างบริษัทใหม่"

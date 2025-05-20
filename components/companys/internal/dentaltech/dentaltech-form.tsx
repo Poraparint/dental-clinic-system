@@ -37,7 +37,7 @@ import { SelectCategory } from "@/components/props/component/select-category";
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { useDentaltTechCategories } from "@/hooks/internal/category/use-dtc";
-import { createDentalTech } from "@/actions/company/manager/dentaltech";
+import { createDentalTech } from "@/hooks/internal/use-dentalTech";
 import { DatePickerField } from "@/components/props/component/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
@@ -80,20 +80,18 @@ export const CreateDentaltechForm = ({
   });
 
   const OnSubmit = (values: z.infer<typeof CreateDentalTechSchema>) => {
-    startTransition(() => {
-      createDentalTech(values, companyId)
-        .then((data) => {
-          if (data?.error) {
-            toast.error(data.error);
-          }
-          if (data?.success) {
-            toast.success(data.success);
+    startTransition(async () => {
+      const data = await createDentalTech(values, companyId);
 
-            setOpen(false);
-            onSuccess?.();
-          }
-        })
-        .catch(() => toast.error("Something went wrong!"));
+      if (data.error) {
+        toast.error(data.error, {
+          description: data.description,
+        });
+      } else if (data.success) {
+        toast.success(data.success);
+        setOpen(false);
+        onSuccess?.();
+      }
     });
   };
   return (
