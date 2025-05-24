@@ -2,19 +2,17 @@
 import { Loading } from "@/components/loading";
 import { usePatients } from "@/hooks/internal/company/use-patient";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useParams } from "next/navigation";
-
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Patients } from "@/types/patient";
+import { useCompany } from "@/context/context";
 
 interface PatientTableProps {
   onRowClick: (patientId: string) => void;
 }
 
 export const PatientTable = ({ onRowClick }: PatientTableProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { patients, error, isLoading } = usePatients(companyId);
 
   const columns = [

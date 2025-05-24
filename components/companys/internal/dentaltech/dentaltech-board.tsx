@@ -2,14 +2,13 @@
 
 import { DentalTechTable } from "@/components/companys/internal/dentaltech/dentaltech-table";
 import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
+import { useCompany } from "@/context/context";
 import { useDentalTechs } from "@/hooks/internal/company/use-dentalTech";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const DentalTechBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { dentalTechs, error, isLoading } = useDentalTechs(

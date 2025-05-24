@@ -3,17 +3,18 @@ import { getMemberByCompanyId } from "@/data/internal/member";
 import { currentManager, currentUser } from "@/lib/auth";
 import { MANAGER_LOGIN_REDIRECT } from "@/routes";
 import { redirect } from "next/navigation";
-import { CompanyProvider } from "@/context/company-provider";
+import { CompanyProvider } from "@/context/provider";
 
 type CompanyLayoutProps = {
   children: React.ReactNode;
-  params: { companyId: string };
+  params: Promise<{ companyId: string }>;
 };
 
 export default async function CompanyLayout({
   children,
-  params: {companyId},
+  params,
 }: CompanyLayoutProps) {
+  const { companyId } = await params;
   const managerId = await currentManager();
   const memberId = await currentUser();
 

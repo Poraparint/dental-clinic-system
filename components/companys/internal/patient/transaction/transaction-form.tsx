@@ -2,9 +2,6 @@
 
 import * as z from "zod";
 
-//params
-import { useParams } from "next/navigation";
-
 //react
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
@@ -38,6 +35,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { useCompany, usePatient } from "@/context/context";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
@@ -48,9 +46,8 @@ export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
 }: CreateTransactionFormProps) => {
-  const params = useParams();
-  const patientId = params.patientId as string;
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
+  const { patientId } = usePatient();
   const { categories, isLoading } = useTransactionCategories(companyId);
 
   const [isPending, startTransition] = useTransition();

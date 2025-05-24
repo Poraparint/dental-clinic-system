@@ -1,6 +1,6 @@
 import { AlertCircle, Calendar, Clock, Users } from "lucide-react";
 import { StatCard } from "@/components/shared/dashboard/stat-card";
-import { useDashboardStats } from "@/hooks/internal/memorize/stat";
+import { useDashboardStats } from "@/hooks/internal/memorize/use-stat";
 import { DashboardStatProps } from "@/interface/stat";
 
 export const DashboardStat = ({

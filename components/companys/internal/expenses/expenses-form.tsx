@@ -2,9 +2,6 @@
 
 import * as z from "zod";
 
-//params
-import { useParams } from "next/navigation";
-
 //react
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
@@ -51,6 +48,7 @@ import { createExpenses } from "@/hooks/internal/company/use-expenses";
 import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { useCompany } from "@/context/context";
 
 interface CreateExpensesFormProps {
   setOpen: (open: boolean) => void;
@@ -61,8 +59,7 @@ export const CreateExpensesForm = ({
   setOpen,
   onSuccess,
 }: CreateExpensesFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { categories, isLoading } = useExpensesCategories(companyId);
 
   const [isPending, startTransition] = useTransition();

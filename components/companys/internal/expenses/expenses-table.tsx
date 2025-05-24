@@ -4,16 +4,15 @@ import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { Badge } from "@/components/ui/badge";
 import { useExpenses } from "@/hooks/internal/company/use-expenses";
-import { useParams } from "next/navigation";
 import { Expenses } from "@/types/expenses";
+import { useCompany } from "@/context/context";
 
 interface ExpensesTableProps {
   month?: string;
 }
 
 export const ExpensesTable = ({ month }: ExpensesTableProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { expenses, error, isLoading } = useExpenses(companyId, month);
 
   const columns = [

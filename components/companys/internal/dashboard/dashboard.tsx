@@ -5,7 +5,6 @@ import { PeriodTabs } from "@/components/shared/dashboard/period-tab";
 import { Card, CardHeader } from "@/components/ui/card";
 import { useDentalTechs } from "@/hooks/internal/company/use-dentalTech";
 import { usePatients } from "@/hooks/internal/company/use-patient";
-import { useParams } from "next/navigation";
 import { useState } from "react";
 import { DashboardStat } from "@/components/companys/internal/dashboard/dashboard-stat";
 import { Period } from "@/lib/utils/stat/stat";
@@ -14,10 +13,10 @@ import {
   useRecheckLists,
   useRechecks,
 } from "@/hooks/internal/company/use-recheck";
+import { useCompany } from "@/context/context";
 
 export const Dashboard = () => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [period, setPeriod] = useState<Period>("month");
 
   const { patients } = usePatients(companyId);

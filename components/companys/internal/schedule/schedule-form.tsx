@@ -27,7 +27,6 @@ import { CardCategory } from "@/components/shared/card";
 import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +34,7 @@ import { useTransactionCategories } from "@/hooks/internal/company/category/use-
 import { useDentists } from "@/hooks/internal/company/use-dentist";
 import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
 import { createSchedule } from "@/hooks/internal/company/use-schedule";
+import { useCompany } from "@/context/context";
 
 interface ScheduleFormProps {
   setOpen: (open: boolean) => void;
@@ -47,8 +47,7 @@ export const ScheduleForm = ({
   onSuccess,
   datetime,
 }: ScheduleFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { categories: tc, isLoading: tcLoading } =
     useTransactionCategories(companyId);
   const { dentists, isLoading: dentistLoading } = useDentists(companyId);

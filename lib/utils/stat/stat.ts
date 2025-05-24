@@ -35,6 +35,12 @@ export type CategoryChartItem = {
   color?: string;
 };
 
+export interface ProfitResult extends ComparisonResult {
+  netProfit: number;
+  revenue: number;
+  expenses: number;
+}
+
 function getValueByPath<T>(obj: T, path: string): unknown {
   return path.split(".").reduce((acc, key) => {
     if (typeof acc === "object" && acc !== null && key in acc) {
@@ -333,3 +339,54 @@ export const getTopCategoryComparison = <T>(
   };
 };
 
+/**
+ * คำนวณกำไรสุทธิโดยเปรียบเทียบระหว่างช่วงเวลา
+ */
+export const calculateProfitComparison = <T, E>(
+  transactions: T[],
+  expenses: E[],
+  period: Period,
+  transactionDateField: keyof T,
+  transactionAmountField: keyof T,
+  expenseDateField: keyof E,
+  expenseAmountField: keyof E,
+  referenceDate?: Date
+): ProfitResult => {
+  // คำนวณรายได้
+  const revenueData = getPeriodData(transactions, period, transactionDateField, referenceDate);
+  const currentRevenue = revenueData.current.reduce(
+    (sum, item) => sum + (Number(item[transactionAmountField]) || 0),
+    0
+  );
+  const previousRevenue = revenueData.previous.reduce(
+    (sum, item) => sum + (Number(item[transactionAmountField]) || 0),
+    0
+  );
+
+  // คำนวณรายจ่าย
+  const expensesData = getPeriodData(expenses, period, expenseDateField, referenceDate);
+  const currentExpenses = expensesData.current.reduce(
+    (sum, item) => sum + (Number(item[expenseAmountField]) || 0),
+    0
+  );
+  const previousExpenses = expensesData.previous.reduce(
+    (sum, item) => sum + (Number(item[expenseAmountField]) || 0),
+    0
+  );
+
+  // คำนวณกำไรสุทธิ
+  const currentNetProfit = currentRevenue - currentExpenses;
+  const previousNetProfit = previousRevenue - previousExpenses;
+  const percentChange = calculatePercentChange(currentNetProfit, previousNetProfit);
+
+  return {
+    currentValue: currentNetProfit,
+    previousValue: previousNetProfit,
+    percentChange,
+    isPositive: percentChange >= 0,
+    compareLabel: getPeriodLabel(period),
+    netProfit: currentNetProfit,
+    revenue: currentRevenue,
+    expenses: currentExpenses,
+  };
+};

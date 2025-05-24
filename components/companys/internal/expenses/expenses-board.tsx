@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-table";
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
 import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
-import { useParams } from "next/navigation";
 import { Loading } from "@/components/loading";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
@@ -15,10 +14,10 @@ import { th } from "date-fns/locale";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
 import { formatCurrency } from "@/lib/utils";
+import { useCompany } from "@/context/context";
 
 export const Expenses = () => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [refreshKey, setRefreshKey] = useState(0);
   const { categories, isLoading, error } = useExpensesCategories(
     companyId,

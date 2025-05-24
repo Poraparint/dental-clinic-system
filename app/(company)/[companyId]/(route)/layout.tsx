@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/app/(company)/_components/app-sidebar";
-import { Navbar } from "@/app/(company)/_components/navbar";
+import { AppSidebar } from "@/app/(company)/[companyId]/(route)/_components/app-sidebar";
+import { Navbar } from "@/app/(company)/[companyId]/(route)/_components/navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
 
