@@ -1,4 +1,3 @@
-// app/(company)/[companyId]/layout.tsx
 import { getCompanyByManagerId } from "@/data/internal/company";
 import { getMemberByCompanyId } from "@/data/internal/member";
 import { currentManager, currentUser } from "@/lib/auth";
@@ -13,9 +12,8 @@ type CompanyLayoutProps = {
 
 export default async function CompanyLayout({
   children,
-  params,
+  params: {companyId},
 }: CompanyLayoutProps) {
-  const { companyId } = params;
   const managerId = await currentManager();
   const memberId = await currentUser();
 
@@ -39,6 +37,5 @@ export default async function CompanyLayout({
     }
   }
 
-  // ✅ Wrap children with client-side context
   return <CompanyProvider companyId={companyId}>{children}</CompanyProvider>;
 }
