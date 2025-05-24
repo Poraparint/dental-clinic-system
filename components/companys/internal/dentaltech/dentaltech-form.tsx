@@ -34,7 +34,6 @@ import { CardCategory } from "@/components/shared/card";
 import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { useDentaltTechCategories } from "@/hooks/internal/company/category/use-dtc";
 import { createDentalTech } from "@/hooks/internal/company/use-dentalTech";
@@ -42,6 +41,7 @@ import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
 import { Input } from "@/components/ui/input";
+import { useCompany } from "@/context/context";
 
 interface CreateDentaltechFormProps {
   setOpen: (open: boolean) => void;
@@ -54,8 +54,7 @@ export const CreateDentaltechForm = ({
   onSuccess,
   transaction,
 }: CreateDentaltechFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { categories, isLoading: dctLoading } =
     useDentaltTechCategories(companyId);
 

@@ -28,11 +28,11 @@ import {
 //props
 import { CardCategory } from "@/components/shared/card";
 import { Users } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { createMembers } from "@/hooks/internal/company/use-member";
+import { useCompany } from "@/context/context";
 
 interface MemberRegisterFormProps {
   setOpen: (open: boolean) => void;
@@ -43,8 +43,7 @@ export const MemberRegisterForm = ({
   setOpen,
   onSuccess,
 }: MemberRegisterFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof MemberRegisterSchema>>({

@@ -4,7 +4,7 @@ import {
   manages,
   views,
   settings,
-} from "@/app/(company)/_components/app-sidebar";
+} from "@/app/(company)/[companyId]/(route)/_components/app-sidebar";
 import { usePathname } from "next/navigation";
 import { useParams } from "next/navigation";
 

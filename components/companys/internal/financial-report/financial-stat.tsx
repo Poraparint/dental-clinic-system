@@ -1,7 +1,7 @@
 import { Activity, DollarSign, PiggyBank, TrendingUp } from "lucide-react";
 import { StatCard } from "@/components/shared/dashboard/stat-card";
 import { FinancialStatProps } from "@/interface/stat";
-import { useFinancialStats } from "@/hooks/internal/memorize/stat";
+import { useFinancialStats } from "@/hooks/internal/memorize/use-stat";
 
 export const FinancialStat = ({
   transactions,
@@ -11,7 +11,7 @@ export const FinancialStat = ({
   const { ...stats } = useFinancialStats({ transactions, expenses, period });
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <StatCard
         title="รายรับทั้งหมด"
         icon={<DollarSign />}
@@ -25,17 +25,6 @@ export const FinancialStat = ({
       />
 
       <StatCard
-        title="รายรับเฉลี่ย/รายการ"
-        icon={<TrendingUp />}
-        currentValue={stats.avgTransaction.currentValue}
-        percentChange={stats.avgTransaction.percentChange}
-        isPositive={stats.avgTransaction.isPositive}
-        compareLabel={stats.avgTransaction.compareLabel}
-        valueType="currency"
-        suffix="฿"
-        className="rounded-md bg-amethyst-bg border-amethyst-border text-amethyst-text"
-      />
-      <StatCard
         title="รายจ่ายทั้งหมด"
         icon={<PiggyBank />}
         currentValue={stats.totalExpenses.currentValue}
@@ -45,6 +34,17 @@ export const FinancialStat = ({
         valueType="currency"
         suffix="฿"
         className="rounded-md bg-destructive text-destructive-foreground border-destructive-foreground"
+      />
+      <StatCard
+        title="กำไรสุทธิ"
+        icon={<TrendingUp />}
+        currentValue={stats.profit.currentValue}
+        percentChange={stats.profit.percentChange}
+        isPositive={stats.profit.isPositive}
+        compareLabel={stats.profit.compareLabel}
+        valueType="currency"
+        suffix="฿"
+        className="rounded-md bg-amethyst-bg border-amethyst-border text-amethyst-text"
       />
       <StatCard
         title="หมวดหมู่ยอดนิยม"

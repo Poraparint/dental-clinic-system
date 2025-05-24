@@ -22,10 +22,10 @@ import { CreateTransactionCategorySchema } from "@/schemas";
 //actions
 import { CardCategory } from "@/components/shared/card";
 import { Album } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { createTransactionCategory } from "@/hooks/internal/company/category/use-tc";
+import { useCompany } from "@/context/context";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -36,8 +36,7 @@ export const CreateTransactionCategoryForm = ({
   setOpen,
   onSuccess,
 }: CreateTransactionCategoryFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
 
   const [isPending, startTransition] = useTransition();
 

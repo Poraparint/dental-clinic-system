@@ -11,3 +11,19 @@ export const useCompany = () => {
     }
     return context;
 }
+
+type PatientContextType = {
+  patientId: string;
+};
+
+export const PatientContext = createContext<PatientContextType | undefined>(
+  undefined
+);
+
+export const usePatient = () => {
+  const context = useContext(PatientContext);
+  if (!context) {
+    throw new Error("usePatient must be used within a PatientProvider");
+  }
+  return context;
+};

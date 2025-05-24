@@ -2,9 +2,6 @@
 
 import * as z from "zod";
 
-//params
-import { useParams } from "next/navigation";
-
 //react
 import { useForm } from "react-hook-form";
 import { useTransition } from "react";
@@ -32,6 +29,7 @@ import { CardCategory } from "@/components/shared/card";
 //actions
 import { createPatient } from "@/hooks/internal/company/use-patient";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { useCompany } from "@/context/context";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
@@ -42,8 +40,7 @@ export const CreatePatientForm = ({
   setOpen,
   onSuccess,
 }: CreatePatientFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreatePatientSchema>>({

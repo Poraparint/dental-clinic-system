@@ -1,15 +1,14 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useRechecks } from "@/hooks/internal/company/use-recheck";
 import { Loading } from "@/components/loading";
 import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
 import { FormNotFound } from "@/components/form-not-found";
 import { StepTimeLineItem } from "@/components/props/component/step-time-line";
+import { useCompany } from "@/context/context";
 
 export const RecheckCard = () => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { rechecks, error, isLoading } = useRechecks(companyId);
 
   if (isLoading) {

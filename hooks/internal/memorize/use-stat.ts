@@ -4,6 +4,7 @@ import { FinancialStatProps, DashboardStatProps } from "@/interface/stat";
 import {
   calculateAverageComparison,
   calculateCountComparison,
+  calculateProfitComparison,
   calculateRevenueComparison,
   getTopCategoryComparison,
 } from "@/lib/utils/stat/stat";
@@ -21,6 +22,16 @@ export const useFinancialStats = ({
       period,
       "datetime",
       "paid"
+    );
+
+    const profit = calculateProfitComparison(
+      transactions,
+      expenses,
+      period,
+      "datetime",
+      "paid",
+      "datetime",
+      "amount"
     );
 
     const avgTransaction = calculateAverageComparison(
@@ -47,6 +58,7 @@ export const useFinancialStats = ({
 
     return {
       revenue,
+      profit,
       avgTransaction,
       topTransactionCategory,
       totalExpenses,
@@ -103,3 +115,4 @@ export const useDashboardStats = ({
     ...stats,
   };
 };
+

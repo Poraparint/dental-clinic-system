@@ -13,13 +13,12 @@ import {
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useMembers } from "@/hooks/internal/company/use-member";
-import { useParams } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import { Member } from "@/types/member";
+import { useCompany } from "@/context/context";
 
 export const MemberTable = () => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { members, error, isLoading } = useMembers(companyId);
 
   const columns = [

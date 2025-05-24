@@ -77,7 +77,7 @@ export const StatCard = ({
   };
 
   return (
-    <Card className="py-3 px-5 hover:shadow-md transition-shadow duration-200 rounded-sm">
+    <Card className="py-3 px-5 hover:shadow-md transition-shadow duration-200">
       <CardContent className="p-0 space-y-2">
         <div className="flex items-center justify-between">
           <CardDescription>{title}</CardDescription>

@@ -5,7 +5,6 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateRecheckSchema } from "@/schemas";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +37,7 @@ import { Transaction } from "@/types/transaction";
 import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
 import { createRecheck } from "@/hooks/internal/company/use-recheck";
 import { TooltipWrapper } from "@/components/shared/tooltip";
+import { useCompany } from "@/context/context";
 
 interface RecheckFormProps {
   setOpen: (open: boolean) => void;
@@ -50,8 +50,7 @@ export const RecheckForm = ({
   onSuccess,
   transaction,
 }: RecheckFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
   const { categories: tcCategories, isLoading: transactionLoading } =
     useTransactionCategories(companyId);

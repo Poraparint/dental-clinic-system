@@ -5,14 +5,13 @@ import {
   onReorderScheduleCategory,
   useScheduleCategories,
 } from "@/hooks/internal/company/category/use-sc";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { FormNotFound } from "@/components/form-not-found";
 import { DraggableCategoryList } from "@/components/props/component/drag-drop/drag-drop-ui";
+import { useCompany } from "@/context/context";
 
 export const AppointmentCategoriesTable = () => {
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
   const { categories, error, isLoading } = useScheduleCategories(companyId);
 
   const handleReorder = async (orderedIds: string[]) => {

@@ -22,10 +22,10 @@ import { CreateDentalTechCategorySchema } from "@/schemas";
 //actions
 import { CardCategory } from "@/components/shared/card";
 import { Aperture } from "lucide-react";
-import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { createDentalTechCategory } from "@/hooks/internal/company/category/use-dtc";
+import { useCompany } from "@/context/context";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -36,9 +36,7 @@ export const CreateDentalTechCategoryForm = ({
   setOpen,
   onSuccess,
 }: CreateTransactionCategoryFormProps) => {
-  const params = useParams();
-  const companyId = params.companyId as string;
-
+  const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateDentalTechCategorySchema>>({

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { NavigatingUi } from "@/components/props/component/navigating";
 import { useNavigation } from "@/hooks/use-navigation";
 import { TitleCard } from "@/components/shared/card/title-card";
-import { useCompany } from "@/context/company-context";
+import { useCompany } from "@/context/context";
 
 export const PatientBoard = () => {
   const { companyId } = useCompany();
