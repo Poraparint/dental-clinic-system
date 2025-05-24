@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Recheck } from "@/types/appointment";
+import { Recheck, RecheckList } from "@/types/appointment";
 import { ApiError } from "@/types/api-error";
 import { CreateRecheckSchema } from "@/schemas";
 import * as z from "zod";
@@ -28,7 +28,6 @@ export const useRechecks = (companyId: string, refreshKey?: number) => {
           error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
           description: "โปรดลองใหม่อีกครั้ง",
         });
-        
       } finally {
         setIsLoading(false);
       }
@@ -64,4 +63,35 @@ export const createRecheck = async (
       description: "โปรดติดต่อผู้ดูแลระบบ",
     };
   }
+};
+
+export const useRecheckLists = (companyId: string) => {
+  const [recheckLists, setRechecks] = useState<RecheckList[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecheckLists = async () => {
+      try {
+        const response = await fetch(`/api/companies/${companyId}/rechecks/recheckLists`);
+
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setRechecks(Array.isArray(data) ? data : []);
+        }
+      } catch (error) {
+        console.error("[GET_RECHECK_LISTS]", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRecheckLists();
+  }, [companyId]);
+  return { recheckLists, error, isLoading };
 };

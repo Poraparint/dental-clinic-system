@@ -27,10 +27,10 @@ import { toast } from "sonner";
 import { CreatePatientSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 
 //actions
-import { createPatient } from "@/hooks/internal/use-patient";
+import { createPatient } from "@/hooks/internal/company/use-patient";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreatePatientFormProps {

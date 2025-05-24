@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/wrapper/dialog-button";
+import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { CreateMinistryForm } from "@/components/companys/external/create-ministry-form";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";

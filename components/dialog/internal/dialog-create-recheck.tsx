@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/wrapper/dialog-button";
+import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { LampDesk } from "lucide-react";
 import { useState } from "react";
 import { RecheckForm } from "@/components/companys/internal/recheck/recheck-form";
@@ -28,7 +28,11 @@ export const DialogCreateRecheck = ({
         variant="amber"
         tooltip="เพิ่มลงรายการรีเช็ค / แบ่งจ่าย"
       >
-        <RecheckForm setOpen={setOpen} onSuccess={onSuccess} transaction={transaction}/>
+        <RecheckForm
+          setOpen={setOpen}
+          onSuccess={onSuccess}
+          transaction={transaction}
+        />
       </DialogButton>
     </>
   );

@@ -3,7 +3,7 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { Badge } from "@/components/ui/badge";
-import { useExpenses } from "@/hooks/internal/use-expenses";
+import { useExpenses } from "@/hooks/internal/company/use-expenses";
 import { useParams } from "next/navigation";
 import { Expenses } from "@/types/expenses";
 

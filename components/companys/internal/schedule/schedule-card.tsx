@@ -3,10 +3,10 @@
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import { ApiError } from "@/types/api-error";
-import { useMemo } from "react";
 import { DentalAppointment } from "@/types/appointment";
 import { CalendarEventCard } from "@/components/props/component/card/event-card";
 import { Calendar, LampDesk } from "lucide-react";
+import { useFilteredAppointments } from "@/hooks/internal/filter/use-filtered-apm";
 
 export const ScheduleCard = ({
   date,
@@ -19,16 +19,7 @@ export const ScheduleCard = ({
   error: ApiError | null;
   isLoading: boolean;
 }) => {
-  const filtered = useMemo(() => {
-    return events.filter((item) => {
-      const itemDate = new Date(item.datetime);
-      return (
-        itemDate.getFullYear() === date.getFullYear() &&
-        itemDate.getMonth() === date.getMonth() &&
-        itemDate.getDate() === date.getDate()
-      );
-    });
-  }, [events, date]);
+  const filtered = useFilteredAppointments(events, date);
 
   if (isLoading) return <Loading />;
 

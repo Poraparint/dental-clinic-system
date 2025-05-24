@@ -1,14 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { DialogContentForm } from "@/components/props/wrapper/dialog-content";
+import { DialogContentForm } from "@/components/shared/dialog/dialog-content";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
 import { VariantType } from "@/types/variant";
+import { TooltipWrapper } from "@/components/shared/tooltip";
 interface DialogButtonProps {
   icon?: React.ReactNode;
   title?: string;
@@ -43,14 +37,9 @@ export const DialogButton = ({
   return (
     <>
       {tooltip ? (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>{button}</TooltipTrigger>
-            <TooltipContent>
-              <p>{tooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipWrapper content={tooltip}>
+          { button }
+        </TooltipWrapper>
       ) : (
         button
       )}

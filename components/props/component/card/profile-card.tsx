@@ -1,12 +1,6 @@
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleHelp } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import React from "react";
+import { TooltipWrapper } from "@/components/shared/tooltip";
+import { CircleBox } from "@/components/shared/common/circle-box";
 
 interface ProfileCardProps {
   icon?: React.ReactNode;
@@ -17,6 +11,7 @@ interface ProfileCardProps {
   badge?: React.ReactNode;
   badgeTooltip?: string;
   tooltip?: string;
+  alternate?: boolean;
 }
 export const ProfileCard = ({
   icon,
@@ -27,49 +22,39 @@ export const ProfileCard = ({
   badgeTooltip,
   className,
   tooltip,
+  alternate = true,
 }: ProfileCardProps) => {
   const card = (
     <CardHeader className={`border-b relative ${className}`}>
       <div className="flex space-x-3 items-center">
-        <div className="p-2 rounded-full border border-primary-foreground shadow-sm">
-          {avatar ? (
-            <span>{avatar}</span>
-          ) : (
-            <span className="[&>svg]:size-4">{icon || <CircleHelp />}</span>
-          )}
-        </div>
+        <CircleBox avatar={avatar} icon={ icon } />
         <div className="space-y-2">
-          {title && <CardTitle>{title}</CardTitle>}
-          {description && <CardDescription>{description}</CardDescription>}
+          {alternate ? (
+            <>
+              {title && <CardTitle>{title}</CardTitle>}
+              {description && <CardDescription>{description}</CardDescription>}
+            </>
+          ) : (
+            <>
+              {description && <CardDescription>{description}</CardDescription>}
+              {title && <CardTitle>{title}</CardTitle>}
+            </>
+          )}
         </div>
       </div>
       {badge && (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              
-                {badge}
-          
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{badgeTooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipWrapper content={badgeTooltip}>
+          {badge}
+        </TooltipWrapper>
       )}
     </CardHeader>
   );
   return (
     <>
       {tooltip ? (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>{card}</TooltipTrigger>
-            <TooltipContent>
-              <p>{tooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <TooltipWrapper content={tooltip}>
+          {card}
+        </TooltipWrapper>
       ) : (
         card
       )}

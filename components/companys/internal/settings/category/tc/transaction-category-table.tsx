@@ -2,8 +2,8 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
-import { formatDate } from "@/lib/utils/utils";
+import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
+import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { Category } from "@/types/category";
 

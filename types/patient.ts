@@ -8,6 +8,7 @@ export type Patient = {
   worktel?: string | null;
   cd?: string | null;
   drug?: string | null;
+  
 };
 
 export type Patients = {

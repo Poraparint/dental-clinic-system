@@ -2,7 +2,7 @@
 import { Loading } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { useTransaction } from "@/hooks/internal/use-transaction";
+import { useTransaction } from "@/hooks/internal/company/use-transaction";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
 import { DialogCreateRecheck } from "@/components/dialog/internal/dialog-create-recheck";
@@ -14,7 +14,10 @@ export const TransactionTable = () => {
   const params = useParams();
   const companyId = params.companyId as string;
   const patientId = params.patientId as string;
-  const { transactions, error, isLoading } = useTransaction(companyId, patientId);
+  const { transactions, error, isLoading } = useTransaction(
+    companyId,
+    patientId
+  );
 
   const [, setRefreshKey] = useState(0);
 

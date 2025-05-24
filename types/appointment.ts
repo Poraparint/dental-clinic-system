@@ -24,9 +24,10 @@ export type Recheck = {
   patientId: string;
   createdAt: Date;
   recheckList: {
+    id: string;
     datetime: Date;
-    detail?: string;
-    price?: number;
+    detail: string;
+    price: number;
     isConfirmed: boolean;
     transactionCategory: {
       name: string;
@@ -56,7 +57,7 @@ export type Recheck = {
 export type RecheckList = {
   datetime: Date;
   detail: string;
-  price?: number;
+  price: number;
   isConfirmed: boolean;
   transactionCategory: {
     name: string;

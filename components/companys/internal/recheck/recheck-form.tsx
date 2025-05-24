@@ -7,10 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateRecheckSchema } from "@/schemas";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 
 // hooks
-import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
+import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 
 // ui
 import {
@@ -25,24 +25,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 // components
-import { SelectCategory } from "@/components/props/component/select-category";
-import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { SelectCategory } from "@/components/shared/select/select-category";
+import { DatePickerField } from "@/components/shared/select/date-picker-field";
 
 // icons
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Transaction } from "@/types/transaction";
-import { useScheduleCategories } from "@/hooks/internal/category/use-sc";
-import { createRecheck } from "@/hooks/internal/use-recheck";
+import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
+import { createRecheck } from "@/hooks/internal/company/use-recheck";
+import { TooltipWrapper } from "@/components/shared/tooltip";
 
 interface RecheckFormProps {
   setOpen: (open: boolean) => void;
@@ -117,39 +112,30 @@ export const RecheckForm = ({
                     รายการรีเช็ค / แบ่งจ่าย
                   </h3>
 
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            append({
-                              datetime: new Date(),
-                              detail: "",
-                              price: 0,
-                              tcId: "",
-                              scheduleId: "",
-                            })
-                          }
-                          disabled={fields.length >= 6 || isPending}
-                          className={cn(
-                            "flex items-center gap-1 text-sm font-normal",
-                            fields.length >= 6 &&
-                              "opacity-50 cursor-not-allowed"
-                          )}
-                        >
-                          <Plus size={14} />
-                          เพิ่มรายการ
-                        </Button>
-                      </TooltipTrigger>
-
-                      <TooltipContent>
-                        <p>สามารถเพิ่มได้สูงสุด 6 รายการ</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <TooltipWrapper content={"สามารถเพิ่มได้สูงสุด 6 รายการ"}>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() =>
+                        append({
+                          datetime: new Date(),
+                          detail: "",
+                          price: 0,
+                          tcId: "",
+                          scheduleId: "",
+                        })
+                      }
+                      disabled={fields.length >= 6 || isPending}
+                      className={cn(
+                        "flex items-center gap-1 text-sm font-normal",
+                        fields.length >= 6 && "opacity-50 cursor-not-allowed"
+                      )}
+                    >
+                      <Plus size={14} />
+                      เพิ่มรายการ
+                    </Button>
+                  </TooltipWrapper>
                 </div>
 
                 {/* Items List */}

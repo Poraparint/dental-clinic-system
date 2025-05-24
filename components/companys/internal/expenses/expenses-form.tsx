@@ -43,13 +43,13 @@ import {
 import { CreateExpensesSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/wrapper/card-category";
-import { SelectCategory } from "@/components/props/component/select-category";
+import { CardCategory } from "@/components/shared/card";
+import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { createExpenses } from "@/hooks/internal/use-expenses";
-import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
-import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { createExpenses } from "@/hooks/internal/company/use-expenses";
+import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
+import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateExpensesFormProps {
