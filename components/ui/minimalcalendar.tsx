@@ -3,14 +3,20 @@
 import * as React from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker, DayPickerSingleProps } from "react-day-picker";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { format } from "date-fns";
 import { renderStatusIcon } from "@/components/props/render/render-icons";
 import { BadgeDate } from "@/components/props/component/badge-date";
 
 interface ItemWithStatus {
-  status?: "รอดำเนินการ" | "รับงานเรียบร้อย" | "เสร็จสิ้น" | "รอยืนยัน" | "ยืนยันแล้ว" | string;
+  status?:
+    | "รอดำเนินการ"
+    | "รับงานเรียบร้อย"
+    | "เสร็จสิ้น"
+    | "รอยืนยัน"
+    | "ยืนยันแล้ว"
+    | string;
   [key: string]: unknown;
 }
 
@@ -93,10 +99,11 @@ function MinimalCalendar<T extends ItemWithStatus>({
         ),
         DayContent: ({ date }) => {
           const key = format(date, "yyyy-MM-dd");
-          const items = data?.filter((item) => {
-            const itemDate = getDate?.(item);
-            return itemDate && format(itemDate, "yyyy-MM-dd") === key;
-          }) ?? [];
+          const items =
+            data?.filter((item) => {
+              const itemDate = getDate?.(item);
+              return itemDate && format(itemDate, "yyyy-MM-dd") === key;
+            }) ?? [];
 
           if (!items || items.length === 0) {
             return (
@@ -139,7 +146,7 @@ function MinimalCalendar<T extends ItemWithStatus>({
                           ? "amethyst"
                           : status === "ยืนยันแล้ว"
                             ? "emerald"
-                        : "default";
+                            : "default";
 
                 return (
                   <BadgeDate
@@ -159,7 +166,7 @@ function MinimalCalendar<T extends ItemWithStatus>({
               {/* เพิ่ม badge สำหรับรายการที่ไม่มี status */}
               {withoutStatus.length > 0 && (
                 <BadgeDate
-                  icon={<Calendar className="size-4"/>}
+                  icon={<Calendar className="size-4" />}
                   count={withoutStatus.length}
                   variant="azurite"
                   className={cn({

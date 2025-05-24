@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/wrapper/dialog-button";
+import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { Aperture } from "lucide-react";
 import { useState } from "react";
 import { CreateDentaltechForm } from "@/components/companys/internal/dentaltech/dentaltech-form";
@@ -28,7 +28,11 @@ export const DialogCreateDentalTech = ({
         variant="azurite"
         tooltip="เพิ่มเป็นงานทันตกรรม"
       >
-        <CreateDentaltechForm setOpen={setOpen} onSuccess={onSuccess} transaction={transaction}/>
+        <CreateDentaltechForm
+          setOpen={setOpen}
+          onSuccess={onSuccess}
+          transaction={transaction}
+        />
       </DialogButton>
     </>
   );

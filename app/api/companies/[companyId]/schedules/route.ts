@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { formatDateOnly } from "@/lib/utils/utils";
+import { formatDateOnly } from "@/lib/utils";
 import { validateAllExceptTechnician } from "@/lib/utils/validation/member";
 import { CreateScheduleSchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
@@ -104,7 +104,7 @@ export async function POST(
     validation.data;
 
   try {
-    await db.schedule.create({
+    const schedule = await db.schedule.create({
       data: {
         datetime: formatDateOnly(datetime),
         patientName,
@@ -121,6 +121,7 @@ export async function POST(
     return NextResponse.json(
       {
         success: "เพิ่มรายการใหม่สำเร็จ",
+        schedule,
       },
       { status: 201 }
     );

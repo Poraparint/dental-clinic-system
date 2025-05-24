@@ -20,12 +20,12 @@ import { Input } from "@/components/ui/input";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { Aperture } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
-import { createDentalTechCategory } from "@/hooks/internal/category/use-dtc";
+import { createDentalTechCategory } from "@/hooks/internal/company/category/use-dtc";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;

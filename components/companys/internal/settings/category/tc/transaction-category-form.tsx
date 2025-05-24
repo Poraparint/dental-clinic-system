@@ -20,12 +20,12 @@ import { Input } from "@/components/ui/input";
 import { CreateTransactionCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { Album } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
-import { createTransactionCategory } from "@/hooks/internal/category/use-tc";
+import { createTransactionCategory } from "@/hooks/internal/company/category/use-tc";
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -67,7 +67,7 @@ export const CreateTransactionCategoryForm = ({
       }
     });
   };
-  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">

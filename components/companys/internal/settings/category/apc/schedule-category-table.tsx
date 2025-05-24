@@ -1,7 +1,10 @@
 "use client";
 
 import { Loading } from "@/components/loading";
-import { onReorderScheduleCategory, useScheduleCategories } from "@/hooks/internal/category/use-sc";
+import {
+  onReorderScheduleCategory,
+  useScheduleCategories,
+} from "@/hooks/internal/company/category/use-sc";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { FormNotFound } from "@/components/form-not-found";
@@ -16,9 +19,9 @@ export const AppointmentCategoriesTable = () => {
     const data = await onReorderScheduleCategory(companyId, orderedIds);
 
     if (data.error) {
-      toast.error(data.error, { description: data.description })
+      toast.error(data.error, { description: data.description });
     } else {
-      toast.success(data.success)
+      toast.success(data.success);
     }
   };
 
@@ -27,11 +30,15 @@ export const AppointmentCategoriesTable = () => {
   }
 
   if (error) {
-    <FormNotFound message={ error.error } description={error.description} />
+    <FormNotFound message={error.error} description={error.description} />;
   }
   return (
     <DraggableCategoryList
-      categories={categories.map((c) => ({ id: c.id, name: c.name, createdAt: c.createdAt }))}
+      categories={categories.map((c) => ({
+        id: c.id,
+        name: c.name,
+        createdAt: c.createdAt,
+      }))}
       onReorder={handleReorder}
     />
   );

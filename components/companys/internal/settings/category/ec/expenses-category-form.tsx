@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { BriefcaseBusiness } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
-import { createExpensesCategory } from "@/hooks/internal/category/use-ec";
+import { createExpensesCategory } from "@/hooks/internal/company/category/use-ec";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;

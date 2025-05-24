@@ -1,8 +1,11 @@
 import { getRecheckByCompanyId } from "@/data/internal/recheck-dentaltech";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
 import { db } from "@/lib/db";
-import { formatDateOnly } from "@/lib/utils/utils";
-import { validateAllExceptTechnician, validateManagerAndDentist } from "@/lib/utils/validation/member";
+import { formatDateOnly } from "@/lib/utils";
+import {
+  validateAllExceptTechnician,
+  validateManagerAndDentist,
+} from "@/lib/utils/validation/member";
 import { CreateRecheckSchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,12 +14,12 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   const { companyId } = await params;
-  
-    const accessToGet = await validateAllExceptTechnician(companyId);
-  
-    if (accessToGet instanceof Response) {
-      return accessToGet;
-    }
+
+  const accessToGet = await validateAllExceptTechnician(companyId);
+
+  if (accessToGet instanceof Response) {
+    return accessToGet;
+  }
 
   try {
     const rechecks = await db.recheck.findMany({
@@ -27,6 +30,7 @@ export async function GET(
         createdAt: true,
         recheckList: {
           select: {
+            id: true,
             datetime: true,
             detail: true,
             price: true,
@@ -123,15 +127,21 @@ export async function POST(
   const existingRecheck = await getRecheckByCompanyId(companyId, transactionId);
 
   if (existingRecheck) {
-    return NextResponse.json({ error: "รหัสธุรกรรมนี้ถูกใช้ไปแล้ว" });
+    return NextResponse.json(
+      { error: "รหัสธุรกรรมนี้ถูกใช้ไปแล้ว" },
+      { status: 409 }
+    );
   }
 
   const patientId = await getPatientByTransactionId(transactionId);
 
   if (!patientId) {
-    return NextResponse.json({
-      error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้",
-    });
+    return NextResponse.json(
+      {
+        error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้",
+      },
+      { status: 409 }
+    );
   }
 
   try {

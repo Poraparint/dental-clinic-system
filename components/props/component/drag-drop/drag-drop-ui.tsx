@@ -6,8 +6,8 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-    PointerSensor,
-  DragEndEvent
+  PointerSensor,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -17,7 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Pencil } from "lucide-react";
-import { formatDate } from "@/lib/utils/utils";
+import { formatDate } from "@/lib/utils";
 
 type Props = {
   categories: {
@@ -42,9 +42,9 @@ export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragEnd = (event: DragEndEvent) => {
-      const { active, over } = event;
+    const { active, over } = event;
 
-      if (!over) return;
+    if (!over) return;
 
     if (active.id !== over?.id) {
       const oldIndex = items.indexOf(active.id as string);
@@ -65,7 +65,15 @@ export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
         <div className="space-y-2">
           {items.map((id) => {
             const category = categories.find((c) => c.id === id)!;
-            return <SortableItem key={category.id} id={category.id} name={category.name} createdAt={category.createdAt} onEdit={category.onEdit} />;
+            return (
+              <SortableItem
+                key={category.id}
+                id={category.id}
+                name={category.name}
+                createdAt={category.createdAt}
+                onEdit={category.onEdit}
+              />
+            );
           })}
         </div>
       </SortableContext>
@@ -73,25 +81,32 @@ export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
   );
 };
 
-function SortableItem({ id, name, createdAt, onEdit }:SortableItemProps) {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+function SortableItem({ id, name, createdAt, onEdit }: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id });
 
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        cursor: "grab",
-        opacity: isDragging ? 0.6 : 1,
-    };
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    cursor: "grab",
+    opacity: isDragging ? 0.6 : 1,
+  };
 
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        {...listeners}
-        className="p-3 rounded-xl shadow-sm border hover:shadow-md transition flex items-center justify-between"
-      >
-        <div className="flex items-center space-x-3">
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="p-3 rounded-xl shadow-sm border hover:shadow-md transition flex items-center justify-between"
+    >
+      <div className="flex items-center space-x-3">
         <GripVertical className="text-muted-foreground" size={18} />
         <div>
           <p className="font-medium text-sm">{name}</p>
@@ -107,7 +122,6 @@ function SortableItem({ id, name, createdAt, onEdit }:SortableItemProps) {
         <Pencil size={16} />
         <span>แก้ไข</span>
       </button>
-   
-      </div>
-    );
+    </div>
+  );
 }

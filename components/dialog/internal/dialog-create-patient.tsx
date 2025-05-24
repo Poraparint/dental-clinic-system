@@ -1,7 +1,7 @@
 "use client";
 
-import { DialogButton } from "@/components/props/wrapper/dialog-button";
-import { PlusIcon } from "lucide-react";
+import { DialogButton } from "@/components/shared/dialog/dialog-button";
+import { UserPlus } from "lucide-react";
 import { useState } from "react";
 import { CreatePatientForm } from "@/components/companys/internal/patient/patient-form";
 
@@ -17,7 +17,7 @@ export const DialogCreatePatient = ({
     <>
       <DialogButton
         title="เพิ่มบัตรใหม่"
-        icon={<PlusIcon />}
+        icon={<UserPlus />}
         dialogTitle="เพิ่มบัตรใหม่"
         dialogDescription="กรอกข้อมูลเพื่อสร้างบัตรใหม่"
         open={open}

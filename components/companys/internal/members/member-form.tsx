@@ -26,13 +26,13 @@ import {
 } from "@/components/ui/select";
 
 //props
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { Users } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
-import { createMembers } from "@/hooks/internal/use-member";
+import { createMembers } from "@/hooks/internal/company/use-member";
 
 interface MemberRegisterFormProps {
   setOpen: (open: boolean) => void;

@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 type DashboardPageProps = {
   params: Promise<{ companyId: string }>;
 };
-export default async function DashboardPage({ params }: DashboardPageProps) {
+const DashboardPage = async ({ params }: DashboardPageProps) => {
   const { companyId } = await params;
 
   if (!companyId) {
@@ -20,3 +20,4 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     </RoleGate>
   );
 }
+export default DashboardPage;

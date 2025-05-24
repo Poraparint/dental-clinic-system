@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogButton } from "@/components/props/wrapper/dialog-button";
+import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { ScheduleForm } from "@/components/companys/internal/schedule/schedule-form";

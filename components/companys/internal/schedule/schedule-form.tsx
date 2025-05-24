@@ -23,18 +23,18 @@ import {
 import { CreateScheduleSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/wrapper/card-category";
-import { SelectCategory } from "@/components/props/component/select-category";
+import { CardCategory } from "@/components/shared/card";
+import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { Input } from "@/components/ui/input";
-import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
-import { useDentists } from "@/hooks/internal/use-dentist";
-import { useScheduleCategories } from "@/hooks/internal/category/use-sc";
-import { createSchedule } from "@/hooks/internal/use-schedule";
+import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
+import { useDentists } from "@/hooks/internal/company/use-dentist";
+import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
+import { createSchedule } from "@/hooks/internal/company/use-schedule";
 
 interface ScheduleFormProps {
   setOpen: (open: boolean) => void;

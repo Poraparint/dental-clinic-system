@@ -29,14 +29,14 @@ import { Input } from "@/components/ui/input";
 import { CreateTransactionSchema } from "@/schemas";
 
 //props
-import { CardCategory } from "@/components/props/wrapper/card-category";
-import { SelectCategory } from "@/components/props/component/select-category";
+import { CardCategory } from "@/components/shared/card/card-category";
+import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { createTransaction } from "@/hooks/internal/use-transaction";
+import { createTransaction } from "@/hooks/internal/company/use-transaction";
 import { Textarea } from "@/components/ui/textarea";
-import { useTransactionCategories } from "@/hooks/internal/category/use-tc";
-import { DatePickerField } from "@/components/props/component/date-picker-field";
+import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
+import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 
 interface CreateTransactionFormProps {

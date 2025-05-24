@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { CreateCompanySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { Building2 } from "lucide-react";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
 import { createMinistry } from "@/hooks/external/use-ministry";
@@ -63,7 +63,11 @@ export const CreateMinistryForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-        <CardCategory icon={<Building2 />} title="ข้อมูลบอร์ด / บริษัท" description="กรอกข้อมูลเพื่อสร้างบริษัท">
+        <CardCategory
+          icon={<Building2 />}
+          title="ข้อมูลบอร์ด / บริษัท"
+          description="กรอกข้อมูลเพื่อสร้างบริษัท"
+        >
           <div className="space-y-3">
             <FormField
               control={form.control}
@@ -89,7 +93,11 @@ export const CreateMinistryForm = ({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="รายละเอียด" />
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="รายละเอียด"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

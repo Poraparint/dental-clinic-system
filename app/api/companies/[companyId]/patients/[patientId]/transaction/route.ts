@@ -4,11 +4,11 @@ import { NextRequest } from "next/server";
 import { validateManagerAndDentist } from "@/lib/utils/validation/member";
 import { CreateTransactionSchema } from "@/schemas";
 import { getPatientByCompanyId } from "@/data/internal/patient";
-import { getDisplayDate } from "@/lib/utils/utils";
+import { getDisplayDate } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ companyId: string, patientId: string }> }
+  { params }: { params: Promise<{ companyId: string; patientId: string }> }
 ) {
   const { companyId, patientId } = await params;
 
@@ -80,7 +80,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ companyId: string, patientId: string }> }
+  { params }: { params: Promise<{ companyId: string; patientId: string }> }
 ) {
   const values = await request.json();
 

@@ -15,7 +15,7 @@ export const Settings = () => {
     <Card className="px-5">
       <h1 className="text-3xl font-bold mb-6">ระบบจัดการหมวดหมู่</h1>
       <Tabs defaultValue="dental-procedures">
-        <TabsList className="grid grid-cols-4 mb-8">
+        <TabsList className="w-fit mb-6">
           <TabsTrigger value="dental-procedures">รายการทำฟัน</TabsTrigger>
           <TabsTrigger value="expense-types">ชนิดรายจ่าย</TabsTrigger>
           <TabsTrigger value="scheduling">ตารางเวลานัด</TabsTrigger>

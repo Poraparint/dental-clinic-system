@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 import { validateManager } from "@/lib/utils/validation/manager";
 import { CreateExpensesSchema } from "@/schemas";
-import { getDisplayDate } from "@/lib/utils/utils";
+import { getDisplayDate } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,

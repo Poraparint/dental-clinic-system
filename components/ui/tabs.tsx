@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -25,10 +25,7 @@ function TabsList({
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      className={cn(
-        "bg-muted-foreground/10 text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
-        className
-      )}
+      className={cn("flex border-b border-primary-foreground", className)}
       {...props}
     />
   );
@@ -42,7 +39,8 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "data-[state=active]:bg-gradient-to-r from-indigo-700 to-indigo-500 data-[state=active]:text-white focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
+        "relative px-4 py-2 text-sm font-medium text-muted-foreground transition-colors data-[state=active]:text-charoite hover:cursor-pointer",
+        "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-charoite after:rounded-full after:transition-all after:duration-200 after:scale-x-0 data-[state=active]:after:scale-x-100",
         className
       )}
       {...props}

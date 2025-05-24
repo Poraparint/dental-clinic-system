@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 import { validateAllExceptAssistant } from "@/lib/utils/validation/member";
 import { CreateDentalTechSchema } from "@/schemas";
 import { getDentalTechByCompanyId } from "@/data/internal/recheck-dentaltech";
-import { formatDateOnly } from "@/lib/utils/utils";
+import { formatDateOnly } from "@/lib/utils";
 import { getPatientByTransactionId } from "@/data/internal/transaction";
 
 export async function GET(
@@ -114,15 +114,21 @@ export async function POST(
   );
 
   if (existingDentalTech) {
-    return NextResponse.json({ error: "รหัสธุรกรรมนี้ถูกใช้ไปแล้ว" });
+    return NextResponse.json(
+      { error: "รหัสธุรกรรมนี้ถูกใช้ไปแล้ว" },
+      { status: 409 }
+    );
   }
 
   const patientId = await getPatientByTransactionId(transactionId);
 
   if (!patientId) {
-    return NextResponse.json({
-      error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้",
-    });
+    return NextResponse.json(
+      {
+        error: "รหัสธุรกรรมไม่ถูกต้องหรือไม่มีรหัสธุรกรรมนี้",
+      },
+      { status: 409 }
+    );
   }
 
   try {

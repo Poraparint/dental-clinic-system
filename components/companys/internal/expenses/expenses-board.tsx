@@ -3,18 +3,18 @@
 import { useMemo, useState } from "react";
 import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-table";
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
-import { useExpensesCategories } from "@/hooks/internal/category/use-ec";
+import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
 import { useParams } from "next/navigation";
 import { Loading } from "@/components/loading";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
-import { useExpensesOverview } from "@/hooks/internal/use-expenses-overview";
+import { useExpensesOverview } from "@/hooks/internal/company/use-expenses-overview";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
-import { formatCurrency } from "@/lib/utils/utils";
+import { formatCurrency } from "@/lib/utils";
 
 export const Expenses = () => {
   const params = useParams();

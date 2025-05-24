@@ -1,11 +1,11 @@
 "use client";
 import { Loading } from "@/components/loading";
-import { usePatients } from "@/hooks/internal/use-patient";
+import { usePatients } from "@/hooks/internal/company/use-patient";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { useParams } from "next/navigation";
 
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
-import { formatDate } from "@/lib/utils/utils";
+import { formatDate } from "@/lib/utils";
 import { Patients } from "@/types/patient";
 
 interface PatientTableProps {

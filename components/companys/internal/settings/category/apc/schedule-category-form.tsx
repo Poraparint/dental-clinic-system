@@ -20,12 +20,12 @@ import { Input } from "@/components/ui/input";
 import { CreateDentalTechCategorySchema } from "@/schemas";
 
 //actions
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card";
 import { Clock1 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/props/component/button/submit-button";
-import { createScheduleCategory } from "@/hooks/internal/category/use-sc";
+import { createScheduleCategory } from "@/hooks/internal/company/category/use-sc";
 
 interface CreateAppointmentCategoryFormProps {
   setOpen: (open: boolean) => void;
@@ -63,7 +63,7 @@ export const CreateAppointmentCategoryForm = ({
       }
     });
   };
-  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">

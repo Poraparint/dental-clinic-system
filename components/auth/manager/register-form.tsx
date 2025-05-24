@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 
 //props
 import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card/card-category";
 import { User } from "lucide-react";
 
 export const RegisterForm = () => {

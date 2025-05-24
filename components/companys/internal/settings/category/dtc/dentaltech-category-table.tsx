@@ -2,8 +2,8 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useDentaltTechCategories } from "@/hooks/internal/category/use-dtc";
-import { formatDate } from "@/lib/utils/utils";
+import { useDentaltTechCategories } from "@/hooks/internal/company/category/use-dtc";
+import { formatDate } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { CategoryWithCreator } from "@/types/category";
 

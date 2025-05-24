@@ -1,8 +1,9 @@
 "use client";
-import { Card } from "@/components/ui/card";
+
 import { RecheckCard } from "@/components/companys/internal/recheck/recheck-card";
 import { useState } from "react";
 import { RefreshButton } from "@/components/props/component/button/refresh-button";
+import { TitleCard } from "@/components/shared/card/title-card";
 
 export const RecheckBoard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -12,14 +13,11 @@ export const RecheckBoard = () => {
   };
 
   return (
-    <Card className="px-5 sapce-y-4">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">คนไข้รีเช็ค / แบ่งชำระ</h1>
-        <RefreshButton onClick={handleRefresh} />
-      </div>
-
-      <hr />
+    <TitleCard
+      title="คนไข้รีเช็ค / แบ่งชำระ"
+      dialog={<RefreshButton onClick={handleRefresh} />}
+    >
       <RecheckCard key={refreshKey} />
-    </Card>
+    </TitleCard>
   );
 };

@@ -1,5 +1,5 @@
 "use client";
-import { CardCategory } from "@/components/props/wrapper/card-category";
+import { CardCategory } from "@/components/shared/card/card-category";
 import { Hospital } from "lucide-react";
 
 //props

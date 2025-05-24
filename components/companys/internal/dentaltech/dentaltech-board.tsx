@@ -2,7 +2,7 @@
 
 import { DentalTechTable } from "@/components/companys/internal/dentaltech/dentaltech-table";
 import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
-import { useDentalTechs } from "@/hooks/internal/use-dentalTech";
+import { useDentalTechs } from "@/hooks/internal/company/use-dentalTech";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
