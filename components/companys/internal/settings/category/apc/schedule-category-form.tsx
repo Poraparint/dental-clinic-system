@@ -23,7 +23,7 @@ import { CreateDentalTechCategorySchema } from "@/schemas";
 import { CardCategory } from "@/components/shared/card";
 import { Clock1 } from "lucide-react";
 import { toast } from "sonner";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { createScheduleCategory } from "@/hooks/internal/company/category/use-sc";
 import { useCompany } from "@/context/context";
 

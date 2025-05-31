@@ -27,25 +27,28 @@ import { CreatePatientSchema } from "@/schemas";
 import { CardCategory } from "@/components/shared/card";
 
 //actions
-import { createPatient } from "@/hooks/internal/company/use-patient";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { createPatient, updatePatient } from "@/hooks/internal/company/use-patient";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany } from "@/context/context";
+import { PatientFormData } from "@/types/patient";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  patientData?: PatientFormData;
 }
 
 export const CreatePatientForm = ({
   setOpen,
   onSuccess,
+  patientData,
 }: CreatePatientFormProps) => {
   const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreatePatientSchema>>({
     resolver: zodResolver(CreatePatientSchema),
-    defaultValues: {
+    defaultValues: patientData ?? {
       name: "",
       phone: "",
       age: "",
@@ -60,7 +63,13 @@ export const CreatePatientForm = ({
 
   const OnSubmit = (values: z.infer<typeof CreatePatientSchema>) => {
     startTransition(async () => {
-      const data = await createPatient(values, companyId);
+      let data;
+
+      if (patientData?.id) {
+        data = await updatePatient(values, companyId, patientData.id);
+      } else {
+        data = await createPatient(values, companyId);
+      }
 
       if (data.error) {
         toast.error(data.error, {
@@ -266,7 +275,7 @@ export const CreatePatientForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <SubmitButton
-            label="เพิ่มบัตรใหม่"
+            label={patientData?.id ? "อัพเดตข้อมูล" : "เพิ่มบัตรใหม่"}
             type="submit"
             isPending={isPending}
           />

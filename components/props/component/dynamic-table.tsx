@@ -9,8 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ChevronRight } from "lucide-react";
+
 import { FormNotFound } from "@/components/form-not-found";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface ColumnConfig<T> {
   key: string;
@@ -25,9 +28,8 @@ interface DynamicTableProps<T> {
   className?: string;
   error?: string;
   description?: string;
-  url?: string;
-  urlname?: string;
   onRowClick?: (item: T) => void;
+  dialogEdit?: (item: T) => React.ReactNode;
 }
 
 export function DynamicTable<T>({
@@ -37,6 +39,7 @@ export function DynamicTable<T>({
   error,
   description,
   onRowClick,
+  dialogEdit,
 }: DynamicTableProps<T>) {
   return (
     <ScrollArea className="h-96">
@@ -54,10 +57,7 @@ export function DynamicTable<T>({
         <TableBody>
           {data.length > 0 ? (
             data.map((item, index) => (
-              <TableRow
-                key={index}
-                onClick={() => onRowClick && onRowClick(item)}
-              >
+              <TableRow key={index} className="hover:bg-background">
                 {columns.map((column) => (
                   <TableCell
                     key={`${column.key}-${index}`}
@@ -66,15 +66,28 @@ export function DynamicTable<T>({
                     {column.render(item)}
                   </TableCell>
                 ))}
+                {onRowClick && (
+                  <TableCell className="text-right">
+                    <Button
+                      className="group px-0"
+                      onClick={() => onRowClick && onRowClick(item)}
+                    >
+                      <span>ดูรายละเอียด</span>
+                      <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
+                    </Button>
+                  </TableCell>
+                )}
+                {dialogEdit && (
+                  <TableCell className="text-right">
+                    {dialogEdit(item)}
+                  </TableCell>
+                )}
               </TableRow>
             ))
           ) : (
             <TableRow className="hover:bg-background">
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                <FormNotFound
-                  message={error}
-                  description={description}
-                />
+                <FormNotFound message={error} description={description} />
               </TableCell>
             </TableRow>
           )}

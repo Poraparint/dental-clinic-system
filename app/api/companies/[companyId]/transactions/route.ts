@@ -32,8 +32,8 @@ export async function GET(
         transactionCategory: {
           select: {
             name: true,
-          }
-        }
+          },
+        },
       },
     });
 

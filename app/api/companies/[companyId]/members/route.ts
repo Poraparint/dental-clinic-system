@@ -20,7 +20,6 @@ export async function GET(
     return accessToGet;
   }
   try {
-
     const members = await db.member.findMany({
       where: {
         companyId,
@@ -43,12 +42,10 @@ export async function GET(
     });
 
     if (members.length < 1) {
-      return NextResponse.json(
-        {
-          error: "ไม่พบข้อมูลพนักงาน",
-          description: "เริ่มต้นด้วยการสร้างบัญชีพนักงาน",
-        }
-      );
+      return NextResponse.json({
+        error: "ไม่พบข้อมูลพนักงาน",
+        description: "เริ่มต้นด้วยการสร้างบัญชีพนักงาน",
+      });
     }
 
     return NextResponse.json(members);
@@ -93,11 +90,14 @@ export async function POST(
   }
 
   const { email, password, name, phone, memberCode, role } = validation.data;
-  
-    const existingUserEmail = await getUserByEmail(email);
+
+  const existingUserEmail = await getUserByEmail(email);
 
   if (existingUserEmail) {
-    return NextResponse.json({ error: "อีเมลนี้ถูกใช้ไปแล้ว" }, { status: 409 });
+    return NextResponse.json(
+      { error: "อีเมลนี้ถูกใช้ไปแล้ว" },
+      { status: 409 }
+    );
   }
 
   try {
@@ -133,7 +133,6 @@ export async function POST(
       {
         success:
           "เพิ่มบัญชีพนักงานเรียบร้อยแล้ว! กรุณาให้พนักงานตรวจสอบอีเมลเพื่อยืนยันตัวตน",
-        
       },
       { status: 201 }
     );

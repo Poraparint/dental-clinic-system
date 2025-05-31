@@ -23,7 +23,7 @@ import { CreateTransactionCategorySchema } from "@/schemas";
 import { CardCategory } from "@/components/shared/card";
 import { Album } from "lucide-react";
 import { toast } from "sonner";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { createTransactionCategory } from "@/hooks/internal/company/category/use-tc";
 import { useCompany } from "@/context/context";
 

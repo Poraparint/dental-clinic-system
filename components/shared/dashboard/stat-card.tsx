@@ -1,4 +1,3 @@
-// components/ui/stat-card.tsx
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import {
   Card,
@@ -77,11 +76,11 @@ export const StatCard = ({
   };
 
   return (
-    <Card className="py-3 px-5 hover:shadow-md transition-shadow duration-200">
-      <CardContent className="p-0 space-y-2">
-        <div className="flex items-center justify-between">
+    <Card className="bg-transparent shadow-none p-0 border-none">
+      <CardContent className="p-0 space-y-2 flex flex-col gap-2 items-center justify-center">
+        <div className="flex flex-col gap-2 items-center justify-center">
           <CardDescription>{title}</CardDescription>
-          <CircleBox icon={icon} className={className} />
+          <CircleBox icon={icon} className={`${className}`} />
         </div>
 
         <CardTitle className="text-xl">

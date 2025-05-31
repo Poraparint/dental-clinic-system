@@ -13,6 +13,7 @@ interface DialogButtonProps {
   variant?: VariantType;
   setOpen: (open: boolean) => void;
   tooltip?: string;
+  className?: string;
 }
 
 export const DialogButton = ({
@@ -25,10 +26,11 @@ export const DialogButton = ({
   open,
   setOpen,
   tooltip,
+  className
 }: DialogButtonProps) => {
 
   const button = (
-    <Button variant={variant} onClick={() => setOpen(true)}>
+    <Button variant={variant} onClick={() => setOpen(true)} className={className}>
       {icon}
       {title}
     </Button>

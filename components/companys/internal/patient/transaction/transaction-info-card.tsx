@@ -1,6 +1,6 @@
 "use client";
 
-import { DialogCreateTransaction } from "@/components/dialog/internal/dialog-create-transaction";
+import { DialogCreateTransaction } from "@/components/dialog/internal/dialog-transaction";
 import { TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import { TransactionTable } from "@/components/companys/internal/patient/transaction/transaction-table";

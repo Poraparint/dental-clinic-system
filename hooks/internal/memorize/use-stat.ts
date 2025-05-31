@@ -6,7 +6,10 @@ import {
   calculateCountComparison,
   calculateProfitComparison,
   calculateRevenueComparison,
+  getCategoryTotals,
+  getMonthlyRevenueExpenseComparison,
   getTopCategoryComparison,
+  getYearlyRevenueExpenseComparison,
 } from "@/lib/utils/stat/stat";
 import { useCombinedAppointments } from "@/hooks/internal/filter/use-combined-apm";
 import { useFilteredAppointments } from "@/hooks/internal/filter/use-filtered-apm";
@@ -56,15 +59,52 @@ export const useFinancialStats = ({
       "amount"
     );
 
+    const categoryChartData = getCategoryTotals(
+      transactions,
+      period,
+      "datetime",
+      "transactionCategory.name",
+      "price"
+    );
+    const expensesChartData = getCategoryTotals(
+      expenses,
+      period,
+      "datetime",
+      "expensesCategory.name",
+      "amount"
+    );
+
+    const monthlyComparison = getMonthlyRevenueExpenseComparison(
+      transactions,
+      expenses,
+      "datetime",
+      "paid", // ใช้ paid สำหรับรายรับจริง
+      "datetime",
+      "amount",
+      6 // 6 เดือนย้อนหลัง
+    );
+
+    const yearlyComparison = getYearlyRevenueExpenseComparison(
+      transactions,
+      expenses,
+      "datetime",
+      "paid",
+      "datetime",
+      "amount",
+      3 // 3 ปีย้อนหลัง
+    );
+
     return {
       revenue,
       profit,
       avgTransaction,
       topTransactionCategory,
       totalExpenses,
+      categoryChartData,
+      expensesChartData,
+      monthlyComparison,
+      yearlyComparison,
     };
-
-   
   }, [transactions, expenses, period]);
 
   return {
@@ -80,7 +120,6 @@ export const useDashboardStats = ({
   rechecks,
   recheckLists,
 }: DashboardStatProps) => {
-
   const { combinedEvents } = useCombinedAppointments({ schedules, rechecks });
   const todayAppointments = useFilteredAppointments(combinedEvents, new Date());
   const stats = useMemo(() => {
@@ -106,7 +145,6 @@ export const useDashboardStats = ({
       patientCount,
       overdueDentaltech,
       recheckListCount,
-      
     };
   }, [patients, period, dentalTechs, recheckLists]);
 
@@ -115,4 +153,3 @@ export const useDashboardStats = ({
     ...stats,
   };
 };
-

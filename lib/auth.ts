@@ -22,6 +22,12 @@ export const currentByRoles = async (allowedRoles: CompanyRole[]) => {
 
 export const currentManager = async () => currentByRoles([CompanyRole.MANAGER]);
 
+export const currentManagerAndComanager = async () => 
+  currentByRoles([
+    CompanyRole.MANAGER,
+    CompanyRole.COMANAGER,
+  ]);
+
 export const currentManagerAndTechnician = async () =>
   currentByRoles([
     CompanyRole.MANAGER,

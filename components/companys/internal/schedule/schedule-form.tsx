@@ -28,7 +28,7 @@ import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
 import { Textarea } from "@/components/ui/textarea";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { Input } from "@/components/ui/input";
 import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 import { useDentists } from "@/hooks/internal/company/use-dentist";

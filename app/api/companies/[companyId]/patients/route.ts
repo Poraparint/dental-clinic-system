@@ -26,13 +26,7 @@ export async function GET(
         companyId,
         isDeleted: false,
       },
-      select: {
-        id: true,
-        name: true,
-        phone: true,
-        createdAt: true,
-        cd: true,
-        drug: true,
+      include: {
         creator: {
           select: {
             name: true,
@@ -98,7 +92,6 @@ export async function POST(
   if (existingPatient) {
     return NextResponse.json({ error: "ชื่อนี้ถูกใช้ไปแล้ว" }, { status: 409 });
   }
-
 
   try {
     await db.patient.create({

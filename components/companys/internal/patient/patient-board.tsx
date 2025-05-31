@@ -1,5 +1,5 @@
 "use client";
-import { DialogCreatePatient } from "@/components/dialog/internal/dialog-create-patient";
+import { DialogCreatePatient } from "@/components/dialog/internal/dialog-patient";
 import { PatientTable } from "@/components/companys/internal/patient/patient-table";
 import { useState } from "react";
 import { NavigatingUi } from "@/components/props/component/navigating";
@@ -26,7 +26,12 @@ export const PatientBoard = () => {
       dialog={<DialogCreatePatient onSuccess={handleRefresh} />}
     >
       {isNavigating && <NavigatingUi />}
-      <PatientTable key={refreshKey} onRowClick={handleRowClick} />
+      <PatientTable
+        key={refreshKey}
+        refreshKey={refreshKey}
+        onRefresh={handleRefresh}
+        onRowClick={handleRowClick}
+      />
     </TitleCard>
   );
 };

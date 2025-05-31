@@ -100,6 +100,8 @@ export async function POST(
   if (accessToPost instanceof Response) {
     return accessToPost;
   }
+
+  const { manager } = accessToPost;
   const validation = CreateExpensesSchema.safeParse(values);
 
   if (!validation.success) {
@@ -123,6 +125,7 @@ export async function POST(
         payment,
         amount,
         companyId,
+        createdManagerId:manager.id
       },
     });
 

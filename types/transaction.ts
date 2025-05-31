@@ -1,6 +1,10 @@
+import { CreateTransactionSchema } from "@/schemas";
+import { Dentaltech, Recheck } from "@prisma/client";
+import {z} from "zod";
+
 export type Transaction = {
   id: string;
-  datetime: string;
+  datetime: Date;
   transactionCategory: {
     id: string;
     name: string;
@@ -12,4 +16,10 @@ export type Transaction = {
   price: number;
   paid: number;
   creatorUserId: string;
+  recheck: Recheck | null;
+  dentaltech: Dentaltech | null;
+};
+
+export type TransactionFormData = z.infer<typeof CreateTransactionSchema> & {
+  id?: string;
 };

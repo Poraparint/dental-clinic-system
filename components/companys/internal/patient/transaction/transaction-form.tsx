@@ -30,21 +30,24 @@ import { CardCategory } from "@/components/shared/card/card-category";
 import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { createTransaction } from "@/hooks/internal/company/use-transaction";
+import { createTransaction, updateTransaction } from "@/hooks/internal/company/use-transaction";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany, usePatient } from "@/context/context";
+import { TransactionFormData } from "@/types/transaction";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  transactionData?: TransactionFormData;
 }
 
 export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
+  transactionData
 }: CreateTransactionFormProps) => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
@@ -54,7 +57,7 @@ export const CreateTransactionForm = ({
 
   const form = useForm<z.infer<typeof CreateTransactionSchema>>({
     resolver: zodResolver(CreateTransactionSchema),
-    defaultValues: {
+    defaultValues: transactionData ?? {
       datetime: new Date(),
       transactionCategoryId: "",
       detail: "",
@@ -70,7 +73,13 @@ export const CreateTransactionForm = ({
 
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
     startTransition(async () => {
-      const data = await createTransaction(values, companyId, patientId);
+      let data;
+
+      if (transactionData?.id) {
+        data = await updateTransaction(values, companyId, patientId, transactionData.id);
+      } else {
+        data = await createTransaction(values, companyId, patientId);
+      }
 
       if (data.error) {
         toast.error(data.error, {
@@ -88,7 +97,7 @@ export const CreateTransactionForm = ({
       <form onSubmit={form.handleSubmit(OnSubmit)}>
         <CardCategory
           icon={<Notebook />}
-          title="รายการธุรกกรม"
+          title="รายการธุรกรรม"
           description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -204,7 +213,7 @@ export const CreateTransactionForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <SubmitButton
-            label="เพิ่มรายการ"
+            label={transactionData?.id ? "อัพเดตข้อมูล" : "เพิ่มรายการใหม่"}
             type="submit"
             isPending={isPending}
           />

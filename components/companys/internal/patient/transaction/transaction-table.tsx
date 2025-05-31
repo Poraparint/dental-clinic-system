@@ -10,16 +10,17 @@ import { useState } from "react";
 import { DialogCreateDentalTech } from "@/components/dialog/internal/dialog-create-dentaltech";
 import { Transaction } from "@/types/transaction";
 import { useCompany, usePatient } from "@/context/context";
+import { DialogUpdateTransaction } from "@/components/dialog/internal/dialog-transaction";
 
 export const TransactionTable = () => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
+  const [refreshKey, setRefreshKey] = useState(0);
   const { transactions, error, isLoading } = useTransaction(
     companyId,
-    patientId
+    patientId,
+    refreshKey
   );
-
-  const [, setRefreshKey] = useState(0);
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1);
@@ -46,7 +47,8 @@ export const TransactionTable = () => {
     {
       key: "detail",
       header: "รายละเอียด",
-      render: (item: Transaction) => <Textarea value={item.detail} readOnly />,
+      render: (item: Transaction) =>
+        item.detail && <Textarea value={item.detail} readOnly />,
     },
     {
       key: "price",
@@ -72,12 +74,20 @@ export const TransactionTable = () => {
       key: "list",
       header: "",
       render: (item: Transaction) => (
-        <div className="flex gap-2">
-          <DialogCreateRecheck onSuccess={handleRefresh} transaction={item} />
-          <DialogCreateDentalTech
-            onSuccess={handleRefresh}
-            transaction={item}
-          />
+        <div className="flex flex-col gap-2">
+          {item.recheck ? (
+            <Badge variant="amber">Recheck แล้ว</Badge>
+          ) : (
+            <DialogCreateRecheck onSuccess={handleRefresh} transaction={item} />
+          )}
+          {item.dentaltech ? (
+            <Badge variant="azurite">ส่ง Lab แล้ว</Badge>
+          ) : (
+            <DialogCreateDentalTech
+              onSuccess={handleRefresh}
+              transaction={item}
+            />
+          )}
         </div>
       ),
     },
@@ -90,6 +100,13 @@ export const TransactionTable = () => {
       data={transactions}
       columns={columns}
       error={error?.error}
+      dialogEdit={(item) => (
+        <DialogUpdateTransaction
+          key={item.id}
+          transaction={item}
+          onSuccess={handleRefresh}
+        />
+      )}
       description={error?.description}
     />
   );

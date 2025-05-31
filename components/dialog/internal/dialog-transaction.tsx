@@ -1,12 +1,15 @@
 "use client";
 
 import { DialogButton } from "@/components/shared/dialog/dialog-button";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, SquarePen } from "lucide-react";
 import { useState } from "react";
 import { CreateTransactionForm } from "@/components/companys/internal/patient/transaction/transaction-form";
+import { Transaction } from "@/types/transaction";
+import { toTransactionFormData } from "@/lib/utils/transform/transaction";
 
 interface DialogCreateTransactionProps {
   onSuccess?: () => void;
+  transaction?: Transaction;
 }
 // ตัวอย่างการใช้งาน
 export const DialogCreateTransaction = ({
@@ -27,5 +30,31 @@ export const DialogCreateTransaction = ({
         <CreateTransactionForm setOpen={setOpen} onSuccess={onSuccess} />
       </DialogButton>
     </>
+  );
+};
+
+export const DialogUpdateTransaction = ({
+  onSuccess,
+  transaction,
+}: DialogCreateTransactionProps) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <DialogButton
+      icon={<SquarePen />}
+      dialogTitle="แก้ไขข้อมูลคนไข้"
+      dialogDescription="ปรับปรุงข้อมูลของคนไข้"
+      variant="default"
+      open={open}
+      setOpen={setOpen}
+      tooltip="แก้ไข"
+      className="rounded-full size-10"
+    >
+      <CreateTransactionForm
+        setOpen={setOpen}
+        onSuccess={onSuccess}
+        transactionData={transaction ? toTransactionFormData(transaction) : undefined}
+      />
+    </DialogButton>
   );
 };

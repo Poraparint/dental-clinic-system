@@ -47,7 +47,7 @@ import { SelectCategory } from "@/components/shared/select/select-category";
 import { createExpenses } from "@/hooks/internal/company/use-expenses";
 import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany } from "@/context/context";
 
 interface CreateExpensesFormProps {

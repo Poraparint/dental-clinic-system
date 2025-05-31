@@ -10,7 +10,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ companyId: string }> }
 ) {
-  
   const { companyId } = await params;
 
   const accessToGet = await validateAllExceptTechnician(companyId);

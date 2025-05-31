@@ -23,10 +23,10 @@ export const DialogCreateRecheck = ({
         icon={<LampDesk />}
         dialogTitle="เพิ่มรายการรีเช็ค / เพิ่มรายการรีเช็ค"
         dialogDescription="กรอกข้อมูลเพื่อสร้างรายการใหม่"
+        title="รีเช็ค"
         open={open}
         setOpen={setOpen}
         variant="amber"
-        tooltip="เพิ่มลงรายการรีเช็ค / แบ่งจ่าย"
       >
         <RecheckForm
           setOpen={setOpen}

@@ -54,6 +54,8 @@ export async function GET(
             name: true,
           },
         },
+        recheck: true,
+        dentaltech: true,
       },
       orderBy: { createdAt: "desc" },
     });

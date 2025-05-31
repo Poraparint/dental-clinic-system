@@ -8,6 +8,8 @@ import {
   subMonths,
   subWeeks,
   subYears,
+  format,
+  eachMonthOfInterval,
 } from "date-fns";
 
 export type Period = "month" | "week" | "year";
@@ -39,6 +41,13 @@ export interface ProfitResult extends ComparisonResult {
   netProfit: number;
   revenue: number;
   expenses: number;
+}
+
+export interface MonthlyComparisonItem {
+  month: string;
+  revenue: number;
+  expenses: number;
+  profit: number;
 }
 
 function getValueByPath<T>(obj: T, path: string): unknown {
@@ -389,4 +398,107 @@ export const calculateProfitComparison = <T, E>(
     revenue: currentRevenue,
     expenses: currentExpenses,
   };
+};
+
+/**
+ * คำนวณข้อมูลรายรับ รายจ่าย และกำไรแยกตามเดือน
+ */
+export const getMonthlyRevenueExpenseComparison = <T, E>(
+  transactions: T[],
+  expenses: E[],
+  transactionDateField: keyof T,
+  transactionAmountField: keyof T,
+  expenseDateField: keyof E,
+  expenseAmountField: keyof E,
+  monthsBack: number = 6, // จำนวนเดือนย้อนหลังที่ต้องการ
+  referenceDate: Date = new Date()
+): MonthlyComparisonItem[] => {
+  // สร้างช่วงเดือนที่จะแสดง
+  const endDate = endOfMonth(referenceDate);
+  const startDate = startOfMonth(subMonths(referenceDate, monthsBack - 1));
+  
+  const months = eachMonthOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+
+  return months.map((monthDate) => {
+    const monthStart = startOfMonth(monthDate);
+    const monthEnd = endOfMonth(monthDate);
+
+    // คำนวณรายรับของเดือนนี้
+    const monthlyRevenue = transactions
+      .filter((item) => {
+        const itemDate = new Date(item[transactionDateField] as string);
+        return itemDate >= monthStart && itemDate <= monthEnd;
+      })
+      .reduce((sum, item) => sum + (Number(item[transactionAmountField]) || 0), 0);
+
+    // คำนวณรายจ่ายของเดือนนี้
+    const monthlyExpenses = expenses
+      .filter((item) => {
+        const itemDate = new Date(item[expenseDateField] as string);
+        return itemDate >= monthStart && itemDate <= monthEnd;
+      })
+      .reduce((sum, item) => sum + (Number(item[expenseAmountField]) || 0), 0);
+
+    // คำนวณกำไรสุทธิ
+    const profit = monthlyRevenue - monthlyExpenses;
+
+    return {
+      month: format(monthDate, "MMM yyyy"), // เช่น "Jan 2024"
+      revenue: Math.round(monthlyRevenue),
+      expenses: Math.round(monthlyExpenses),
+      profit: Math.round(profit),
+    };
+  });
+};
+
+/**
+ * คำนวณข้อมูลรายรับ รายจ่าย แยกตามปี
+ */
+export const getYearlyRevenueExpenseComparison = <T, E>(
+  transactions: T[],
+  expenses: E[],
+  transactionDateField: keyof T,
+  transactionAmountField: keyof T,
+  expenseDateField: keyof E,
+  expenseAmountField: keyof E,
+  yearsBack: number = 3,
+  referenceDate: Date = new Date()
+): MonthlyComparisonItem[] => {
+  const years = [];
+  for (let i = yearsBack - 1; i >= 0; i--) {
+    years.push(subYears(referenceDate, i));
+  }
+
+  return years.map((yearDate) => {
+    const yearStart = startOfYear(yearDate);
+    const yearEnd = endOfYear(yearDate);
+
+    // คำนวณรายรับของปีนี้
+    const yearlyRevenue = transactions
+      .filter((item) => {
+        const itemDate = new Date(item[transactionDateField] as string);
+        return itemDate >= yearStart && itemDate <= yearEnd;
+      })
+      .reduce((sum, item) => sum + (Number(item[transactionAmountField]) || 0), 0);
+
+    // คำนวณรายจ่ายของปีนี้
+    const yearlyExpenses = expenses
+      .filter((item) => {
+        const itemDate = new Date(item[expenseDateField] as string);
+        return itemDate >= yearStart && itemDate <= yearEnd;
+      })
+      .reduce((sum, item) => sum + (Number(item[expenseAmountField]) || 0), 0);
+
+    const profit = yearlyRevenue - yearlyExpenses;
+
+    return {
+      month: format(yearDate, "yyyy"), 
+      revenue: Math.round(yearlyRevenue),
+      expenses: Math.round(yearlyExpenses),
+      profit: Math.round(profit),
+    };
+  });
 };

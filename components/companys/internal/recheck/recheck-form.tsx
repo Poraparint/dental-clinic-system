@@ -32,7 +32,7 @@ import { DatePickerField } from "@/components/shared/select/date-picker-field";
 // icons
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { CardCategory } from "@/components/shared/card";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { Transaction } from "@/types/transaction";
 import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
 import { createRecheck } from "@/hooks/internal/company/use-recheck";

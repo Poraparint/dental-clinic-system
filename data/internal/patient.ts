@@ -16,11 +16,46 @@ export const getPatientByCompanyId = async (
   companyId: string,
   patientId: string
 ) => {
-  const patient = await db.patient.findUnique({
+  const patient = await db.patient.findFirst({
     where: {
       id: patientId,
       companyId,
       isDeleted: false,
+    },
+  });
+  return patient;
+};
+
+export const isDuplicatePatientName = async (
+  companyId: string,
+  patientId: string,
+  name: string | undefined
+) => {
+  const patient = await db.patient.findFirst({
+    where: {
+      name,
+      companyId,
+      isDeleted: false,
+      id: {
+        not: patientId,
+      },
+    },
+  });
+  return patient;
+};
+
+export const getCreatorIdByPatientId = async (
+  companyId: string,
+  patientId: string,
+) => {
+  const patient = await db.patient.findFirst({
+    where: {
+      id: patientId,
+      companyId,
+      isDeleted: false,
+    },
+    select: {
+      creatorUserId: true,
     },
   });
   return patient;
