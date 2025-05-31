@@ -1,10 +1,10 @@
 "use client";
 
-import { DialogCreatePatient } from "@/components/dialog/internal/dialog-create-patient";
+import { DialogCreatePatient } from "@/components/dialog/internal/dialog-patient";
 import { PeriodTabs } from "@/components/shared/dashboard/period-tab";
 import { Card, CardHeader } from "@/components/ui/card";
 import { useDentalTechs } from "@/hooks/internal/company/use-dentalTech";
-import { usePatients } from "@/hooks/internal/company/use-patient";
+import { useAllPatients } from "@/hooks/internal/company/use-patient";
 import { useState } from "react";
 import { DashboardStat } from "@/components/companys/internal/dashboard/dashboard-stat";
 import { Period } from "@/lib/utils/stat/stat";
@@ -19,7 +19,7 @@ export const Dashboard = () => {
   const { companyId } = useCompany();
   const [period, setPeriod] = useState<Period>("month");
 
-  const { patients } = usePatients(companyId);
+  const { patients } = useAllPatients(companyId);
   const { dentalTechs } = useDentalTechs(companyId);
   const { schedules } = useSchedules(companyId);
   const { rechecks } = useRechecks(companyId);

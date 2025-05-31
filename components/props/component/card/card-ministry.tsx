@@ -30,11 +30,9 @@ export const CardMinistry = ({
         </div>
       </CardHeader>
       <CardFooter className="pt-4">
-        <Button  className="group px-0" onClick={onClick} >
-          
-            <span>Access to dashboard</span>
-            <ChevronRight className="h-4 w-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
-         
+        <Button className="group px-0" onClick={onClick}>
+          <span>Access to dashboard</span>
+          <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
         </Button>
       </CardFooter>
     </Card>

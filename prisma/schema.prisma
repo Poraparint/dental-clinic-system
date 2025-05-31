@@ -37,7 +37,7 @@ model Company {
   transactionCategories      TransactionCategory[]
   DentalTechnicianCategories DentalTechCategory[]
   expensesCategories         ExpensesCategory[]
-  scheduleCategories      ScheduleCategory[]
+  scheduleCategories         ScheduleCategory[]
   expenses                   Expenses[]
   dentalTech                 Dentaltech[]
   schedule                   Schedule[]
@@ -59,17 +59,21 @@ model User {
   updatedAt          DateTime  @updatedAt
   isTwoFactorEnabled Boolean   @default(false)
   accounts           Account[]
-
   twoFactorConfirmation TwoFactorConfirmation?
   manager               Manager?
   member                Member?
-  dentaltech Dentaltech[]
-  patient               Patient[]
-  transaction           Transaction[]
+  dentaltech            Dentaltech[] @relation("CreatedTech")
+  updatedTech           Dentaltech[] @relation("UpdatedTech")
+  patient               Patient[] @relation("CreatedPatients")
+  updatedPatients       Patient[]              @relation("UpdatedPatients")
+  transactions   Transaction[] @relation("CreatedTransactions")
+  updatedTransactions   Transaction[] @relation("UpdatedTransactions")
   dentalTechCategory    DentalTechCategory[]
-  scheduleCreator              Schedule[] @relation("idx_schedule_creator")
-  scheduleDentist       Schedule[]@relation("idx_schedule_dentist")
+  scheduleCreator       Schedule[]             @relation("idx_schedule_creator")
+  scheduleDentist       Schedule[]             @relation("idx_schedule_dentist")
+  updatedSchedule         Schedule[]             @relation("UpdatedSchedule")
   recheck               Recheck[]
+  updatedRecheckList    RecheckList[] @relation("UpdatedRecheckList")
 }
 
 model Manager {
@@ -81,8 +85,10 @@ model Manager {
   companies             Company[]
   members               Member[]
   transactionCategories TransactionCategory[]
-  scheduleCategories ScheduleCategory[]
+  scheduleCategories    ScheduleCategory[]
   expensesCategories    ExpensesCategory[]
+  createdExpenses      Expenses[] @relation("CreatedExpenses")
+  updatedExpenses      Expenses[] @relation("UpdatedExpenses")
 }
 
 model Member {
@@ -165,15 +171,13 @@ model TransactionCategory {
   description String?
   price       Float?
   managerId   String
-
   companyId String
-
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   isDeleted    Boolean       @default(false)
   transactions Transaction[]
-  recheckList RecheckList[]
-  schedule Schedule[]
+  recheckList  RecheckList[]
+  schedule     Schedule[]
 
   manager Manager @relation(fields: [managerId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
@@ -188,7 +192,6 @@ model DentalTechCategory {
   name          String
   description   String?
   creatorUserId String
-
   companyId  String
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
@@ -223,18 +226,17 @@ model ExpensesCategory {
 }
 
 model ScheduleCategory {
-  id        String     @id @default(cuid())
-  name      String
-  order     Int
-  managerId String
-  companyId String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  isDeleted Boolean    @default(false)
-  schedule  Schedule[]
+  id          String        @id @default(cuid())
+  name        String
+  order       Int
+  managerId   String
+  companyId   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isDeleted   Boolean       @default(false)
+  schedule    Schedule[]
   recheckList RecheckList[]
-  manager   Manager    @relation(fields: [managerId], references: [id])
-
+  manager     Manager       @relation(fields: [managerId], references: [id])
   company Company @relation(fields: [companyId], references: [id])
 
   @@unique([name, companyId])
@@ -255,6 +257,7 @@ model Patient {
   drug          String?
   companyId     String
   creatorUserId String
+  updaterUserId String?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   isDeleted     Boolean       @default(false)
@@ -262,7 +265,8 @@ model Patient {
   dentaltech    Dentaltech[]
   recheck       Recheck[]
   company       Company       @relation(fields: [companyId], references: [id])
-  creator       User          @relation(fields: [creatorUserId], references: [id])
+  creator       User          @relation("CreatedPatients", fields: [creatorUserId], references: [id])
+  updater       User?         @relation("UpdatedPatients", fields: [updaterUserId], references: [id])
 
   @@unique([name, companyId])
   @@index([companyId], name: "idx_patient_all")
@@ -281,13 +285,15 @@ model Transaction {
   updatedAt             DateTime            @updatedAt
   isDelete              Boolean             @default(false)
   creatorUserId         String
+  updaterUserId         String?
   transactionCategoryId String
   recheck               Recheck?
   dentaltech            Dentaltech?
   patient               Patient             @relation(fields: [patientId], references: [id])
   transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
 
-  creator User @relation(fields: [creatorUserId], references: [id])
+  creator User @relation("CreatedTransactions", fields: [creatorUserId], references: [id])
+  updater User? @relation("UpdatedTransactions", fields: [updaterUserId], references: [id])
 
   @@index([patientId, isDelete], name: "idx_transaction_patient")
   @@index([creatorUserId, isDelete], name: "idx_transaction_creator")
@@ -299,18 +305,20 @@ model Dentaltech {
   level              String             @default("ปกติ")
   status             String             @default("รอดำเนินการ")
   deadline           DateTime           @default(now())
-  teeth Float @default(1)
+  teeth              Float              @default(1)
   price              Float?
   postit             String?
   patientId          String
   dctId              String
-  transactionId String
+  transactionId      String
   companyId          String
-  creatorUserId String
+  creatorUserId      String
+  updaterUserId      String?
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
-  transaction   Transaction   @relation(fields: [id], references: [id])
-  creator User @relation(fields: [creatorUserId], references: [id])
+  transaction        Transaction        @relation(fields: [id], references: [id])
+  creator            User               @relation("CreatedTech",fields: [creatorUserId], references: [id])
+  updater            User?              @relation("UpdatedTech",fields: [updaterUserId], references: [id])
   company            Company            @relation(fields: [companyId], references: [id])
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient            Patient            @relation(fields: [patientId], references: [id])
@@ -325,9 +333,14 @@ model Expenses {
   ecId     String
   payment  String
   amount   Float
-
   companyId        String
   createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  createdManagerId String
+  updatedManagerId String?
+  isDeleted        Boolean          @default(false)
+  createdManager   Manager          @relation("CreatedExpenses", fields: [createdManagerId], references: [id])
+  updatedManager   Manager?         @relation("UpdatedExpenses", fields: [updatedManagerId], references: [id])
   expensesCategory ExpensesCategory @relation(fields: [ecId], references: [id])
   company          Company          @relation(fields: [companyId], references: [id])
 
@@ -337,22 +350,26 @@ model Expenses {
 }
 
 model Schedule {
-  id            String              @id @default(cuid())
-  datetime      DateTime            @default(now())
-  phone         String?
-  patientName   String
-  tcId String
-  detail        String?
-  scheduleId String
-  creatorUserId String
-  memberId String
-  companyId     String
-  createdAt     DateTime            @default(now())
+  id                  String              @id @default(cuid())
+  datetime            DateTime            @default(now())
+  phone               String?
+  patientName         String?
+  tcId                String
+  detail              String?
+  scheduleId          String
+  creatorUserId       String
+  updaterUserId       String?
+  status              String              @default("รอดำเนินการ")
+  memberId            String
+  companyId           String
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
   transactionCategory TransactionCategory @relation(fields: [tcId], references: [id])
-  scheduleCategory   ScheduleCategory @relation(fields: [scheduleId], references: [id])
-  company       Company             @relation(fields: [companyId], references: [id])
-  dentist User @relation(fields: [memberId], references: [id], name: "idx_schedule_dentist")
-  creator       User                @relation(fields: [creatorUserId], references: [id], name: "idx_schedule_creator")
+  scheduleCategory    ScheduleCategory    @relation(fields: [scheduleId], references: [id])
+  company             Company             @relation(fields: [companyId], references: [id])
+  dentist             User                @relation(fields: [memberId], references: [id], name: "idx_schedule_dentist")
+  creator             User                @relation(fields: [creatorUserId], references: [id], name: "idx_schedule_creator")
+  updater             User?               @relation("UpdatedSchedule", fields: [updaterUserId], references: [id])
 
   @@index([companyId], name: "idx_schedule_all")
   @@index([datetime, companyId], name: "idx_schedule_datetime")
@@ -364,7 +381,6 @@ model Recheck {
   companyId     String
   creatorUserId String
   createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
   recheckList   RecheckList[]
   transaction   Transaction   @relation(fields: [id], references: [id])
   patient       Patient       @relation(fields: [patientId], references: [id])
@@ -375,17 +391,21 @@ model Recheck {
 }
 
 model RecheckList {
-  id          String   @id @default(cuid())
-  datetime    DateTime @default(now())
-  detail      String?
-  price       Float?
-  scheduleId String
-  recheckId   String
+  id                    String              @id @default(cuid())
+  datetime              DateTime            @default(now())
+  detail                String?
+  price                 Float?
+  scheduleId            String
+  recheckId             String
   transactionCategoryId String
-  isConfirmed Boolean  @default(false)
-  scheduleCategory    ScheduleCategory @relation(fields: [scheduleId], references: [id])
-  recheck     Recheck  @relation(fields: [recheckId], references: [id])
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  updatedUserId        String?
+  isConfirmed           Boolean             @default(false)
+  scheduleCategory      ScheduleCategory    @relation(fields: [scheduleId], references: [id])
+  recheck               Recheck             @relation(fields: [recheckId], references: [id])
   transactionCategory   TransactionCategory @relation(fields: [transactionCategoryId], references: [id])
+  updatedUser          User?               @relation("UpdatedRecheckList",fields: [updatedUserId], references: [id])
 
   @@index([recheckId], name: "idx_rechecklist_all")
 }

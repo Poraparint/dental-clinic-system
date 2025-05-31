@@ -23,10 +23,10 @@ export const DialogCreateDentalTech = ({
         icon={<Aperture />}
         dialogTitle="สร้างงานทันตกรรม"
         dialogDescription="กรอกข้อมูลเพื่อสร้างงานทันตกรรม"
+        title="ทันตกรรม"
         open={open}
         setOpen={setOpen}
         variant="azurite"
-        tooltip="เพิ่มเป็นงานทันตกรรม"
       >
         <CreateDentaltechForm
           setOpen={setOpen}

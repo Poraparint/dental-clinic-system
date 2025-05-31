@@ -149,7 +149,7 @@ export async function POST(
       data: {
         id: transactionId,
         companyId,
-        patientId: patientId.patient.id,
+        patientId: patientId.patientId,
         creatorUserId: member.id,
       },
     });

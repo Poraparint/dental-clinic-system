@@ -10,12 +10,12 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   const { companyId } = await params;
-  
-    const accessToGet = await validateManager(companyId);
-  
-    if (accessToGet instanceof NextResponse) {
-      return accessToGet;
-    }
+
+  const accessToGet = await validateManager(companyId);
+
+  if (accessToGet instanceof NextResponse) {
+    return accessToGet;
+  }
   try {
     const categorys = await db.expensesCategory.findMany({
       where: {
@@ -108,4 +108,3 @@ export async function POST(
     );
   }
 }
-

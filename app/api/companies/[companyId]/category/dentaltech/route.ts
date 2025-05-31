@@ -11,12 +11,12 @@ export async function GET(
   { params }: { params: Promise<{ companyId: string }> }
 ) {
   const { companyId } = await params;
-  
-    const accessToGet = await validateManagerAndTechnician(companyId);
-  
-    if (accessToGet instanceof NextResponse) {
-      return accessToGet;
-    }
+
+  const accessToGet = await validateManagerAndTechnician(companyId);
+
+  if (accessToGet instanceof NextResponse) {
+    return accessToGet;
+  }
 
   try {
     if (!companyId) {
@@ -114,15 +114,14 @@ export async function POST(
       },
       { status: 201 }
     );
-  } catch (error){
+  } catch (error) {
     console.error("[DENTALTECH_CATEGORY_POST]", error);
-    return NextResponse.json (
+    return NextResponse.json(
       {
         error: "ไม่สามารถสร้างหมวดหมู่ได้",
         description: "โปรดติดต่อผู้ดูแลระบบ",
       },
-      { status: 500
-      }
-    )
+      { status: 500 }
+    );
   }
 }

@@ -141,7 +141,7 @@ export async function POST(
         detail,
         teeth,
         level,
-        patientId: patientId.patient.id,
+        patientId: patientId.patientId,
         creatorUserId: member.id,
         companyId,
       },

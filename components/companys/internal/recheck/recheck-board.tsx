@@ -2,7 +2,7 @@
 
 import { RecheckCard } from "@/components/companys/internal/recheck/recheck-card";
 import { useState } from "react";
-import { RefreshButton } from "@/components/props/component/button/refresh-button";
+import { RefreshButton } from "@/components/shared/button/refresh-button";
 import { TitleCard } from "@/components/shared/card/title-card";
 
 export const RecheckBoard = () => {

@@ -41,7 +41,7 @@ export const PatientInfoCard = ({ patient }: PatientInfoCardProps) => {
                 <CardTitle>
                   <Badge
                     variant="outline"
-                    className="bg-amber-100 text-amber-800 border-amber-200"
+                    className="bg-amber-bg text-amber-text border-amber-border"
                   >
                     {patient.cd}
                   </Badge>

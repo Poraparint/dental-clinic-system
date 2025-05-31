@@ -55,6 +55,7 @@ export type Recheck = {
 };
 
 export type RecheckList = {
+  id: string;
   datetime: Date;
   detail: string;
   price: number;

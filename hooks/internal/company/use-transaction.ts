@@ -6,7 +6,7 @@ import { ApiError } from "@/types/api-error";
 import { CreateTransactionSchema } from "@/schemas";
 import * as z from "zod";
 
-export const useTransaction = (companyId: string, patientId: string) => {
+export const useTransaction = (companyId: string, patientId: string, refreshKey?: number) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export const useTransaction = (companyId: string, patientId: string) => {
     };
 
     fetchTransactions();
-  }, [companyId, patientId]);
+  }, [companyId, patientId, refreshKey]);
 
   return { transactions, error, isLoading };
 };
@@ -104,4 +104,38 @@ export const useAllTransaction = (companyId: string) => {
   }, [companyId]);
 
   return { transactions, error, isLoading };
+};
+
+export const updateTransaction = async (
+  values: Partial<z.infer<typeof CreateTransactionSchema>>,
+  companyId: string,
+  patientId: string,
+  transactionId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/patients/${patientId}/transaction/${transactionId}/update`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[UPDATE_TRANSACTION]", error);
+    return {
+      error: "ไม่สามารถอัพเดตรายการธุรกรรมได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
 };

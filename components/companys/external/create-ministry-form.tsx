@@ -22,7 +22,7 @@ import { CreateCompanySchema } from "@/schemas";
 //actions
 import { CardCategory } from "@/components/shared/card";
 import { Building2 } from "lucide-react";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { createMinistry } from "@/hooks/external/use-ministry";
 import { toast } from "sonner";
 

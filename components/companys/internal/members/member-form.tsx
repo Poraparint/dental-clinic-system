@@ -30,7 +30,7 @@ import { CardCategory } from "@/components/shared/card";
 import { Users } from "lucide-react";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
-import { SubmitButton } from "@/components/props/component/button/submit-button";
+import { SubmitButton } from "@/components/shared/button/submit-button";
 import { createMembers } from "@/hooks/internal/company/use-member";
 import { useCompany } from "@/context/context";
 

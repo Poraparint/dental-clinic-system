@@ -1,19 +1,30 @@
 "use client";
 import { Loading } from "@/components/loading";
-import { usePatients } from "@/hooks/internal/company/use-patient";
+import { useAllPatients } from "@/hooks/internal/company/use-patient";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Patients } from "@/types/patient";
 import { useCompany } from "@/context/context";
+import { DialogUpdatePatient } from "@/components/dialog/internal/dialog-patient";
 
 interface PatientTableProps {
   onRowClick: (patientId: string) => void;
+  refreshKey: number;
+  onRefresh: () => void;
 }
 
-export const PatientTable = ({ onRowClick }: PatientTableProps) => {
+export const PatientTable = ({
+  onRowClick,
+  refreshKey,
+  onRefresh,
+}: PatientTableProps) => {
   const { companyId } = useCompany();
-  const { patients, error, isLoading } = usePatients(companyId);
+  const { patients, error, isLoading } = useAllPatients(companyId, refreshKey);
+
+  const handleSuccess = () => {
+    onRefresh();
+  };
 
   const columns = [
     {
@@ -63,12 +74,21 @@ export const PatientTable = ({ onRowClick }: PatientTableProps) => {
   }
 
   return (
-    <DynamicTable
-      data={patients}
-      columns={columns}
-      onRowClick={(patient) => onRowClick(patient.id)}
-      error={error?.error}
-      description={error?.description}
-    />
+    <>
+      <DynamicTable
+        data={patients}
+        columns={columns}
+        onRowClick={(patient) => onRowClick(patient.id)}
+        dialogEdit={(item) => (
+          <DialogUpdatePatient
+            key={item.id}
+            patient={item}
+            onSuccess={handleSuccess}
+          />
+        )}
+        error={error?.error}
+        description={error?.description}
+      />
+    </>
   );
 };

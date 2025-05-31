@@ -16,7 +16,7 @@ export async function GET(
   if (accessToGet instanceof NextResponse) {
     return accessToGet;
   }
-  
+
   try {
     const categorys = await db.scheduleCategory.findMany({
       where: {
@@ -112,15 +112,14 @@ export async function POST(
       },
       { status: 201 }
     );
-  } catch (error){
+  } catch (error) {
     console.error("[SCHEDULE_CATEGORY_POST]", error);
-    return NextResponse.json (
+    return NextResponse.json(
       {
         error: "ไม่สามารถสร้างหมวดหมู่ได้",
         description: "โปรดติดต่อผู้ดูแลระบบ",
       },
-      { status: 500
-      }
-    )
+      { status: 500 }
+    );
   }
 }

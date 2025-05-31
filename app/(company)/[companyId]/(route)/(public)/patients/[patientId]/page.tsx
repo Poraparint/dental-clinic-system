@@ -1,45 +1,42 @@
+"use client";
 import { PatientInfoCard } from "@/components/companys/internal/patient/patient-info-card";
 import { TransactionInfoCard } from "@/components/companys/internal/patient/transaction/transaction-info-card";
+import { FormNotFound } from "@/components/form-not-found";
+import { Loading } from "@/components/loading";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCompany } from "@/context/context";
 import { PatientProvider } from "@/context/provider";
-import { getPatientByCompanyId } from "@/data/internal/patient";
-import { currentManagerAndDentist } from "@/lib/auth";
+import { usePatient } from "@/hooks/internal/company/use-patient";
 import { CompanyRole } from "@prisma/client";
-import { notFound } from "next/navigation";
+import { Briefcase } from "lucide-react";
+import { useParams } from "next/navigation";
 
-type PatientInfoCardPageProps = {
-  params: Promise<{ patientId: string; companyId: string }>;
-};
+const PatientInfoCardPage = () => {
+  const { companyId } = useCompany();
+  const params = useParams();
 
-const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
-  const { companyId, patientId } = await params;
+  const patientId = params.patientId as string;
 
-  const existingUser = await currentManagerAndDentist();
+  const { patient, error, isLoading } = usePatient(companyId, patientId);
 
-  if (!existingUser) {
-    notFound();
-  }
+  if (isLoading) return <Loading />;
 
-  const patient = await getPatientByCompanyId(companyId, patientId);
-
-  if (!patient) {
-    notFound();
-  }
+  if (error || !patient) return <FormNotFound />;
 
   return (
-    <RoleGate
-      allowedRole={[
-        CompanyRole.MANAGER,
-        CompanyRole.COMANAGER,
-        CompanyRole.DENTIST,
-        CompanyRole.ASSISTANT,
-      ]}
-    >
-      <PatientProvider patientId={patientId}>
+    <PatientProvider patientId={patientId}>
+      <RoleGate
+        allowedRole={[
+          CompanyRole.MANAGER,
+          CompanyRole.COMANAGER,
+          CompanyRole.DENTIST,
+          CompanyRole.ASSISTANT,
+        ]}
+      >
         <Card className="tracking-wide px-5">
           <Tabs defaultValue="info" className="space-y-4">
             <TabsList>
@@ -54,7 +51,15 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
               </Avatar>
               <div>
                 <h1 className="text-3xl font-bold">{patient.name}</h1>
-                <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
+                {patient.age && (
+                  <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
+                )}
+                {patient.job && (
+                  <p className="text-foreground/70 flex items-center gap-2">
+                    <Briefcase className="size-4 text-muted-foreground" />
+                    <span>{patient.job}</span>
+                  </p>
+                )}
               </div>
             </div>
 
@@ -70,8 +75,8 @@ const PatientInfoCardPage = async ({ params }: PatientInfoCardPageProps) => {
             </RoleGate>
           </Tabs>
         </Card>
-      </PatientProvider>
-    </RoleGate>
+      </RoleGate>
+    </PatientProvider>
   );
 };
 

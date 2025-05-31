@@ -1,26 +1,29 @@
 import { NavigatingUi } from "@/components/props/component/navigating";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigation } from "@/hooks/use-navigation";
-import { Navigation } from "lucide-react";
+import { RouterButton } from "@/components/shared/button/router-button";
 
 interface TitleCardProps {
   title: string;
   description?: string;
+  icon?: React.ReactNode;
   dialog?: React.ReactNode;
   companyId?: string;
   path?: string;
   children?: React.ReactNode;
+  tooltip?: string;
   hr?: boolean;
 }
 
 export const TitleCard = ({
   title,
   description,
+  icon,
   dialog,
   companyId,
   path,
   children,
+  tooltip,
   hr = true,
 }: TitleCardProps) => {
   const { navigateTo, isNavigating } = useNavigation();
@@ -40,9 +43,7 @@ export const TitleCard = ({
         </div>
         {dialog && dialog}
         {path && companyId && (
-          <Button onClick={handleNavigate}>
-            <Navigation />
-          </Button>
+          <RouterButton onClick={handleNavigate} tooltip={tooltip} icon={ icon } />
         )}
       </div>
       {hr && <hr />}

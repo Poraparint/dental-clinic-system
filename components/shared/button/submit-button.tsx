@@ -6,6 +6,7 @@ interface SubmitButtonProps {
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
   disabled?: boolean;
+  tooltip?: string;
 }
 
 export const SubmitButton = ({
@@ -16,7 +17,8 @@ export const SubmitButton = ({
   disabled = false,
 }: SubmitButtonProps) => {
   return (
-    <Button
+    
+      <Button
       typeof={type}
       onClick={onClick}
       disabled={disabled || isPending}
@@ -24,5 +26,7 @@ export const SubmitButton = ({
     >
       {isPending ? "กำลังบันทึก..." : label}
     </Button>
+    
+    
   );
 };
