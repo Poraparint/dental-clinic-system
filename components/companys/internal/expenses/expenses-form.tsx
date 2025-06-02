@@ -44,8 +44,10 @@ import { CardCategory } from "@/components/shared/card";
 import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { createExpenses } from "@/hooks/internal/company/use-expenses";
-import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
+import {
+  createExpenses,
+  useExpensesCategories,
+} from "@/hooks";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany } from "@/context/context";

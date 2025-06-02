@@ -6,10 +6,11 @@ import { RecheckCardUi } from "@/components/props/wrapper/recheck-card-ui";
 import { FormNotFound } from "@/components/form-not-found";
 import { StepTimeLineItem } from "@/components/props/component/step-time-line";
 import { useCompany } from "@/context/context";
+import { RefreshableProps } from "@/types";
 
-export const RecheckCard = () => {
+export const RecheckCard = ({refreshKey}: RefreshableProps) => {
   const { companyId } = useCompany();
-  const { rechecks, error, isLoading } = useRechecks(companyId);
+  const { rechecks, error, isLoading } = useRechecks(companyId, refreshKey);
 
   if (isLoading) {
     return <Loading />;
@@ -42,7 +43,7 @@ export const RecheckCard = () => {
           <div key={recheck.id}>
             <RecheckCardUi
               createdAt={recheck.createdAt}
-              creator={recheck.creator.name}
+              creator={recheck.creator.name || ""}
               price={recheck.transaction.price}
               transaction={recheck.transaction.transactionCategory.name}
               footer={
@@ -54,7 +55,6 @@ export const RecheckCard = () => {
                       style={{ width: `${completionPercentage}%` }}
                     />
 
-                    {/* Milestone items */}
                     {sortedList.map((item, index) => (
                       <StepTimeLineItem
                         key={item.id || index}

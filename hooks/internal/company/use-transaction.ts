@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Transaction } from "@/types/transaction";
-import { ApiError } from "@/types/api-error";
+import { Transaction, ApiError } from "@/types";
 import { CreateTransactionSchema } from "@/schemas";
 import * as z from "zod";
 

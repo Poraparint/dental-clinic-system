@@ -3,28 +3,23 @@
 import { Loading } from "@/components/loading";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { useTransaction } from "@/hooks/internal/company/use-transaction";
+import { useTransaction } from "@/hooks";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { DialogCreateRecheck } from "@/components/dialog/internal/dialog-create-recheck";
-import { useState } from "react";
+import { DialogCreateRecheck } from "@/components/dialog/internal/dialog-recheck";
 import { DialogCreateDentalTech } from "@/components/dialog/internal/dialog-create-dentaltech";
-import { Transaction } from "@/types/transaction";
+import { Transaction, RefreshableProps } from "@/types";
 import { useCompany, usePatient } from "@/context/context";
 import { DialogUpdateTransaction } from "@/components/dialog/internal/dialog-transaction";
+import { Aperture, LampDesk } from "lucide-react";
 
-export const TransactionTable = () => {
+export const TransactionTable = ({ refreshKey, handleRefresh }: RefreshableProps) => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
-  const [refreshKey, setRefreshKey] = useState(0);
   const { transactions, error, isLoading } = useTransaction(
     companyId,
     patientId,
     refreshKey
   );
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
 
   const columns = [
     {
@@ -74,14 +69,18 @@ export const TransactionTable = () => {
       key: "list",
       header: "",
       render: (item: Transaction) => (
-        <div className="flex flex-col gap-2">
+        <div className="flex gap-2">
           {item.recheck ? (
-            <Badge variant="amber">Recheck แล้ว</Badge>
+            <Badge variant="amber" className="rounded-full size-10">
+              <LampDesk />
+            </Badge>
           ) : (
             <DialogCreateRecheck onSuccess={handleRefresh} transaction={item} />
           )}
           {item.dentaltech ? (
-            <Badge variant="azurite">ส่ง Lab แล้ว</Badge>
+            <Badge variant="azurite" className="rounded-full size-10">
+              <Aperture />
+            </Badge>
           ) : (
             <DialogCreateDentalTech
               onSuccess={handleRefresh}

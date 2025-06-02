@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Schedule } from "@/types/appointment";
-import { ApiError } from "@/types/api-error";
+import { Schedule, ApiError } from "@/types";
 import { CreateScheduleSchema } from "@/schemas";
 import * as z from "zod";
 

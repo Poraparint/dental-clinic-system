@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Category } from "@/types/category";
-import { ApiError } from "@/types/api-error";
+import { TransactionCategoryWithManager, ApiError } from "@/types";
 import { CreateTransactionCategorySchema } from "@/schemas";
 import * as z from "zod";
 
-export const useTransactionCategories = (companyId: string) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+export const useTransactionCategories = (companyId: string, refreshKey?: number) => {
+  const [categories, setCategories] = useState<
+    TransactionCategoryWithManager[]
+  >([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +39,7 @@ export const useTransactionCategories = (companyId: string) => {
     if (companyId) {
       fetchCategories();
     }
-  }, [companyId]);
+  }, [companyId, refreshKey]);
 
   return { categories, error, isLoading };
 };
@@ -72,3 +73,36 @@ export const createTransactionCategory = async (
     };
    }
 }
+
+export const updateTransactionCategory = async (
+  values: Partial<z.infer<typeof CreateTransactionCategorySchema>>,
+  companyId: string,
+  tcId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/transaction/${tcId}/update`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[UPDATE_TRANSACTION_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถอัปเดตข้อมูลได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};

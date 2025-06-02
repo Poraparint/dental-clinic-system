@@ -27,10 +27,13 @@ import { CreatePatientSchema } from "@/schemas";
 import { CardCategory } from "@/components/shared/card";
 
 //actions
-import { createPatient, updatePatient } from "@/hooks/internal/company/use-patient";
+import {
+  createPatient,
+  updatePatient,
+} from "@/hooks/internal/company/use-patient";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany } from "@/context/context";
-import { PatientFormData } from "@/types/patient";
+import { PatientFormData } from "@/types";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;

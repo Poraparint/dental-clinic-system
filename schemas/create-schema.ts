@@ -12,7 +12,7 @@ export const CreateTransactionCategorySchema = z.object({
   ...optionalPriceSchema,
 });
 
-export const CreateDentalTechCategorySchema = z.object({
+export const CreateCommonCategorySchema = z.object({
   ...baseNameSchema,
   ...descriptionSchema,
   color: z.optional(z.string()),

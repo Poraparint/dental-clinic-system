@@ -12,7 +12,6 @@ import { useCompany } from "@/context/context";
 import { PatientProvider } from "@/context/provider";
 import { usePatient } from "@/hooks/internal/company/use-patient";
 import { CompanyRole } from "@prisma/client";
-import { Briefcase } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const PatientInfoCardPage = () => {
@@ -53,12 +52,6 @@ const PatientInfoCardPage = () => {
                 <h1 className="text-3xl font-bold">{patient.name}</h1>
                 {patient.age && (
                   <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
-                )}
-                {patient.job && (
-                  <p className="text-foreground/70 flex items-center gap-2">
-                    <Briefcase className="size-4 text-muted-foreground" />
-                    <span>{patient.job}</span>
-                  </p>
                 )}
               </div>
             </div>

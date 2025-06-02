@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Category } from "@/types/category";
-import { ApiError } from "@/types/api-error";
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { ScheduleCategoryWithManager, ApiError } from "@/types";
+import { CreateCommonCategorySchema } from "@/schemas";
 import * as z from "zod";
 
 //GET
 export const useScheduleCategories = (companyId: string) => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<ScheduleCategoryWithManager[]>(
+    []
+  );
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,7 +47,7 @@ export const useScheduleCategories = (companyId: string) => {
 
 //CREATE
 export const createScheduleCategory = async (
-  values: z.infer<typeof CreateDentalTechCategorySchema>,
+  values: z.infer<typeof CreateCommonCategorySchema>,
   companyId: string
 ) => {
   try {

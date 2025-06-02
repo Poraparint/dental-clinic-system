@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { CreateCommonCategorySchema } from "@/schemas";
 
 //actions
 import { CardCategory } from "@/components/shared/card";
@@ -32,38 +32,32 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubmitButton } from "@/components/shared/button/submit-button";
-import { createExpensesCategory } from "@/hooks/internal/company/category/use-ec";
+import {
+  createExpensesCategory,
+  updateExpensesCategory,
+} from "@/hooks";
 import { useCompany } from "@/context/context";
+import { CommonCategoryFormData } from "@/types";
+import { colorOptions } from "@/components/shared/common/color-options";
 
 interface CreateExpensesCategoryFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  updateData?: CommonCategoryFormData;
 }
 
 export const CreateExpensesCategoryForm = ({
   setOpen,
   onSuccess,
+  updateData,
 }: CreateExpensesCategoryFormProps) => {
   const { companyId } = useCompany();
 
   const [isPending, startTransition] = useTransition();
 
-  const colorOptions = [
-    { id: "#a78bfa", name: "ม่วงอ่อน" }, // Purple-300
-    { id: "#f472b6", name: "ชมพูพาสเทล" }, // Pink-400
-    { id: "#fb923c", name: "ส้มอบอุ่น" }, // Orange-400
-    { id: "#fbbf24", name: "เหลืองทอง" }, // Amber-400
-    { id: "#34d399", name: "มินต์กรีน" }, // Emerald-400
-    { id: "#60a5fa", name: "ฟ้าสดใส" }, // Blue-400
-    { id: "#c084fc", name: "ลาเวนเดอร์" }, // Purple-400
-    { id: "#663A44", name: "ม่วงแดง" },
-    { id: "#D4C8BE", name: "ครีม" },
-    { id: "#43474D", name: "เทาเข้ม" },
-  ];
-
-  const form = useForm<z.infer<typeof CreateDentalTechCategorySchema>>({
-    resolver: zodResolver(CreateDentalTechCategorySchema),
-    defaultValues: {
+  const form = useForm<z.infer<typeof CreateCommonCategorySchema>>({
+    resolver: zodResolver(CreateCommonCategorySchema),
+    defaultValues: updateData ?? {
       name: "",
       description: "",
       color: "#D4C8BE",
@@ -74,9 +68,15 @@ export const CreateExpensesCategoryForm = ({
   const watchDescription = form.watch("description");
   const watchColor = form.watch("color");
 
-  const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
+  const OnSubmit = (values: z.infer<typeof CreateCommonCategorySchema>) => {
     startTransition(async () => {
-      const data = await createExpensesCategory(values, companyId);
+      let data;
+
+      if (updateData?.id) {
+        data = await updateExpensesCategory(values, companyId, updateData.id);
+      } else {
+        data = await createExpensesCategory(values, companyId);
+      }
 
       if (data.error) {
         toast.error(data.error, {
@@ -195,7 +195,7 @@ export const CreateExpensesCategoryForm = ({
 
         <div className="flex justify-end">
           <SubmitButton
-            label="เพิ่มหมวดหมู่"
+            label={updateData?.id ? "อัพเดตข้อมูล" : "เพิ่มหมวดหมู่"}
             type="submit"
             isPending={isPending}
           />

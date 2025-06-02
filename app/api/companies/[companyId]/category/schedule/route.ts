@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { db } from "@/lib/db";
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { CreateCommonCategorySchema } from "@/schemas";
 import { getScheduleCategoryName } from "@/data/internal/category";
 import { validateManager } from "@/lib/utils/validation/manager";
 import { validateAllExceptTechnician } from "@/lib/utils/validation/member";
@@ -64,7 +64,7 @@ export async function POST(
 
   const { manager } = accessToPost;
 
-  const validation = CreateDentalTechCategorySchema.safeParse(values);
+  const validation = CreateCommonCategorySchema.safeParse(values);
   if (!validation.success) {
     return NextResponse.json(
       {

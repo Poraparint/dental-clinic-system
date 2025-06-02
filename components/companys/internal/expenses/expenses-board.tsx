@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
+import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-ec";
 import { formatCurrency } from "@/lib/utils";
 import { useCompany } from "@/context/context";
 

@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DialogCreateSchedule } from "@/components/dialog/internal/dialog-create-schedule";
 import { ScheduleCard } from "@/components/companys/internal/schedule/schedule-card";
-import { useSchedules } from "@/hooks/internal/company/use-schedule";
 import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
-import { useRechecks } from "@/hooks/internal/company/use-recheck";
-import { useCombinedAppointments } from "@/hooks/internal/filter/use-combined-apm";
+import {
+  useSchedules,
+  useRechecks,
+  useCombinedAppointments,
+  useRefreshable,
+} from "@/hooks";
 import { useCompany } from "@/context/context";
 
 export const ScheduleBoard = () => {
   const { companyId } = useCompany();
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const { refreshKey, handleRefresh, isRefreshing } = useRefreshable();
 
   const {
     schedules,
@@ -24,18 +26,7 @@ export const ScheduleBoard = () => {
     rechecks,
     error: recheckError,
     isLoading: recheckLoading,
-  } = useRechecks(companyId);
-
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    setRefreshKey((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (!recheckLoading && !scheduleLoading && isRefreshing) {
-      setIsRefreshing(false);
-    }
-  }, [recheckLoading, scheduleLoading, isRefreshing]);
+  } = useRechecks(companyId, refreshKey);
 
   const { combinedEvents } = useCombinedAppointments({ schedules, rechecks });
 

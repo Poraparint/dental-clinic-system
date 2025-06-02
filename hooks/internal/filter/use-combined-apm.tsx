@@ -1,4 +1,4 @@
-import { Recheck, Schedule } from "@/types/appointment";
+import { Recheck, Schedule } from "@/types";
 import { useMemo } from "react";
 
 interface CombinedEvent {

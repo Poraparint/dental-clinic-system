@@ -21,18 +21,18 @@ interface CalendarEventProp {
   badge?: React.ReactNode;
   badgeTooltip?: string;
   name: string;
-  phone?: string;
+  phone?: string | null;
   levelIcon?: React.ReactNode;
   level?: string;
   statusIcon?: React.ReactNode;
   status?: string;
   schedule?: string;
   categoryName: string;
-  detail?: string;
+  detail?: string | null;
   teeth?: number;
   datetime: Date;
   creator?: string;
-  dentist?: string;
+  dentist?: string | null;
   extraLabel?: string;
 }
 

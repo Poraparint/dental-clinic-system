@@ -36,7 +36,7 @@ import { useTransactionCategories } from "@/hooks/internal/company/category/use-
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany, usePatient } from "@/context/context";
-import { TransactionFormData } from "@/types/transaction";
+import { TransactionFormData } from "@/types";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;

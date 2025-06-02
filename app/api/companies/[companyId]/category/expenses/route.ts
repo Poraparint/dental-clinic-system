@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { NextRequest } from "next/server";
 import { validateManager } from "@/lib/utils/validation/manager";
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { CreateCommonCategorySchema } from "@/schemas";
 import { getExpensesCategoryName } from "@/data/internal/category";
 
 export async function GET(
@@ -60,7 +60,7 @@ export async function POST(
 
   const { manager } = accessToPost;
 
-  const validation = CreateDentalTechCategorySchema.safeParse(values);
+  const validation = CreateCommonCategorySchema.safeParse(values);
   if (!validation.success) {
     return NextResponse.json(
       {

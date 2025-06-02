@@ -4,8 +4,8 @@ import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { PlusIcon, SquarePen } from "lucide-react";
 import { useState } from "react";
 import { CreateTransactionForm } from "@/components/companys/internal/patient/transaction/transaction-form";
-import { Transaction } from "@/types/transaction";
-import { toTransactionFormData } from "@/lib/utils/transform/transaction";
+import { Transaction } from "@/types";
+import { toTransactionFormData } from "@/lib/utils/transform/model";
 
 interface DialogCreateTransactionProps {
   onSuccess?: () => void;
@@ -44,10 +44,9 @@ export const DialogUpdateTransaction = ({
       icon={<SquarePen />}
       dialogTitle="แก้ไขข้อมูลคนไข้"
       dialogDescription="ปรับปรุงข้อมูลของคนไข้"
-      variant="default"
+      variant="secondary"
       open={open}
       setOpen={setOpen}
-      tooltip="แก้ไข"
       className="rounded-full size-10"
     >
       <CreateTransactionForm

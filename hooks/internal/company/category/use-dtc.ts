@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CategoryWithCreator } from "@/types/category";
-import { ApiError } from "@/types/api-error";
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { DentalTechCategoryWithCreator, ApiError } from "@/types";
+import { CreateCommonCategorySchema } from "@/schemas";
 import * as z from "zod";
 
 
 export const useDentaltTechCategories = (companyId: string) => {
-  const [categories, setCategories] = useState<CategoryWithCreator[]>([]);
+  const [categories, setCategories] = useState<DentalTechCategoryWithCreator[]>(
+    []
+  );
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +43,7 @@ export const useDentaltTechCategories = (companyId: string) => {
 };
 
 export const createDentalTechCategory = async (
-  values: z.infer<typeof CreateDentalTechCategorySchema>,
+  values: z.infer<typeof CreateCommonCategorySchema>,
   companyId: string
 ) => {
   try {

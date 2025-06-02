@@ -2,8 +2,7 @@
 
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
-import { ApiError } from "@/types/api-error";
-import { DentalAppointment } from "@/types/appointment";
+import { DentalAppointment, ApiError } from "@/types";
 import { CalendarEventCard } from "@/components/props/component/card/event-card";
 import { Calendar, LampDesk } from "lucide-react";
 import { useFilteredAppointments } from "@/hooks/internal/filter/use-filtered-apm";
@@ -51,13 +50,13 @@ export const ScheduleCard = ({
           }
           badgeTooltip={item.isRecheck ? "รายการรีเช็ค / แบ่งชำระ" : "รายการนัด"}
           datetime={item.datetime}
-          name={item.patientName}
+          name={item.patientName || "ไม่ทราบชื่อ"}
           phone={item.phone}
           detail={item.detail}
           categoryName={item.transactionCategory.name || "-"}
           schedule={item.scheduleCategory.name || "-"}
           dentist={item.isRecheck ? item.creator?.name : item.dentist?.name}
-          creator={item.creator.name}
+          creator={item.creator.name || "ไม่ทราบชื่อ"}
           extraLabel={item.isRecheck ? "🩺 Recheck" : undefined}
         />
       ))}
