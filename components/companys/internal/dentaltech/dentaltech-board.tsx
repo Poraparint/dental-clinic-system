@@ -3,29 +3,19 @@
 import { DentalTechTable } from "@/components/companys/internal/dentaltech/dentaltech-table";
 import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
 import { useCompany } from "@/context/context";
-import { useDentalTechs } from "@/hooks/internal/company/use-dentalTech";
-import { useEffect, useState } from "react";
+import { useDentalTechs, useRefreshable } from "@/hooks";
+import { useState } from "react";
 
 export const DentalTechBoard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
   const { companyId } = useCompany();
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const { refreshKey, handleRefresh, isRefreshing } = useRefreshable(false);
   const { dentalTechs, error, isLoading } = useDentalTechs(
     companyId,
     refreshKey
   );
 
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    setRefreshKey((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (!isLoading && isRefreshing) {
-      setIsRefreshing(false);
-    }
-  }, [isLoading, isRefreshing]);
+  useRefreshable(isLoading);
 
   return (
     <CalendarBoard

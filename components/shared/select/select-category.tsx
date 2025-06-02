@@ -16,7 +16,7 @@ interface SelectCategoryProps {
   placeholder?: string;
   isLoading?: boolean;
   categories: {
-    id: string; name?: string; color?: string; user?: {
+    id: string; name?: string; color?: string | null; user?: {
       name: string;
     } }[];
 }

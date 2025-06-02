@@ -12,9 +12,9 @@ import {
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useMembers } from "@/hooks/internal/company/use-member";
+import { useMembers } from "@/hooks";
 import { formatDate } from "@/lib/utils";
-import { Member } from "@/types/member";
+import { Member } from "@/types";
 import { useCompany } from "@/context/context";
 
 export const MemberTable = () => {

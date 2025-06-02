@@ -33,9 +33,9 @@ import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { CardCategory } from "@/components/shared/card";
 import { SubmitButton } from "@/components/shared/button/submit-button";
-import { Transaction } from "@/types/transaction";
+import { Transaction } from "@/types";
 import { useScheduleCategories } from "@/hooks/internal/company/category/use-sc";
-import { createRecheck } from "@/hooks/internal/company/use-recheck";
+import { createRecheck } from "@/hooks";
 import { TooltipWrapper } from "@/components/shared/tooltip";
 import { useCompany } from "@/context/context";
 

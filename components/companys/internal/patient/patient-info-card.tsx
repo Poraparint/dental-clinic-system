@@ -3,9 +3,9 @@ import { Badge } from "@/components/ui/badge";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { Pill, UserRound } from "lucide-react";
-import { Patient } from "@/types/patient";
+import { Patients } from "@/types";
 interface PatientInfoCardProps {
-  patient: Patient;
+  patient: Patients;
 }
 
 export const PatientInfoCard = ({ patient }: PatientInfoCardProps) => {
@@ -14,7 +14,11 @@ export const PatientInfoCard = ({ patient }: PatientInfoCardProps) => {
       <TabsContent value="info">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <CardCategory icon={<UserRound />} title="ข้อมูลการติดต่อ">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <CardDescription>อาชีพ</CardDescription>
+                <CardTitle>{patient.job}</CardTitle>
+              </div>
               <div className="space-y-2">
                 <CardDescription>ที่อยู่</CardDescription>
                 <CardTitle>{patient.address}</CardTitle>

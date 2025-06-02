@@ -7,8 +7,7 @@ import {
   renderStatusIcon,
 } from "@/components/props/render/render-icons";
 import { CalendarEventCard } from "@/components/props/component/card/event-card";
-import { DentalTech } from "@/types/dentaltech";
-import { ApiError } from "@/types/api-error";
+import { DentalTech, ApiError } from "@/types";
 
 export const DentalTechTable = ({
   date,

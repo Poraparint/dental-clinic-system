@@ -2,8 +2,7 @@
 
 
 import { useEffect, useState } from "react";
-import { DentalTech } from "@/types/dentaltech";
-import { ApiError } from "@/types/api-error";
+import { DentalTech, ApiError } from "@/types";
 import { CreateDentalTechSchema } from "@/schemas";
 import * as z from "zod";
 

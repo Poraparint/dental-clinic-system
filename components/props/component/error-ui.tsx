@@ -107,7 +107,7 @@ export default function ErrorUI({
               className="group flex items-center gap-2 px-6 py-5 text-base transition-all duration-200"
             >
               <ArrowLeft className="h-5 w-5 transform transition-transform duration-200 ease-in-out group-hover:-translate-x-1" />
-              <span>Go Back</span>
+              <span>ย้อนกลับ</span>
             </Button>
           )}
 

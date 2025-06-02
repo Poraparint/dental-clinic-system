@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Recheck, RecheckList } from "@/types/appointment";
-import { ApiError } from "@/types/api-error";
+import { Recheck, RecheckList, ApiError } from "@/types";
 import { CreateRecheckSchema } from "@/schemas";
 import * as z from "zod";
 

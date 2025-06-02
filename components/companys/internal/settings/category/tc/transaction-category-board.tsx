@@ -1,15 +1,11 @@
 "use client";
 import { TabsContent } from "@/components/ui/tabs";
 import { TransactionCategoriesTable } from "@/components/companys/internal/settings/category/tc/transaction-category-table";
-import { useState } from "react";
-import { DialogCreateTransactionCategory } from "@/components/dialog/internal/category/dialog-create-tc";
+import { DialogCreateTransactionCategory } from "@/components/dialog/internal/category/dialog-tc";
+import { useRefreshable } from "@/hooks";
 
 export const TransactionCategoryBoard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
+  const { refreshKey, handleRefresh} = useRefreshable();
 
   return (
     <TabsContent value="dental-procedures" className="space-y-4">
@@ -18,7 +14,7 @@ export const TransactionCategoryBoard = () => {
         <DialogCreateTransactionCategory onSuccess={handleRefresh} />
       </div>
       <hr />
-      <TransactionCategoriesTable key={refreshKey} />
+      <TransactionCategoriesTable refreshKey={refreshKey} handleRefresh={handleRefresh}/>
     </TabsContent>
   );
 };

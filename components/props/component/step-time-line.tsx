@@ -2,7 +2,7 @@
 import { formatDate } from "@/lib/utils";
 import { CheckCircle, Clock } from "lucide-react";
 import { StepDialog } from "@/components/dialog/internal/step-dialog";
-import { RecheckList } from "@/types/appointment";
+import { RecheckList } from "@/types";
 
 interface StepTimeLineItemProps {
   index?: number;

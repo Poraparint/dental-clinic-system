@@ -1,15 +1,11 @@
 "use client";
 import { TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
 import { ExpensesCategoriesTable } from "@/components/companys/internal/settings/category/ec/expenses-category-table";
-import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-create-ec";
+import { DialogCreateExpensesCategory } from "@/components/dialog/internal/category/dialog-ec";
+import { useRefreshable } from "@/hooks";
 
 export const ExpensesCategoryBoard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
+  const { refreshKey, handleRefresh } = useRefreshable();
 
   return (
     <TabsContent value="expense-types" className="space-y-4">
@@ -20,7 +16,10 @@ export const ExpensesCategoryBoard = () => {
         <DialogCreateExpensesCategory onSuccess={handleRefresh} />
       </div>
       <hr />
-      <ExpensesCategoriesTable key={refreshKey} />
+      <ExpensesCategoriesTable
+        refreshKey={refreshKey}
+        handleRefresh={handleRefresh}
+      />
     </TabsContent>
   );
 };

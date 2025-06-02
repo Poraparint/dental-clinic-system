@@ -31,7 +31,7 @@ import { Users } from "lucide-react";
 import { toast } from "sonner";
 import { CompanyRole } from "@prisma/client";
 import { SubmitButton } from "@/components/shared/button/submit-button";
-import { createMembers } from "@/hooks/internal/company/use-member";
+import { createMembers } from "@/hooks";
 import { useCompany } from "@/context/context";
 
 interface MemberRegisterFormProps {

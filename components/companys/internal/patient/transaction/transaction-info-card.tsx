@@ -2,14 +2,11 @@
 
 import { DialogCreateTransaction } from "@/components/dialog/internal/dialog-transaction";
 import { TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
 import { TransactionTable } from "@/components/companys/internal/patient/transaction/transaction-table";
+import { useRefreshable } from "@/hooks";
 
 export const TransactionInfoCard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
+  const { refreshKey, handleRefresh } = useRefreshable();
 
   return (
     <>
@@ -27,7 +24,7 @@ export const TransactionInfoCard = () => {
           <DialogCreateTransaction onSuccess={handleRefresh} />
         </div>
 
-        <TransactionTable key={refreshKey} />
+        <TransactionTable refreshKey={refreshKey} handleRefresh={ handleRefresh } />
       </TabsContent>
     </>
   );

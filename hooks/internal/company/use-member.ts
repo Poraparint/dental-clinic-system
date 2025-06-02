@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Member } from "@/types/member";
-import { ApiError } from "@/types/api-error";
+import { Member, ApiError } from "@/types";
 import { MemberRegisterSchema } from "@/schemas";
 import * as z from "zod";
 

@@ -9,7 +9,7 @@ import {
 import { ReactNode, useState } from "react";
 import { RecheckStepCard } from "@/components/props/component/card/recheck-step-card";
 
-import { RecheckList } from "@/types/appointment";
+import { RecheckList } from "@/types";
 
 interface StepDialogProps {
   children: ReactNode;

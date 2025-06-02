@@ -5,8 +5,8 @@ import { ProfileCard } from "@/components/props/component/card/profile-card";
 interface RecheckStepCardProps {
   category?: string;
   datetime?: Date | null;
-  detail?: string;
-  price?: number;
+  detail?: string | null;
+  price?: number | null ;
 }
 
 export const RecheckStepCard = ({
@@ -41,7 +41,7 @@ export const RecheckStepCard = ({
       />
       <ProfileCard
         icon={<Banknote />}
-        description={formatCurrency(price)}
+        description={formatCurrency(price || 0)}
         className="border-none"
       />
     </div>

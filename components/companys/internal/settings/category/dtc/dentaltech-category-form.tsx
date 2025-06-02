@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { CreateDentalTechCategorySchema } from "@/schemas";
+import { CreateCommonCategorySchema } from "@/schemas";
 
 //actions
 import { CardCategory } from "@/components/shared/card";
@@ -39,15 +39,15 @@ export const CreateDentalTechCategoryForm = ({
   const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof CreateDentalTechCategorySchema>>({
-    resolver: zodResolver(CreateDentalTechCategorySchema),
+  const form = useForm<z.infer<typeof CreateCommonCategorySchema>>({
+    resolver: zodResolver(CreateCommonCategorySchema),
     defaultValues: {
       name: "",
       description: "",
     },
   });
 
-  const OnSubmit = (values: z.infer<typeof CreateDentalTechCategorySchema>) => {
+  const OnSubmit = (values: z.infer<typeof CreateCommonCategorySchema>) => {
     startTransition(async () => {
       const data = await createDentalTechCategory(values, companyId);
 

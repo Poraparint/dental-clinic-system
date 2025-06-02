@@ -4,12 +4,12 @@ import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { SquarePen, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { CreatePatientForm } from "@/components/companys/internal/patient/patient-form";
-import { Patient } from "@/types/patient";
-import { toPatientFormData } from "@/lib/utils/transform/patient";
+import { Patients } from "@/types";
+import { toPatientFormData } from "@/lib/utils/transform/model";
 
 interface DialogPatientProps {
   onSuccess?: () => void;
-  patient?: Patient;
+  patient?: Patients;
 }
 // ตัวอย่างการใช้งาน
 export const DialogCreatePatient = ({ onSuccess }: DialogPatientProps) => {
@@ -40,10 +40,9 @@ export const DialogUpdatePatient = ({
       icon={<SquarePen />}
       dialogTitle="แก้ไขข้อมูลคนไข้"
       dialogDescription="ปรับปรุงข้อมูลของคนไข้"
-      variant="default"
+      variant="secondary"
       open={open}
       setOpen={setOpen}
-      tooltip="แก้ไข"
       className="rounded-full size-10"
     >
       <CreatePatientForm

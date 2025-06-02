@@ -32,6 +32,11 @@ export async function GET(
             name: true,
           },
         },
+        updater: {
+          select: {
+            name: true,
+          }
+        }
       },
       orderBy: { createdAt: "desc" },
     });

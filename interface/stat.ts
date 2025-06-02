@@ -4,11 +4,15 @@ import {
   MonthlyComparisonItem,
   Period,
 } from "@/lib/utils/stat/stat";
-import { Recheck, RecheckList, Schedule } from "@/types/appointment";
-import { DentalTech } from "@/types/dentaltech";
-import { Expenses } from "@/types/expenses";
-import { Patients } from "@/types/patient";
-import { Transaction } from "@/types/transaction";
+import {
+  Recheck,
+  RecheckList,
+  Schedule,
+  DentalTech,
+  Expenses,
+  Patients,
+  Transaction,
+} from "@/types";
 
 export interface DashboardStatProps {
   patients: Patients[];

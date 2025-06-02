@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Patient, Patients } from "@/types/patient";
-import { ApiError } from "@/types/api-error";
+import { Patients, ApiError } from "@/types";
 import { CreatePatientSchema } from "@/schemas";
 import * as z from "zod";
 
@@ -100,15 +99,21 @@ export const updatePatient = async (
   }
 };
 
-export const usePatient = (companyId: string, patientId: string, refreshKey?: number) => {
-  const [patient, setPatient] = useState<Patient>();
+export const usePatient = (
+  companyId: string,
+  patientId: string,
+  refreshKey?: number
+) => {
+  const [patient, setPatient] = useState<Patients>();
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const response = await fetch(`/api/companies/${companyId}/patients/${patientId}`);
+        const response = await fetch(
+          `/api/companies/${companyId}/patients/${patientId}`
+        );
 
         const data = await response.json();
         if (!response.ok || data.error) {

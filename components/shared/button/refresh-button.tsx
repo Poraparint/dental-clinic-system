@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
@@ -17,8 +17,7 @@ export const RefreshButton = ({
   onClick?: () => void;
   isLoading?: boolean;
   isRefreshing?: boolean;
-    }) => {
-  
+}) => {
   return (
     <TooltipProvider>
       <Tooltip>

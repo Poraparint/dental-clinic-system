@@ -24,17 +24,24 @@ import { CardCategory } from "@/components/shared/card";
 import { Album } from "lucide-react";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/shared/button/submit-button";
-import { createTransactionCategory } from "@/hooks/internal/company/category/use-tc";
+import {
+  createTransactionCategory,
+  updateTransactionCategory,
+} from "@/hooks";
 import { useCompany } from "@/context/context";
+import { TransactionCategoryFormData } from "@/types";
+
 
 interface CreateTransactionCategoryFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
+  updateData?: TransactionCategoryFormData;
 }
 
 export const CreateTransactionCategoryForm = ({
   setOpen,
   onSuccess,
+  updateData,
 }: CreateTransactionCategoryFormProps) => {
   const { companyId } = useCompany();
 
@@ -42,7 +49,7 @@ export const CreateTransactionCategoryForm = ({
 
   const form = useForm<z.infer<typeof CreateTransactionCategorySchema>>({
     resolver: zodResolver(CreateTransactionCategorySchema),
-    defaultValues: {
+    defaultValues: updateData ?? {
       name: "",
       description: "",
       price: 0,
@@ -53,7 +60,17 @@ export const CreateTransactionCategoryForm = ({
     values: z.infer<typeof CreateTransactionCategorySchema>
   ) => {
     startTransition(async () => {
-      const data = await createTransactionCategory(values, companyId);
+      let data;
+
+      if (updateData?.id) {
+        data = await updateTransactionCategory(
+          values,
+          companyId,
+          updateData.id
+        );
+      } else {
+        data = await createTransactionCategory(values, companyId);
+      }
 
       if (data.error) {
         toast.error(data.error, {
@@ -125,7 +142,7 @@ export const CreateTransactionCategoryForm = ({
 
         <div className="flex justify-end">
           <SubmitButton
-            label="เพิ่มหมวดหมู่"
+            label={updateData?.id ? "อัพเดตข้อมูล" : "เพิ่มหมวดหมู่"}
             type="submit"
             isPending={isPending}
           />

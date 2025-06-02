@@ -3,8 +3,8 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { Badge } from "@/components/ui/badge";
-import { useExpenses } from "@/hooks/internal/company/use-expenses";
-import { Expenses } from "@/types/expenses";
+import { useExpenses } from "@/hooks";
+import { Expenses } from "@/types";
 import { useCompany } from "@/context/context";
 
 interface ExpensesTableProps {
@@ -38,7 +38,7 @@ export const ExpensesTable = ({ month }: ExpensesTableProps) => {
       render: (item: Expenses) => (
         <Badge variant="outline" className="flex gap-3">
           <div
-            style={{ backgroundColor: item.expensesCategory.color }}
+            style={{ backgroundColor: item.expensesCategory.color || "ghostwhite" }}
             className="rounded-full size-3"
           />
           {item.expensesCategory.name}
