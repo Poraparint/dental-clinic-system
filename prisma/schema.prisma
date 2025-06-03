@@ -38,10 +38,12 @@ model Company {
   DentalTechnicianCategories DentalTechCategory[]
   expensesCategories         ExpensesCategory[]
   scheduleCategories         ScheduleCategory[]
+  addOnItems AddonItem[]
   expenses                   Expenses[]
   dentalTech                 Dentaltech[]
   schedule                   Schedule[]
   recheck                    Recheck[]
+
 
   @@index([managerId], name: "idx_company_all")
   @@index([isDeleted], name: "idx_company")
@@ -87,6 +89,7 @@ model Manager {
   transactionCategories TransactionCategory[]
   scheduleCategories    ScheduleCategory[]
   expensesCategories    ExpensesCategory[]
+  addOnItems AddonItem[]
   createdExpenses      Expenses[] @relation("CreatedExpenses")
   updatedExpenses      Expenses[] @relation("UpdatedExpenses")
 }
@@ -244,6 +247,28 @@ model ScheduleCategory {
   @@index([companyId], name: "idx_ac_all")
 }
 
+model AddonItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  unitPrice   Float    ?
+  stock       Int      
+  companyId   String
+  managerId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+
+  manager Manager @relation(fields: [managerId], references: [id])
+  company Company @relation(fields: [companyId], references: [id])
+
+  transactionAddons TransactionAddon[]
+
+  @@unique([name, companyId])
+  @@index([companyId, isDeleted])
+}
+
+
 model Patient {
   id            String        @id @default(cuid())
   name          String
@@ -287,6 +312,7 @@ model Transaction {
   creatorUserId         String
   updaterUserId         String?
   transactionCategoryId String
+  transactionAddons TransactionAddon[]
   recheck               Recheck?
   dentaltech            Dentaltech?
   patient               Patient             @relation(fields: [patientId], references: [id])
@@ -298,6 +324,21 @@ model Transaction {
   @@index([patientId, isDelete], name: "idx_transaction_patient")
   @@index([creatorUserId, isDelete], name: "idx_transaction_creator")
 }
+
+model TransactionAddon {
+  id             String   @id @default(cuid())
+  transactionId  String
+  addonItemId   String
+  quantity      Int
+  price    Float       
+  createdAt     DateTime     @default(now())
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  addonItem   AddonItem   @relation(fields: [addonItemId], references: [id])
+
+  @@index([addonItemId])
+}
+
 
 model Dentaltech {
   id                 String             @id @unique

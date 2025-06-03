@@ -9,7 +9,6 @@ interface CardCategoryProps {
   icon: React.ReactNode;
   title: string;
   description?: string;
-
 }
 
 export const CardCategory = ({
@@ -20,7 +19,7 @@ export const CardCategory = ({
 
 }: CardCategoryProps) => {
   return (
-    <Card className="mb-3 border-0 shadow-none relative">
+    <Card className="mb-3 border-0 shadow-none relative w-full">
       <ProfileCard icon={ icon } title={title} description={description} />
       {children && <CardContent>{children}</CardContent>}
     </Card>

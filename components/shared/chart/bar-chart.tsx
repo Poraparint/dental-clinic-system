@@ -15,21 +15,23 @@ import {
 import { CategoryChartItem } from "@/lib/utils/stat/stat";
 
 const colors = [
-  "#5d9cec",
-  "#ff9aa2",
-  "#96e6a1",
-  "#ffb347",
-  "#ffef96",
-  "#a78bfa",
-  "#7aa3e5",
-  "#9be7a8",
+  "#3b78d8", // จาก #5d9cec → ฟ้าเข้มขึ้น
+  "#ff6f7d", // จาก #ff9aa2 → ชมพูเข้ม
+  "#5cb85c", // จาก #96e6a1 → เขียวเข้ม
+  "#ff8c00", // จาก #ffb347 → ส้มเข้ม
+  "#ffd700", // จาก #ffef96 → เหลืองทองเข้ม
+  "#7c3aed", // จาก #a78bfa → ม่วงเข้ม
+  "#3b5998", // จาก #7aa3e5 → น้ำเงินเข้ม
+  "#43a047", // จาก #9be7a8 → เขียวป่า
 ];
+
 
 interface Props {
   data: CategoryChartItem[];
+  unit?: string;
 }
 
-export const CategoryBarChart = ({ data }: Props) => {
+export const CategoryBarChart = ({ data, unit="บาท" }: Props) => {
   if (!data) {
     return (
       <div className="flex h-[200px] items-center justify-center">
@@ -62,7 +64,7 @@ export const CategoryBarChart = ({ data }: Props) => {
         />
         <Tooltip
           contentStyle={{ borderRadius: 8, fontSize: 13 }}
-          formatter={(value: number) => `${value.toLocaleString()} บาท`}
+          formatter={(value: number) => `${value.toLocaleString()} ${unit}`}
         />
         <Bar dataKey="total" radius={[0, 6, 6, 0]}>
           {data.map((entry, index) => (

@@ -37,20 +37,14 @@ import {
   updateExpensesCategory,
 } from "@/hooks";
 import { useCompany } from "@/context/context";
-import { CommonCategoryFormData } from "@/types";
 import { colorOptions } from "@/components/shared/common/color-options";
-
-interface CreateExpensesCategoryFormProps {
-  setOpen: (open: boolean) => void;
-  onSuccess?: () => void;
-  updateData?: CommonCategoryFormData;
-}
+import { CommonCategoryFormProps } from "@/interface/props";
 
 export const CreateExpensesCategoryForm = ({
   setOpen,
   onSuccess,
   updateData,
-}: CreateExpensesCategoryFormProps) => {
+}: CommonCategoryFormProps) => {
   const { companyId } = useCompany();
 
   const [isPending, startTransition] = useTransition();

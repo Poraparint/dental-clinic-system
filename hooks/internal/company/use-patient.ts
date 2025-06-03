@@ -5,21 +5,44 @@ import { Patients, ApiError } from "@/types";
 import { CreatePatientSchema } from "@/schemas";
 import * as z from "zod";
 
-export const useAllPatients = (companyId: string, refreshKey?: number) => {
+interface UsePatientsOptions {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  refreshKey?: number;
+}
+
+export const useAllPatients = (companyId: string, options?: UsePatientsOptions) => {
   const [patients, setPatients] = useState<Patients[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [total, setTotal] = useState<number | null>(null);
+  const [totalPages, setTotalPages] = useState<number | null>(null);
+
+  const { page, pageSize, search, refreshKey } = options || {};
 
   useEffect(() => {
     const fetchPatients = async () => {
-      try {
-        const response = await fetch(`/api/companies/${companyId}/patients`);
+      setIsLoading(true);
+      setError(null);
 
+      const params = new URLSearchParams();
+
+      if (page) params.append("page", page.toString());
+      if (pageSize) params.append("pageSize", pageSize.toString());
+      if (search) params.append("search", search);
+
+      const query = params.toString();
+      const url = `/api/companies/${companyId}/patients${query ? `?${query}` : ""}`;
+      try {
+        const response = await fetch(url);
         const data = await response.json();
         if (!response.ok || data.error) {
           setError(data);
         } else {
-          setPatients(Array.isArray(data) ? data : []);
+          setPatients(Array.isArray(data) ? data : data.data || []);
+          setTotal(data.total || null);
+          setTotalPages(data.totalPages || null);
         }
       } catch (error) {
         console.error("[GET_PATIENT]", error);
@@ -33,9 +56,9 @@ export const useAllPatients = (companyId: string, refreshKey?: number) => {
     };
 
     fetchPatients();
-  }, [companyId, refreshKey]);
+  }, [companyId, page, pageSize, search, refreshKey]);
 
-  return { patients, error, isLoading };
+  return { patients, total, totalPages, error, isLoading };
 };
 
 export const createPatient = async (
@@ -98,6 +121,39 @@ export const updatePatient = async (
     };
   }
 };
+
+export const softDeletePatient = async (
+  companyId: string,
+  patientId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/patients/${patientId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[DELETE_PATIENT]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลคนไข้ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
+
 
 export const usePatient = (
   companyId: string,

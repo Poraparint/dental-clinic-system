@@ -8,12 +8,17 @@ import { Expenses } from "@/types";
 import { useCompany } from "@/context/context";
 
 interface ExpensesTableProps {
+  refreshKey?: number;
   month?: string;
 }
 
-export const ExpensesTable = ({ month }: ExpensesTableProps) => {
+export const ExpensesTable = ({ refreshKey, month }: ExpensesTableProps) => {
   const { companyId } = useCompany();
-  const { expenses, error, isLoading } = useExpenses(companyId, month);
+  const { expenses, error, isLoading } = useExpenses(
+    companyId,
+    month,
+    refreshKey
+  );
 
   const columns = [
     {

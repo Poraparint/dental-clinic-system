@@ -1,5 +1,6 @@
 "use client";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AddOnCategoryBoard } from "@/components/companys/internal/settings/category/add-on/addon-category-board";
 import { TransactionCategoryBoard } from "@/components/companys/internal/settings/category/tc/transaction-category-board";
 import { DentalTechCategoryBoard } from "@/components/companys/internal/settings/category/dtc/dentaltech-category-board";
 import { ExpensesCategoryBoard } from "@/components/companys/internal/settings/category/ec/expenses-category-board";
@@ -17,6 +18,7 @@ export const Settings = () => {
       <Tabs defaultValue="dental-procedures">
         <TabsList className="w-fit mb-6">
           <TabsTrigger value="dental-procedures">รายการทำฟัน</TabsTrigger>
+          <TabsTrigger value="addon-items">สินค้าเสริม</TabsTrigger>
           <TabsTrigger value="expense-types">ชนิดรายจ่าย</TabsTrigger>
           <TabsTrigger value="scheduling">ตารางเวลานัด</TabsTrigger>
           <TabsTrigger value="dental-items">รายการทันตกรรม</TabsTrigger>
@@ -24,6 +26,7 @@ export const Settings = () => {
         {role !== CompanyRole.DENTALTECHNICIAN && (
           <>
             <TransactionCategoryBoard />
+            <AddOnCategoryBoard/>
             <AppointmentCategoryBoard />
             <ExpensesCategoryBoard />
           </>

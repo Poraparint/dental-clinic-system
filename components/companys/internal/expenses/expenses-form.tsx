@@ -28,13 +28,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 //schema
 import { CreateExpensesSchema } from "@/schemas";
@@ -150,7 +143,6 @@ export const CreateExpensesForm = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="payment"
@@ -159,36 +151,16 @@ export const CreateExpensesForm = ({
                   <FormLabel className="text-sm font-medium">
                     ช่องทางชำระ
                   </FormLabel>
-                  <FormControl>
-                    <div className="flex items-center gap-4">
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        disabled={isPending}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <div className="flex items-center gap-2">
-                            <SelectValue placeholder="เลือกช่องทางชำระ" />
-                          </div>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {paymentOptions.map((payment) => (
-                            <SelectItem key={payment.id} value={payment.id}>
-                              <div className="flex items-center gap-2">
-                                {payment.icon}
-                                {payment.id}
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </FormControl>
+                  <SelectCategory
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isPending}
+                    categories={paymentOptions}
+                  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="amount"

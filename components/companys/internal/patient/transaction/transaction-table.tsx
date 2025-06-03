@@ -10,7 +10,7 @@ import { DialogCreateDentalTech } from "@/components/dialog/internal/dialog-crea
 import { Transaction, RefreshableProps } from "@/types";
 import { useCompany, usePatient } from "@/context/context";
 import { DialogUpdateTransaction } from "@/components/dialog/internal/dialog-transaction";
-import { Aperture, LampDesk } from "lucide-react";
+import { Aperture, LampDesk, PencilLine, User2 } from "lucide-react";
 
 export const TransactionTable = ({ refreshKey, handleRefresh }: RefreshableProps) => {
   const { companyId } = useCompany();
@@ -37,7 +37,20 @@ export const TransactionTable = ({ refreshKey, handleRefresh }: RefreshableProps
     {
       key: "transactionCategory",
       header: "รายการ",
-      render: (item: Transaction) => item.transactionCategory.name,
+      render: (item: Transaction) => (
+        <div>
+          {item.transactionCategory.name}
+          {item.transactionAddons && item.transactionAddons.length > 0 && (
+            <ul className="ml-2 list-disc text-sm text-muted-foreground">
+              {item.transactionAddons.map((addon) => (
+                <li key={addon.id}>
+                  {addon.addonItem.name} × {addon.quantity} ({addon.price} บาท)
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ),
     },
     {
       key: "detail",
@@ -61,10 +74,23 @@ export const TransactionTable = ({ refreshKey, handleRefresh }: RefreshableProps
       ),
     },
     {
-      key: "creator",
-      header: "ผู้บันทึก",
-      render: (item: Transaction) => item.creator.name,
-    },
+      key: "manager",
+      header: "จัดการโดย",
+      render: (item: Transaction) => (
+        <div className="text-sm space-y-1">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <User2 className="w-4 h-4 text-blue-500" />
+            <span>สร้างโดย: <span className="font-medium text-foreground">{item.creator.name}</span></span>
+          </div>
+          {item.updater && (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <PencilLine className="w-4 h-4 text-green-500" />
+              <span>อัปเดตโดย: <span className="font-medium text-foreground">{item.updater.name}</span></span>
+            </div>
+          )}
+        </div>
+      ),
+    },    
     {
       key: "list",
       header: "",

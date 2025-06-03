@@ -54,6 +54,23 @@ export async function GET(
             name: true,
           },
         },
+        updater: {
+          select: {
+            name: true,
+          },
+        },
+        transactionAddons: {
+          select: {
+            id: true,
+            quantity: true,
+            price: true,
+            addonItem: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
         recheck: true,
         dentaltech: true,
       },
@@ -116,11 +133,11 @@ export async function POST(
     );
   }
 
-  const { datetime, transactionCategoryId, detail, price, paid } =
+  const { datetime, transactionCategoryId, detail, price, paid, addonItems } =
     validation.data;
 
   try {
-    await db.transaction.create({
+    const transaction = await db.transaction.create({
       data: {
         datetime: getDisplayDate(datetime),
         transactionCategoryId,
@@ -131,6 +148,17 @@ export async function POST(
         creatorUserId: member.id,
       },
     });
+
+    const addonItemsData = addonItems.map((item) => ({
+      transactionId: transaction.id,
+      quantity: item.quantity,
+      price: item.price,
+      addonItemId: item.addonItemId,
+    }));
+
+    await db.$transaction([
+      ...addonItemsData.map((data) => db.transactionAddon.create({ data })),
+    ]);
 
     return NextResponse.json(
       {

@@ -1,4 +1,6 @@
 import {
+  AddOnCategoryFormData,
+  AddOnCategoryWithManager,
   CommonCategoryFormData,
   DentalTechCategoryWithCreator,
   ExpensesCategoryWithManager,
@@ -14,6 +16,18 @@ export function toTransactionCategoryFormData(
     name: category.name ?? "",
     description: category.description ?? "",
     price: category.price ?? 0,
+  };
+}
+
+export function toAddOnCategoryFormData(
+  category: AddOnCategoryWithManager
+): AddOnCategoryFormData {
+  return {
+    id: category.id,
+    name: category.name ?? "",
+    description: category.description ?? "",
+    price: category.unitPrice ?? 1,
+stock: category.stock 
   };
 }
 

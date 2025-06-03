@@ -4,7 +4,7 @@ import {
 import { getCreatorIdByTransactionId, getPatientByTransactionId } from "@/data/internal/transaction";
 import { db } from "@/lib/db";
 import { validateManagerAndDentist } from "@/lib/utils/validation/member";
-import { CreateTransactionSchema } from "@/schemas";
+import { UpdateTransactionSchema } from "@/schemas";
 import { CompanyRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -66,7 +66,7 @@ export async function PATCH(
     );
   }
 
-  const validation = CreateTransactionSchema.safeParse(values);
+  const validation = UpdateTransactionSchema.safeParse(values);
 
   if (!validation.success) {
     return NextResponse.json(

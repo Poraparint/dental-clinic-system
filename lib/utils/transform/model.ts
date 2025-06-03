@@ -32,5 +32,11 @@ export function toTransactionFormData(transaction: Transaction): TransactionForm
     detail: transaction.detail ?? "",
     price: transaction.price ?? null,
     paid: transaction.paid ?? null,
+    addonItems:
+      transaction.transactionAddons?.map((item) => ({
+        addonItemId: item.id,
+        price: item.price,
+        quantity: item.quantity,
+      })) ?? [],
   };
 }

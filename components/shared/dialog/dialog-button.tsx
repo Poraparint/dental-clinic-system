@@ -14,6 +14,7 @@ interface DialogButtonProps {
   setOpen: (open: boolean) => void;
   tooltip?: string;
   className?: string;
+  formWidth?: string;
 }
 
 export const DialogButton = ({
@@ -26,7 +27,8 @@ export const DialogButton = ({
   open,
   setOpen,
   tooltip,
-  className
+  className,
+  formWidth
 }: DialogButtonProps) => {
 
   const button = (
@@ -50,6 +52,7 @@ export const DialogButton = ({
         setOpen={setOpen}
         title={dialogTitle}
         description={dialogDescription}
+        className={formWidth}
       >
         {children}
         <DialogFooter className="absolute bottom-6 left-5">

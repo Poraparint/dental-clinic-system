@@ -39,38 +39,6 @@ export const useTransaction = (companyId: string, patientId: string, refreshKey?
   return { transactions, error, isLoading };
 };
 
-export const createTransaction = async (
-  values: z.infer<typeof CreateTransactionSchema>,
-  companyId: string,
-  patientId: string
-) => {
-  try {
-    const response = await fetch(
-      `/api/companies/${companyId}/patients/${patientId}/transaction`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      }
-    );
-
-    const data = await response.json();
-    if (!response.ok) {
-      return { error: data.error };
-    }
-
-    return { success: data.success };
-  } catch (error) {
-    console.error("[CREATE_TRANSACTION_PATIENT]", error);
-    return {
-      error: "ไม่สามารถสร้างรายการธุรกรรมได้",
-      description: "โปรดติดต่อผู้ดูแลระบบ",
-    };
-  }
-};
-
 export const useAllTransaction = (companyId: string) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
@@ -104,6 +72,40 @@ export const useAllTransaction = (companyId: string) => {
 
   return { transactions, error, isLoading };
 };
+
+export const createTransaction = async (
+  values: z.infer<typeof CreateTransactionSchema>,
+  companyId: string,
+  patientId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/patients/${patientId}/transaction`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[CREATE_TRANSACTION_PATIENT]", error);
+    return {
+      error: "ไม่สามารถสร้างรายการธุรกรรมได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
+
+
 
 export const updateTransaction = async (
   values: Partial<z.infer<typeof CreateTransactionSchema>>,

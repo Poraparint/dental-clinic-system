@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ApiError } from "@/types/api-error";
+import { ApiError } from "@/types";
 import * as z from "zod";
 import { CreateCompanySchema } from "@/schemas";
 
@@ -11,7 +11,7 @@ interface Ministry {
   description: string;
 }
 
-export const useMinistry = () => {
+export const useMinistry = (refreshKey?: number) => {
   const [ministries, setMinistries] = useState<Ministry[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +38,7 @@ export const useMinistry = () => {
       }
     };
     fetchMinistry();
-  }, []);
+  }, [refreshKey]);
 
   return { ministries, error, isLoading };
 };

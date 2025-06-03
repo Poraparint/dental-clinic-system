@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { baseNameSchema, emailSchema, loginPasswordSchema } from '@/schemas/index';
+import { baseNameSchema,emailSchema, loginPasswordSchema, datetimeSchema, detailSchema, priceSchema, createPaymentSchema } from '@/schemas/index';
 
 export const SettingSchema = z
   .object({
@@ -35,4 +35,25 @@ export const SettingSchema = z
   );
 
 
+  export const UpdateTransactionSchema = z
+    .object({
+      ...datetimeSchema,
+      transactionCategoryId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
+      ...detailSchema,
+      ...priceSchema,
+      ...createPaymentSchema(),
+    })
+    .superRefine((data, ctx) => {
+      if (
+        typeof data.price === "number" &&
+        typeof data.paid === "number" &&
+        data.paid > data.price
+      ) {
+        ctx.addIssue({
+          path: ["paid"],
+          code: z.ZodIssueCode.custom,
+          message: "จำนวนเงินที่ชำระต้องไม่เกินราคารวม",
+        });
+      }
+    });
   

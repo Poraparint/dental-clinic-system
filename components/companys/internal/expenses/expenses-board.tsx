@@ -4,10 +4,9 @@ import { useMemo, useState } from "react";
 import { ExpensesTable } from "@/components/companys/internal/expenses/expenses-table";
 import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create-expenses";
 import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
-import { Loading } from "@/components/loading";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
-import { useExpensesOverview } from "@/hooks/internal/company/use-expenses-overview";
+import { useExpensesOverview, useRefreshable } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
@@ -18,18 +17,15 @@ import { useCompany } from "@/context/context";
 
 export const Expenses = () => {
   const { companyId } = useCompany();
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { categories, isLoading, error } = useExpensesCategories(
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const { refreshKey, handleRefresh } = useRefreshable();
+  const { categories, error } = useExpensesCategories(companyId, refreshKey);
+
+  const { expensesOverview } = useExpensesOverview(
     companyId,
+    currentMonth,
     refreshKey
   );
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const { expensesOverview, isLoading: isOverviewLoading } =
-    useExpensesOverview(companyId, currentMonth, refreshKey);
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
 
   const handlePrevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -67,10 +63,6 @@ export const Expenses = () => {
       };
     });
   }, [categories, expensesOverview]);
-
-  if (isLoading || isOverviewLoading) {
-    return <Loading />;
-  }
 
   return (
     <div className="lg:flex gap-4 space-y-4">
@@ -113,7 +105,7 @@ export const Expenses = () => {
         </Card>
         <Card className="px-5">
           <ExpensesTable
-            key={refreshKey}
+            refreshKey={refreshKey}
             month={format(currentMonth, "yyyy-MM")}
           />
         </Card>

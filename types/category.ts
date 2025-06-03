@@ -1,4 +1,4 @@
-import { CreateCommonCategorySchema, CreateTransactionCategorySchema } from "@/schemas";
+import { CreateAddOnCategorySchema, CreateCommonCategorySchema, CreateTransactionCategorySchema } from "@/schemas";
 import { Prisma } from "@prisma/client";
 import { z } from "zod";
 
@@ -7,11 +7,19 @@ export type TransactionCategoryFormData = z.infer<typeof CreateTransactionCatego
   id?: string;
 };
 
+export type AddOnCategoryFormData = z.infer<
+  typeof CreateAddOnCategorySchema
+> & {
+  id?: string;
+};
+
 export type CommonCategoryFormData = z.infer<
   typeof CreateCommonCategorySchema
 > & {
   id?: string;
 };
+
+//types
 
 export type TransactionCategoryWithManager =
   Prisma.TransactionCategoryGetPayload<{
@@ -24,6 +32,18 @@ export type TransactionCategoryWithManager =
       };
     };
   }>;
+
+  export type AddOnCategoryWithManager =
+    Prisma.AddonItemGetPayload<{
+      include: {
+        manager: {
+          select: {
+            id: true;
+            name: true;
+          };
+        };
+      };
+    }>;
 
 export type DentalTechCategoryWithCreator =
   Prisma.DentalTechCategoryGetPayload<{

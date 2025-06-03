@@ -7,14 +7,14 @@ import { CardMinistry } from "@/components/props/component/card/card-ministry";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
-import { useMinistry } from "@/hooks/external/use-ministry";
+import { useMinistry, useNavigation } from "@/hooks";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
-import { useNavigation } from "@/hooks/use-navigation";
 import { NavigatingUi } from "@/components/props/component/navigating";
+import { RefreshableProps } from "@/types";
 
-export const CompanyCard = () => {
-  const { ministries, error, isLoading } = useMinistry();
+export const CompanyCard = ({refreshKey}: RefreshableProps) => {
+  const { ministries, error, isLoading } = useMinistry(refreshKey);
   const { isNavigating, navigateTo } = useNavigation();
 
   const handleCardClick = (ministryId: string) => {

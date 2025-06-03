@@ -1,17 +1,35 @@
 "use client";
-import { Loading } from "@/components/loading";
-import { useAllPatients } from "@/hooks";
+import { softDeletePatient, useAllPatients, useDebounce } from "@/hooks";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Patients, RefreshableProps } from "@/types";
 import { useCompany } from "@/context/context";
 import { DialogUpdatePatient } from "@/components/dialog/internal/dialog-patient";
+import { toast } from "sonner";
+import { PaginationControls } from "@/components/shared/pagination/pagination";
 
-
-export const PatientTable = ({ onRowClick, refreshKey, handleRefresh }: RefreshableProps) => {
+type PatientTableProps = RefreshableProps & {
+  search: string;
+  page: number;
+  setPage: (page: number) => void;
+};
+export const PatientTable = ({
+  search,
+  page,
+  setPage,
+  onRowClick,
+  refreshKey,
+  handleRefresh,
+}: PatientTableProps) => {
   const { companyId } = useCompany();
-  const { patients, error, isLoading } = useAllPatients(companyId, refreshKey);
+  const debouncedSearch = useDebounce(search, 300);
+  const { patients, totalPages, error } = useAllPatients(companyId, {
+    page,
+    pageSize: 20,
+    search: debouncedSearch,
+    refreshKey,
+  });
 
   const columns = [
     {
@@ -70,10 +88,6 @@ export const PatientTable = ({ onRowClick, refreshKey, handleRefresh }: Refresha
     },
   ];
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       <DynamicTable
@@ -89,9 +103,27 @@ export const PatientTable = ({ onRowClick, refreshKey, handleRefresh }: Refresha
             onSuccess={handleRefresh}
           />
         )}
+        onSoftDelete={(item) => softDeletePatient(companyId, item.id)}
+        onDeleteResult={({ success, error, description }) => {
+          if (success) {
+            toast.success(success);
+            handleRefresh?.();
+          } else {
+            toast.error(error, {
+              description: description,
+            });
+          }
+        }}
         error={error?.error}
         description={error?.description}
       />
+      {totalPages && totalPages > 1 && (
+        <PaginationControls
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </>
   );
 };
