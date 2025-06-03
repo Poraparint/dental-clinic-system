@@ -11,12 +11,12 @@ import {
   getTopCategoryComparison,
   getYearlyRevenueExpenseComparison,
 } from "@/lib/utils/stat/stat";
-import { useCombinedAppointments } from "@/hooks/internal/filter/use-combined-apm";
-import { useFilteredAppointments } from "@/hooks/internal/filter/use-filtered-apm";
+import { useCombinedAppointments, useFilteredAppointments } from "@/hooks";
 
 export const useFinancialStats = ({
   transactions,
   expenses,
+  dentalTechs,
   period,
 }: FinancialStatProps) => {
   const stats = useMemo(() => {
@@ -59,6 +59,14 @@ export const useFinancialStats = ({
       "amount"
     );
 
+    const totalTeethPerTech = getCategoryTotals(
+      dentalTechs,
+      period,
+      "deadline",
+      "dentalTechCategory.name",
+      "teeth"
+    );
+
     const categoryChartData = getCategoryTotals(
       transactions,
       period,
@@ -78,10 +86,10 @@ export const useFinancialStats = ({
       transactions,
       expenses,
       "datetime",
-      "paid", // ใช้ paid สำหรับรายรับจริง
+      "paid", 
       "datetime",
       "amount",
-      6 // 6 เดือนย้อนหลัง
+      6 
     );
 
     const yearlyComparison = getYearlyRevenueExpenseComparison(
@@ -91,7 +99,7 @@ export const useFinancialStats = ({
       "paid",
       "datetime",
       "amount",
-      3 // 3 ปีย้อนหลัง
+      3 
     );
 
     return {
@@ -100,12 +108,13 @@ export const useFinancialStats = ({
       avgTransaction,
       topTransactionCategory,
       totalExpenses,
+      totalTeethPerTech,
       categoryChartData,
       expensesChartData,
       monthlyComparison,
       yearlyComparison,
     };
-  }, [transactions, expenses, period]);
+  }, [transactions, expenses, dentalTechs, period]);
 
   return {
     ...stats,

@@ -5,7 +5,7 @@ import { Expenses, ApiError } from "@/types";
 import { CreateExpensesSchema } from "@/schemas";
 import * as z from "zod";
 
-export const useExpenses = (companyId: string, month?: string) => {
+export const useExpenses = (companyId: string, month?: string, refreshKey?:number) => {
   const [expenses, setExpenses] = useState<Expenses[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,9 +20,19 @@ export const useExpenses = (companyId: string, month?: string) => {
 
         const json = await response.json();
         if (!response.ok || json.error) {
-          setError(json)
+          setError(json);
+          setExpenses([]);
         } else {
-          setExpenses(Array.isArray(json.data) ? json.data : []);
+          const data = Array.isArray(json.data) ? json.data : [];
+          setExpenses(data);
+          setError(
+            data.length === 0
+              ? {
+                  error: "ไม่พบข้อมูล",
+                  description: `ไม่มีข้อมูลรายจ่ายสำหรับเดือน ${month}`,
+                }
+              : null
+          );
         }
 
       } catch (error) {
@@ -39,7 +49,7 @@ export const useExpenses = (companyId: string, month?: string) => {
     if (companyId) {
       fetchExpenses();
     }
-  }, [companyId, month]);
+  }, [companyId, month, refreshKey]);
 
   return { expenses, error, isLoading };
 };

@@ -6,6 +6,7 @@ interface DialogContentFormProps {
   title?: string;
   description?: string;
   children: React.ReactNode;
+  className?: string;
 }
 
 import {
@@ -22,10 +23,11 @@ export const DialogContentForm = ({
   title,
   description,
   children,
+  className
 }: DialogContentFormProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
-      <DialogContent>
+      <DialogContent className={className}>
         <DialogHeader className="bg-gradient-to-r from-indigo-400 to-indigo-200 dark:from-indigo-900 dark:to-indigo-400 absolute p-5 w-full rounded-t-md">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

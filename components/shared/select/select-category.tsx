@@ -16,9 +16,15 @@ interface SelectCategoryProps {
   placeholder?: string;
   isLoading?: boolean;
   categories: {
-    id: string; name?: string; color?: string | null; user?: {
+    id: string;
+    name?: string;
+    color?: string | null;
+    unitPrice?: number | null;
+    icon?: React.ReactNode;
+    user?: {
       name: string;
-    } }[];
+    };
+  }[];
 }
 
 export const SelectCategory = ({
@@ -54,7 +60,15 @@ export const SelectCategory = ({
                   style={{ backgroundColor: cat.color }}
                 />
               )}
-              <span>{ cat.name || cat.user?.name }</span>
+              {cat.icon && (
+                cat.icon
+              )}
+              <span>{cat.name || cat.user?.name || cat.id}</span>
+              {typeof cat.unitPrice === "number" && (
+                <span className="text-sm text-muted-foreground">
+                  ฿{cat.unitPrice.toFixed(2)}
+                </span>
+              )}
             </SelectItem>
           ))
         ) : (

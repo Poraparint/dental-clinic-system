@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Minus} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -57,22 +57,22 @@ export const StatCard = ({
   // Determine trend icon and color
   const getTrendIcon = () => {
     if (!showTrend || percentChange === 0) {
-      return <Minus className="w-4 h-4 text-gray-500" />;
+      return <Minus className="size-4 text-muted-foreground" />;
     }
 
     if (isPositive) {
-      return <TrendingUp className="w-4 h-4 text-emerald-600" />;
+      return <span>+ </span>;
     } else {
-      return <TrendingDown className="w-4 h-4 text-red-600" />;
+      return <span>- </span>;
     }
   };
 
   const getTrendColor = () => {
     if (!showTrend || percentChange === 0) {
-      return "text-gray-500";
+      return "text-muted-foreground";
     }
 
-    return isPositive ? "text-emerald-600" : "text-red-600";
+    return isPositive;
   };
 
   return (

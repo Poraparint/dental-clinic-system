@@ -29,20 +29,13 @@ import {
   updateTransactionCategory,
 } from "@/hooks";
 import { useCompany } from "@/context/context";
-import { TransactionCategoryFormData } from "@/types";
-
-
-interface CreateTransactionCategoryFormProps {
-  setOpen: (open: boolean) => void;
-  onSuccess?: () => void;
-  updateData?: TransactionCategoryFormData;
-}
+import { TransactionCategoryFormProps } from "@/interface/props";
 
 export const CreateTransactionCategoryForm = ({
   setOpen,
   onSuccess,
   updateData,
-}: CreateTransactionCategoryFormProps) => {
+}: TransactionCategoryFormProps) => {
   const { companyId } = useCompany();
 
   const [isPending, startTransition] = useTransition();

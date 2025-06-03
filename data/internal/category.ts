@@ -12,6 +12,21 @@ export const getTransactionCategoryName = async (name: string, companyId: string
   return category;
 };
 
+export const getAddonItemCategoryName = async (
+  name: string,
+  companyId: string
+) => {
+  const category = await db.addonItem.findUnique({
+    where: {
+      name_companyId: {
+        name,
+        companyId,
+      },
+    },
+  });
+  return category;
+};
+
 export const getDentalTechCategoryByName = async (name: string, companyId: string) => {
   const category = await db.dentalTechCategory.findUnique({
     where: {

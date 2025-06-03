@@ -8,13 +8,15 @@ import { useState } from "react";
 import { FinancialContent } from "@/components/companys/internal/financial-report/financial-content";
 import { useCompany } from "@/context/context";
 import { useFinancialStats } from "@/hooks/internal/memorize/use-stat";
+import { useDentalTechs } from "@/hooks";
 
 export const FinancialReport = () => {
   const { companyId } = useCompany();
   const [period, setPeriod] = useState<Period>("month");
   const { transactions } = useAllTransaction(companyId);
   const { expenses } = useExpenses(companyId);
-  const { ...stats } = useFinancialStats({ transactions, expenses, period });
+  const { dentalTechs } = useDentalTechs(companyId);
+  const { ...stats } = useFinancialStats({ transactions, expenses, dentalTechs, period });
 
   return (
     <Card>

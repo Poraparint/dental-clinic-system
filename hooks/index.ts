@@ -4,6 +4,7 @@ export * from "@/hooks/use-current-user";
 export * from "@/hooks/use-mobile";
 export * from "@/hooks/use-navigation";
 export * from "@/hooks/use-refreshable";
+export * from "@/hooks/use-debounce";
 
 //external
 export * from "@/hooks/external/use-ministry";
@@ -24,6 +25,7 @@ export * from "@/hooks/internal/company/category/use-dtc";
 export * from "@/hooks/internal/company/category/use-ec";
 export * from "@/hooks/internal/company/category/use-sc";
 export * from "@/hooks/internal/company/category/use-tc";
+export * from "@/hooks/internal/company/category/use-add-on";
 
 //internal/filter
 export * from "@/hooks/internal/filter/use-combined-apm";

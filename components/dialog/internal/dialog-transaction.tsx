@@ -24,6 +24,7 @@ export const DialogCreateTransaction = ({
         icon={<PlusIcon />}
         dialogTitle="เพิ่มรายการธุรกรรม"
         dialogDescription="กรอกข้อมูลเพื่อสร้างรายการธุรกรรม"
+        formWidth="md:max-w-5xl"
         open={open}
         setOpen={setOpen}
       >

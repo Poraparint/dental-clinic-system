@@ -18,6 +18,18 @@ export const CreateCommonCategorySchema = z.object({
   color: z.optional(z.string()),
 });
 
+export const CreateAddOnCategorySchema = z.object({
+  ...baseNameSchema,
+  ...descriptionSchema,
+  ...optionalPriceSchema,
+  stock: z.preprocess(
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "กรุณากรอกจำนวนสินค้า" })
+      .min(0, "จำนวนสินค้าต้องไม่น้อยกว่า 0")
+  ),
+});
+
 export const CreatePatientSchema = z.object({
   ...baseNameSchema,
   phone: z.optional(z.string()),
@@ -37,6 +49,14 @@ export const CreateTransactionSchema = z
     ...detailSchema,
     ...priceSchema,
     ...createPaymentSchema(),
+
+    addonItems: z.array(
+      z.object({
+        addonItemId: z.string().min(1, "ต้องมีหมวดหมู่"),
+        quantity: z.number().min(1),
+        ...priceSchema,
+      })
+    ),
   })
   .superRefine((data, ctx) => {
     if (
@@ -93,7 +113,7 @@ export const CreateRecheckSchema = z.object({
       z.object({
         ...datetimeSchema,
         scheduleId: z.string().min(1, "ต้องเลือกเวลา"),
-        tcId: z.string().min(1, "ต้องมีหมวหมู่"),
+        tcId: z.string().min(1, "ต้องมีหมวดหมู่"),
         detail: z.string().optional().default(""),
         ...priceSchema,
       })

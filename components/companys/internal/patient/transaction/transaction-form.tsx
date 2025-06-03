@@ -4,7 +4,7 @@ import * as z from "zod";
 
 //react
 import { useForm } from "react-hook-form";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 //icons
@@ -30,13 +30,18 @@ import { CardCategory } from "@/components/shared/card/card-category";
 import { SelectCategory } from "@/components/shared/select/select-category";
 
 //actions
-import { createTransaction, updateTransaction } from "@/hooks/internal/company/use-transaction";
+import {
+  createTransaction,
+  updateTransaction,
+  useAddOnCategories,
+} from "@/hooks";
 import { Textarea } from "@/components/ui/textarea";
 import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany, usePatient } from "@/context/context";
 import { TransactionFormData } from "@/types";
+import { AddonSection } from "@/components/shared/select";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
@@ -47,11 +52,18 @@ interface CreateTransactionFormProps {
 export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
-  transactionData
+  transactionData,
 }: CreateTransactionFormProps) => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
-  const { categories, isLoading } = useTransactionCategories(companyId);
+  const { categories: transactionCategories, isLoading: tcLoading } =
+    useTransactionCategories(companyId);
+  const { categories: availableAddons, isLoading: addonLoading } =
+    useAddOnCategories(companyId);
+
+  const [addonList, setAddonList] = useState<
+    { id: string; name: string; price: number; quantity: number }[]
+  >([]);
 
   const [isPending, startTransition] = useTransition();
 
@@ -63,22 +75,51 @@ export const CreateTransactionForm = ({
       detail: "",
       price: 0,
       paid: 0,
+      addonItems: [],
     },
   });
   const transactionCategoryId = form.watch("transactionCategoryId");
 
-  const selectedCategory = categories?.find?.(
+  const selectedCategory = transactionCategories?.find(
     (cat) => cat.id === transactionCategoryId
   );
 
+  const totalAddonPrice = addonList.reduce((total, item) => {
+    return total + item.price * item.quantity;
+  }, 0);
+
+  const calculatedBasePrice = (selectedCategory?.price || 0) + totalAddonPrice;
+
+  useEffect(() => {
+    if (!transactionData && calculatedBasePrice > 0) {
+      form.setValue("price", calculatedBasePrice);
+    }
+  }, [calculatedBasePrice, form, transactionData]);
+
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
     startTransition(async () => {
+      const addonItems = addonList.map((item) => ({
+        addonItemId: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const payload = {
+        ...values,
+        addonItems,
+      };
       let data;
 
       if (transactionData?.id) {
-        data = await updateTransaction(values, companyId, patientId, transactionData.id);
+        data = await updateTransaction(
+          payload,
+          companyId,
+          patientId,
+          transactionData.id
+        );
       } else {
-        data = await createTransaction(values, companyId, patientId);
+        data = await createTransaction(payload, companyId, patientId);
       }
 
       if (data.error) {
@@ -100,115 +141,127 @@ export const CreateTransactionForm = ({
           title="รายการธุรกรรม"
           description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <DatePickerField
-              form={form}
-              name="datetime"
-              withQuickSelect={false}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className={`space-y-2 ${transactionData?.id && "col-span-full"}`}>
+              <div className="grid grid-cols-2 gap-6">
+                <DatePickerField
+                  form={form}
+                  name="datetime"
+                  withQuickSelect={false}
+                />
 
-            <FormField
-              control={form.control}
-              name="transactionCategoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    ประเภทการทำธุรกรรม
-                  </FormLabel>
-                  <SelectCategory
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isPending}
-                    isLoading={isLoading}
-                    categories={categories}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                <FormField
+                  control={form.control}
+                  name="transactionCategoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        ประเภทการทำธุรกรรม
+                      </FormLabel>
+                      <SelectCategory
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={isPending}
+                        isLoading={tcLoading}
+                        categories={transactionCategories}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="detail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium">
+                      รายละเอียด
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        disabled={isPending}
+                        placeholder="กรอกรายละเอียดการทำธุรกรรม"
+                        className="w-full min-h-[80px]"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* แถวที่สอง: รายละเอียด */}
-          <FormField
-            control={form.control}
-            name="detail"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-medium">
-                  รายละเอียด
-                </FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    disabled={isPending}
-                    placeholder="กรอกรายละเอียดการทำธุรกรรม"
-                    className="w-full"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              {/* ราคาและการชำระเงิน */}
+              <div className="grid grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        ราคารวม
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                            ฿
+                          </span>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder={calculatedBasePrice.toFixed(2)}
+                            type="number"
+                            step="0.01"
+                            className="pl-8"
+                            value={field.value === 0 ? "" : field.value}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="paid"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        จ่ายแล้ว
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                            ฿
+                          </span>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="0.00"
+                            type="number"
+                            step="0.01"
+                            className="pl-8"
+                            value={field.value === 0 ? "" : field.value}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {!transactionData?.id && (
+              <AddonSection
+                availableAddons={availableAddons}
+                addonList={addonList}
+                setAddonList={setAddonList}
+                isPending={isPending}
+                isLoading={addonLoading}
+              />
             )}
-          />
-
-          {/* แถวที่สาม: ราคาและการชำระเงิน */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">ราคา</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        ฿
-                      </span>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder={
-                          selectedCategory?.price
-                            ? selectedCategory.price.toFixed(2)
-                            : "0.00"
-                        }
-                        type="number"
-                        className="pl-8"
-                        value={field.value === 0 ? "" : field.value}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="paid"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-medium">
-                    จ่ายแล้ว
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                        ฿
-                      </span>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="0.00"
-                        type="number"
-                        className="pl-8"
-                        value={field.value === 0 ? "" : field.value}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
         </CardCategory>
         <div className="flex justify-end">

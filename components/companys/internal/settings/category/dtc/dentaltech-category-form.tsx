@@ -26,16 +26,12 @@ import { toast } from "sonner";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { createDentalTechCategory } from "@/hooks/internal/company/category/use-dtc";
 import { useCompany } from "@/context/context";
-
-interface CreateTransactionCategoryFormProps {
-  setOpen: (open: boolean) => void;
-  onSuccess?: () => void;
-}
+import { CommonCategoryFormProps } from "@/interface/props";
 
 export const CreateDentalTechCategoryForm = ({
   setOpen,
   onSuccess,
-}: CreateTransactionCategoryFormProps) => {
+}: CommonCategoryFormProps) => {
   const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 

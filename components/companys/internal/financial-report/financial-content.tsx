@@ -1,15 +1,18 @@
-import { DollarSign, PiggyBank, TrendingUp } from "lucide-react";
+import { Aperture, DollarSign, PiggyBank, TrendingUp } from "lucide-react";
 import { StatCard } from "@/components/shared/dashboard/stat-card";
 import { AllFinancialStats } from "@/interface/stat";
 import { Card } from "@/components/ui/card";
 import { FinancialChart } from "./financial-chart";
 import { RevenueExpenseComparisonChart } from "@/components/shared/chart/two-bar-chart";
 import { CategoryBarChart } from "@/components/shared/chart/bar-chart";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { CardCategory } from "@/components/shared/card";
 
 export const FinancialContent = ({
   revenue,
   totalExpenses,
   profit,
+  totalTeethPerTech,
   monthlyComparison,
   categoryChartData,
   expensesChartData,
@@ -18,13 +21,14 @@ export const FinancialContent = ({
   | "revenue"
   | "totalExpenses"
   | "profit"
+  | "totalTeethPerTech"
   | "monthlyComparison"
   | "categoryChartData"
   | "expensesChartData"
 >) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-7 lg:grid-rows-5 gap-5">
-      <div className="md:col-span-4 md:row-span-3">
+      <div className="lg:col-span-4 lg:row-span-3">
         {expensesChartData.length > 0 && (
           <RevenueExpenseComparisonChart
             data={monthlyComparison}
@@ -33,7 +37,7 @@ export const FinancialContent = ({
           />
         )}
       </div>
-      <Card className="grid grid-cols-3 gap-2 lg:col-span-3 lg:col-start-5 lg:row-start-1">
+      <Card className="grid grid-cols-3 gap-2 lg:col-span-3 lg:col-start-5">
         <StatCard
           title="รายรับทั้งหมด"
           icon={<DollarSign />}
@@ -69,7 +73,7 @@ export const FinancialContent = ({
           className="rounded-md bg-amethyst-bg border-amethyst-border text-amethyst-text"
         />
       </Card>
-      <div className="lg:col-span-3 lg:row-span-3 lg:col-start-5 lg:row-start-2">
+      <div className="lg:col-span-3 lg:row-span-2 lg:col-start-5 lg:row-start-2">
         {categoryChartData.length > 0 && (
           <FinancialChart
             title="รายได้ทั้งหมด"
@@ -77,6 +81,34 @@ export const FinancialContent = ({
           />
         )}
       </div>
+      {totalTeethPerTech.length > 0 && (
+        <Card className="lg:col-span-4 lg:row-span-2 lg:row-start-4 p-0">
+          <CardCategory
+            title="สถิติงานแยกตามหมวดหมู่"
+            description="จำนวนฟันในแต่ละหมวดหมู่"
+            icon={<Aperture />}
+          >
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ชื่อหมวดหมู่</TableHead>
+                  <TableHead>จำนวนฟัน (ซี่)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {totalTeethPerTech.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">
+                      {item.category}
+                    </TableCell>
+                    <TableCell>{item.total.toLocaleString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardCategory>
+        </Card>
+      )}
     </div>
   );
 };

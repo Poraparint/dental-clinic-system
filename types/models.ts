@@ -35,8 +35,33 @@ export type Transaction = Prisma.TransactionGetPayload<{
         name: true;
       };
     };
-    recheck: true;
-    dentaltech: true;
+    updater: {
+      select: {
+        name: true;
+      };
+    };
+    recheck: {
+      select: {
+        id: true;
+      };
+    };
+    dentaltech: {
+      select: {
+        id: true;
+      };
+    };
+    transactionAddons: {
+      select: {
+        id: true;
+        quantity: true;
+        price: true;
+        addonItem: {
+          select: {
+            name: true;
+          };
+        };
+      };
+    };
   };
 }>;
 

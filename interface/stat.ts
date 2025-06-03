@@ -26,6 +26,7 @@ export interface DashboardStatProps {
 export interface FinancialStatProps {
   transactions: Transaction[];
   expenses: Expenses[];
+  dentalTechs: DentalTech[];
   period: Period;
 }
 
@@ -42,6 +43,7 @@ export interface AllFinancialStats {
   avgTransaction: ComparisonResult;
   topTransactionCategory: TopCategoryComparisonResult;
   totalExpenses: ComparisonResult;
+  totalTeethPerTech: CategoryChartItem[];
   categoryChartData: CategoryChartItem[];
   expensesChartData: CategoryChartItem[];
   monthlyComparison: MonthlyComparisonItem[];

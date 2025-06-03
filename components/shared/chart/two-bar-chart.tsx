@@ -58,30 +58,30 @@ export const RevenueExpenseComparisonChart = ({
             <XAxis
               dataKey="month"
               tick={{ fontSize: 12 }}
-              className="text-gray-600"
+              className="text-muted-foreground"
             />
             <YAxis
               tickFormatter={(value) => formatCurrency(value).replace("฿", "")}
               tick={{ fontSize: 12 }}
-              className="text-gray-600"
+              className="text-muted-foreground"
             />
             <Tooltip
               formatter={(value: number) => formatCurrency(value)}
-              labelClassName="font-semibold text-gray-900"
+              labelClassName="font-semibold text-muted-foreground"
             />
 
             <Legend wrapperStyle={{ fontSize: "14px" }} iconType="rect" />
             <Bar
               dataKey="revenue"
               name="รายรับ"
-              fill="#10b981"
+              fill="#3b82f6"
               radius={[2, 2, 0, 0]}
               className="hover:opacity-80 transition-opacity"
             />
             <Bar
               dataKey="expenses"
               name="รายจ่าย"
-              fill="#ef4444"
+              fill="#f97316"
               radius={[2, 2, 0, 0]}
               className="hover:opacity-80 transition-opacity"
             />
