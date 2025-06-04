@@ -78,24 +78,26 @@ export function DynamicTable<T>({
                         {column.render(item)}
                       </TableCell>
                     ))}
+
+                    {onRowClick && (
+                      <TableCell className="text-right">
+                        <Button
+                          className="group px-0"
+                          onClick={() => onRowClick && onRowClick(item)}
+                        >
+                          <span>ดูรายละเอียด</span>
+                          <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
+                        </Button>
+                      </TableCell>
+                    )}
                     <RoleGate
                       allowedRole={[
                         CompanyRole.MANAGER,
                         CompanyRole.COMANAGER,
                         CompanyRole.DENTIST,
                       ]}
+                      fallback={<></>}
                     >
-                      {onRowClick && (
-                        <TableCell className="text-right">
-                          <Button
-                            className="group px-0"
-                            onClick={() => onRowClick && onRowClick(item)}
-                          >
-                            <span>ดูรายละเอียด</span>
-                            <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
-                          </Button>
-                        </TableCell>
-                      )}
                       {dialogEdit && (
                         <TableCell className="text-right">
                           {dialogEdit(item)}
@@ -157,23 +159,24 @@ export function DynamicTable<T>({
                         </div>
                       ))}
 
-                      <RoleGate
-                        allowedRole={[
-                          CompanyRole.MANAGER,
-                          CompanyRole.COMANAGER,
-                          CompanyRole.DENTIST,
-                        ]}
-                      >
-                        <div className="flex flex-col gap-4">
-                          {onRowClick && (
-                            <Button
-                              className="group px-0 w-full"
-                              onClick={() => onRowClick && onRowClick(item)}
-                            >
-                              <span>ดูรายละเอียด</span>
-                              <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
-                            </Button>
-                          )}
+                      <div className="flex flex-col gap-4">
+                        {onRowClick && (
+                          <Button
+                            className="group px-0 w-full"
+                            onClick={() => onRowClick && onRowClick(item)}
+                          >
+                            <span>ดูรายละเอียด</span>
+                            <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
+                          </Button>
+                        )}
+                        <RoleGate
+                          allowedRole={[
+                            CompanyRole.MANAGER,
+                            CompanyRole.COMANAGER,
+                            CompanyRole.DENTIST,
+                          ]}
+                          fallback={<></>}
+                        >
                           {dialogEdit && (
                             <div className="absolute top-2 right-2">
                               {dialogEdit(item)}
@@ -191,8 +194,8 @@ export function DynamicTable<T>({
                               }
                             />
                           )}
-                        </div>
-                      </RoleGate>
+                        </RoleGate>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

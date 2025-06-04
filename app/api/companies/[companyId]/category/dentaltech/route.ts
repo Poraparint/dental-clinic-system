@@ -4,7 +4,6 @@ import { NextRequest } from "next/server";
 import { validateManagerAndTechnician } from "@/lib/utils/validation/member";
 import { getDentalTechCategoryByName } from "@/data/internal/category";
 import { CreateCommonCategorySchema } from "@/schemas";
-import { validateManager } from "@/lib/utils/validation/manager";
 
 export async function GET(
   request: NextRequest,
@@ -70,13 +69,13 @@ export async function POST(
 
   const { companyId } = await params;
 
-  const accessToPost = await validateManager(companyId);
+  const accessToPost = await validateManagerAndTechnician(companyId);
 
   if (accessToPost instanceof NextResponse) {
     return accessToPost;
   }
 
-  const { manager } = accessToPost;
+  const { member } = accessToPost;
 
   const validation = CreateCommonCategorySchema.safeParse(values);
   if (!validation.success) {
@@ -103,7 +102,7 @@ export async function POST(
         name,
         description,
         companyId,
-        creatorUserId: manager.id,
+        creatorUserId: member.id,
       },
     });
 

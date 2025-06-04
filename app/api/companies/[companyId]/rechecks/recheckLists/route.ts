@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { validateManager } from "@/lib/utils/validation/manager";
+import { validateManagerAndComanager } from "@/lib/utils/validation/member";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -8,7 +8,7 @@ export async function GET(
 ) {
   const { companyId } = await params;
 
-  const accessToGet = await validateManager(companyId);
+  const accessToGet = await validateManagerAndComanager(companyId);
 
   if (accessToGet instanceof Response) {
     return accessToGet;

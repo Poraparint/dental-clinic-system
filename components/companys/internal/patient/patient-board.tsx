@@ -28,6 +28,7 @@ export const PatientBoard = () => {
     <TitleCard
       title="รายชื่อคนไข้ / บัตรคนไข้"
       dialog={<DialogCreatePatient onSuccess={handleRefresh} />}
+      
     >
       <SearchBar
         value={search}

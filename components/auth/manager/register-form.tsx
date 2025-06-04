@@ -10,7 +10,7 @@ import { FormSuccess } from "@/components/form-success";
 import { RegisterSchema } from "@/schemas";
 
 //action
-import { register } from "@/actions/auth/register";
+import { managerRegister } from "@/hooks/external/auth/use-manager";
 
 //ui
 import {
@@ -26,8 +26,6 @@ import { Button } from "@/components/ui/button";
 
 //props
 import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
-import { CardCategory } from "@/components/shared/card/card-category";
-import { User } from "lucide-react";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -48,25 +46,26 @@ export const RegisterForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      register(values)
+      managerRegister(values)
         .then((data) => {
           setError(data.error);
           setSuccess(data.success);
         })
         .catch(() => setError("Something went wrong!"));
     });
+    
   };
 
   return (
     <CardWrapper
-      headerLabel="Create your Clinic"
-      headerDescription="Register your clinic to get started"
-      backButtonLabel="have an account?"
+      headerLabel="สร้างคลินิกของคุณ"
+      headerDescription="ลงทะเบียนคลินิกเพื่อเริ่มใช้งาน"
+      backButtonLabel="มีบัญชีแล้ว?"
       backButtonHref="/auth/login"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
-          <CardCategory icon={<User />} title="ข้อมูลผู้ใช้">
+          
             <div className="space-y-3">
               <FormField
                 control={form.control}
@@ -122,7 +121,7 @@ export const RegisterForm = () => {
                 )}
               />
             </div>
-          </CardCategory>
+          
 
           <FormError message={error} />
           <FormSuccess message={success} />
@@ -131,7 +130,7 @@ export const RegisterForm = () => {
             className="w-full py-7 mt-7 text-base"
             disabled={isPending}
           >
-            Create Account
+            สร้างบัญชี
           </Button>
         </form>
       </Form>

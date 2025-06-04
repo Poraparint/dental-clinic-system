@@ -1,22 +1,18 @@
 "use client";
-import { useState } from "react";
 import { MemberTable } from "@/components/companys/internal/members/member-table";
 import { DialogCreateMember } from "@/components/dialog/internal/dialog-create-member";
 import { TitleCard } from "@/components/shared/card/title-card";
+import { useRefreshable } from "@/hooks";
 
 export const MemberBoard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
+  const {refreshKey, handleRefresh } = useRefreshable();
 
   return (
     <TitleCard
       title="รายชื่อสมาชิก / จัดการพนักงาน"
       dialog={<DialogCreateMember onSuccess={handleRefresh} />}
     >
-      <MemberTable key={refreshKey} />
+      <MemberTable refreshKey={refreshKey} handleRefresh={ handleRefresh } />
     </TitleCard>
   );
 };
