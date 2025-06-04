@@ -15,8 +15,13 @@ import {
 } from "lucide-react";
 import { CardCategory } from "@/components/shared/card";
 import { DialogWrapper } from "@/components/shared/dialog";
+import { onSoftDeleteProps } from "@/interface/props";
+import { handleSoftDelete } from "@/lib/common/soft-delete";
+import { RoleGate } from "../../wrapper/role-gate";
+import { CompanyRole } from "@prisma/client";
+import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
 
-interface CalendarEventProp {
+interface CalendarEventProp<T = unknown> extends onSoftDeleteProps<T> {
   avatar?: string;
   badge?: React.ReactNode;
   badgeTooltip?: string;
@@ -36,7 +41,7 @@ interface CalendarEventProp {
   extraLabel?: string;
 }
 
-export const CalendarEventCard = ({
+export const CalendarEventCard = <T,>({
   avatar,
   badge,
   badgeTooltip,
@@ -54,7 +59,10 @@ export const CalendarEventCard = ({
   creator,
   dentist,
   extraLabel,
-}: CalendarEventProp) => {
+  item,
+  onSoftDelete,
+  onDeleteResult,
+}: CalendarEventProp<T>) => {
   return (
     <DialogWrapper
       trigger={
@@ -160,6 +168,25 @@ export const CalendarEventCard = ({
               {extraLabel}
             </span>
           )}
+          <RoleGate
+            allowedRole={[
+              CompanyRole.MANAGER,
+              CompanyRole.COMANAGER,
+              CompanyRole.DENTIST,
+            ]}
+          >
+            {onSoftDelete && (
+              <ConfirmDeleteDialog
+                onConfirm={() =>
+                  handleSoftDelete({
+                    item,
+                    onSoftDelete,
+                    onDeleteResult,
+                  })
+                }
+              />
+            )}
+          </RoleGate>
         </div>
       </CardCategory>
     </DialogWrapper>

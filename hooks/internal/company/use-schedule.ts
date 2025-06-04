@@ -65,3 +65,35 @@ export const createSchedule = async (
     };
   }
 };
+
+export const softDeleteSchedule = async (
+  companyId: string,
+  scheduleId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/schedules/${scheduleId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[DELETE_PATIENT]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลคนไข้ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};

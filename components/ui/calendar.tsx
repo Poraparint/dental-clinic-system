@@ -36,11 +36,11 @@ function Calendar({
         cell: "text-center text-sm p-0 w-10 relative [&:has([aria-selected])]:bg-transparent",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal rounded-full hover:bg-muted-foreground"
+          "h-9 w-9 p-0 font-normal rounded-full hover:bg-primary-foreground hover:dark:text-white"
         ),
         day_range_start: "day-range-start bg-blue-600 text-white",
         day_range_end: "day-range-end bg-blue-600 text-white",
-        day_selected: "bg-indigo text-white",
+        day_selected: "bg-charoite text-white",
         day_today: "border",
         day_outside: "text-gray-400 opacity-50",
         day_disabled: "text-gray-300 opacity-50",

@@ -110,7 +110,7 @@ export const PatientTable = ({
             handleRefresh?.();
           } else {
             toast.error(error, {
-              description: description,
+              description,
             });
           }
         }}

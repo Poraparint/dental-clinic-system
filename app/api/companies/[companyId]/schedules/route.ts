@@ -18,7 +18,7 @@ export async function GET(
 
   try {
     const schedules = await db.schedule.findMany({
-      where: { companyId },
+      where: { companyId, isDeleted: false },
       select: {
         id: true,
         datetime: true,

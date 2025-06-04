@@ -1,5 +1,5 @@
 export type RefreshableProps = {
-  refreshKey: number;
+  refreshKey?: number;
   handleRefresh?: () => void;
   onRowClick?: (id: string) => void;
 };

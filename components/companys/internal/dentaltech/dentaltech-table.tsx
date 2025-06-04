@@ -8,6 +8,7 @@ import {
 } from "@/components/props/render/render-icons";
 import { CalendarEventCard } from "@/components/props/component/card/event-card";
 import { DentalTech, ApiError } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const DentalTechTable = ({
   date,
@@ -37,7 +38,7 @@ export const DentalTechTable = ({
 
   return (
     <div className="space-y-4">
-      <div>
+     <ScrollArea className="h-[36rem]">
         {itemsForDate.map((dentaltech) => (
           <CalendarEventCard
             key={dentaltech.id}
@@ -54,7 +55,7 @@ export const DentalTechTable = ({
             dentist={dentaltech.creator.name}
           />
         ))}
-      </div>
+      </ScrollArea>
     </div>
   );
 };
