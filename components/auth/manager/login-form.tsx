@@ -12,7 +12,7 @@ import { FormSuccess } from "@/components/form-success";
 import { LoginSchema } from "@/schemas";
 
 //action
-import { managerLogin } from "@/actions/auth/login";
+import { managerLogin } from "@/hooks/external/auth/use-manager";
 
 //ui
 import {
@@ -27,10 +27,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { CardWrapper } from "@/components/props/wrapper/card-wrapper";
+import { MANAGER_LOGIN_REDIRECT } from "@/routes";
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = searchParams.get("callbackUrl") || MANAGER_LOGIN_REDIRECT;
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
@@ -52,33 +53,38 @@ export const LoginForm = () => {
   const OnSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
+    startTransition(async () => {
+      const data = await managerLogin(values, callbackUrl);
 
-    startTransition(() => {
-      managerLogin(values, callbackUrl)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            setError(data.error);
-          }
+      if (data?.redirect) {
+        window.location.href = data.redirect;
+        return;
+      }
 
-          if (data?.success) {
-            form.reset();
-            setSuccess(data.success);
-          }
+      if (data?.url) {
+        window.location.href = data.url;
+        return;
+      }
 
-          if (data?.twoFactor) {
-            setShowTwoFactor(true);
-          }
-        })
-        .catch(() => setError("Something went wrong!"));
+      if (data?.error) {
+        setError(data.error);
+      }
+
+      if (data?.success) {
+        setSuccess(data.success);
+      }
+
+      if (data?.twoFactor) {
+        setShowTwoFactor(true);
+      }
     });
   };
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      headerDescription="Sign in to access your clinic management dashboard"
-      backButtonLabel="Dont have an account"
+      headerLabel="ยินดีต้อนรับกลับมา"
+      headerDescription="เข้าสู่ระบบเพื่อเข้าถึงแดชบอร์ดจัดการคลินิก"
+      backButtonLabel="ยังไม่มีบัญชี?"
       backButtonHref="/auth/register"
     >
       <Form {...form}>
@@ -142,7 +148,7 @@ export const LoginForm = () => {
                         size="sm"
                         variant="link"
                         asChild
-                        className="px-0 font-normal justify-start"
+                        className="px-0 font-normal justify-start text-charoite"
                       >
                         <Link href="/auth/reset">Forgot password?</Link>
                       </Button>
@@ -160,7 +166,7 @@ export const LoginForm = () => {
             className="w-full py-7 mt-7 text-base"
             disabled={isPending}
           >
-            {showTwoFactor ? "Confirm" : "Login"}
+            {showTwoFactor ? "ยืนยัน" : "เข้าสู่ระบบ"}
           </Button>
         </form>
       </Form>

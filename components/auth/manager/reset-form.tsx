@@ -10,7 +10,7 @@ import { FormSuccess } from "@/components/form-success";
 import { ResetSchema } from "@/schemas";
 
 //action
-import { reset } from "@/actions/auth/reset";
+import { resetPassword } from "@/hooks/external/auth/use-verify";
 
 //ui
 import {
@@ -41,11 +41,8 @@ export const ResetForm = () => {
   const OnSubmit = (values: z.infer<typeof ResetSchema>) => {
     setError("");
     setSuccess("");
-
-    console.log(values);
-
     startTransition(() => {
-      reset(values).then((data) => {
+      resetPassword(values).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
       });

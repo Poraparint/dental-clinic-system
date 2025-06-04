@@ -6,6 +6,8 @@ import { useState } from "react";
 import { CreatePatientForm } from "@/components/companys/internal/patient/patient-form";
 import { Patients } from "@/types";
 import { toPatientFormData } from "@/lib/utils/transform/model";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
+import { CompanyRole } from "@prisma/client";
 
 interface DialogPatientProps {
   onSuccess?: () => void;
@@ -16,16 +18,18 @@ export const DialogCreatePatient = ({ onSuccess }: DialogPatientProps) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <DialogButton
-      title="เพิ่มบัตรใหม่"
-      icon={<UserPlus />}
-      dialogTitle="เพิ่มบัตรใหม่"
-      dialogDescription="กรอกข้อมูลเพื่อสร้างบัตรใหม่"
-      open={open}
-      setOpen={setOpen}
-    >
-      <CreatePatientForm setOpen={setOpen} onSuccess={onSuccess} />
-    </DialogButton>
+    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER, CompanyRole.DENTIST]} fallback={<></>}>
+      <DialogButton
+        title="เพิ่มบัตรใหม่"
+        icon={<UserPlus />}
+        dialogTitle="เพิ่มบัตรใหม่"
+        dialogDescription="กรอกข้อมูลเพื่อสร้างบัตรใหม่"
+        open={open}
+        setOpen={setOpen}
+      >
+        <CreatePatientForm setOpen={setOpen} onSuccess={onSuccess} />
+      </DialogButton>
+    </RoleGate>
   );
 };
 

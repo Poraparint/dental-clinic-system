@@ -11,7 +11,7 @@ import { FormSuccess } from "@/components/form-success";
 import { NewPasswordSchema } from "@/schemas";
 
 //action
-import { newPassword } from "@/actions/auth/new-password";
+import { newPassword } from "@/hooks/external/auth/use-verify";
 
 //ui
 import {
@@ -44,8 +44,6 @@ export const NewPasswordForm = () => {
   const OnSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
     setError("");
     setSuccess("");
-
-    console.log(values);
 
     startTransition(() => {
       newPassword(values, token).then((data) => {

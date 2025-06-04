@@ -32,10 +32,17 @@ import Image from "next/image";
 import { NavigatingUi } from "@/components/props/component/navigating";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useCompany } from "@/context/context";
+import { useCurrentRole } from "@/hooks";
+import { getFilteredMenus } from "@/lib/utils/validation/filterd-menu";
 
 export function AppSidebar() {
   const { companyId } = useCompany();
   const { navigateTo, isNavigating, isActive } = useNavigation();
+  const role = useCurrentRole();
+
+  // กรองเมนูตาม role
+  const { filteredManages, filteredViews, filteredSettings } =
+    getFilteredMenus(role);
 
   return (
     <>
@@ -62,58 +69,74 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {manages.map((manage) => (
-                  <SidebarMenuItem key={manage.title}>
-                    <SidebarMenuButton
-                      asChild
-                      variant={
-                        isActive(manage.url(companyId)) ? "charoite" : "default"
-                      }
-                      onClick={() => navigateTo(manage.url(companyId))}
-                    >
-                      <div className="flex items-center gap-3">
-                        <manage.icon className="size-20" />
-                        <span>{manage.title}</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-                <hr className="my-2" />
-                {views.map((view) => (
-                  <SidebarMenuItem key={view.title}>
-                    <SidebarMenuButton
-                      asChild
-                      variant={
-                        isActive(view.url(companyId)) ? "charoite" : "default"
-                      }
-                      onClick={() => navigateTo(view.url(companyId))}
-                    >
-                      <div className="flex items-center gap-3">
-                        <view.icon className="size-20" />
-                        <span>{view.title}</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-                <hr className="my-2" />
-                {settings.map((setting) => (
-                  <SidebarMenuItem key={setting.title}>
-                    <SidebarMenuButton
-                      asChild
-                      variant={
-                        isActive(setting.url(companyId))
-                          ? "charoite"
-                          : "default"
-                      }
-                      onClick={() => navigateTo(setting.url(companyId))}
-                    >
-                      <div className="flex items-center gap-3">
-                        <setting.icon className="size-20" />
-                        <span>{setting.title}</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {filteredManages.length > 0 && (
+                  <>
+                    {filteredManages.map((manage) => (
+                      <SidebarMenuItem key={manage.title}>
+                        <SidebarMenuButton
+                          asChild
+                          variant={
+                            isActive(manage.url(companyId))
+                              ? "charoite"
+                              : "default"
+                          }
+                          onClick={() => navigateTo(manage.url(companyId))}
+                        >
+                          <div className="flex items-center gap-3">
+                            <manage.icon className="size-20" />
+                            <span>{manage.title}</span>
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                    <hr className="my-2" />
+                  </>
+                )}
+                {filteredViews.length > 0 && (
+                  <>
+                    {filteredViews.map((view) => (
+                      <SidebarMenuItem key={view.title}>
+                        <SidebarMenuButton
+                          asChild
+                          variant={
+                            isActive(view.url(companyId))
+                              ? "charoite"
+                              : "default"
+                          }
+                          onClick={() => navigateTo(view.url(companyId))}
+                        >
+                          <div className="flex items-center gap-3">
+                            <view.icon className="size-20" />
+                            <span>{view.title}</span>
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                    <hr className="my-2" />
+                  </>
+                )}
+                {filteredSettings.length > 0 && (
+                  <>
+                    {filteredSettings.map((setting) => (
+                      <SidebarMenuItem key={setting.title}>
+                        <SidebarMenuButton
+                          asChild
+                          variant={
+                            isActive(setting.url(companyId))
+                              ? "charoite"
+                              : "default"
+                          }
+                          onClick={() => navigateTo(setting.url(companyId))}
+                        >
+                          <div className="flex items-center gap-3">
+                            <setting.icon className="size-20" />
+                            <span>{setting.title}</span>
+                          </div>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </>
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

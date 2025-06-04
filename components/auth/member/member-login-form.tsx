@@ -12,7 +12,7 @@ import { FormSuccess } from "@/components/form-success";
 import { MemberLoginSchema } from "@/schemas";
 
 //action
-import { memberLogin } from "@/actions/auth/login";
+import { memberLogin } from "@/hooks/external/auth/use-member";
 
 //ui
 import {
@@ -50,33 +50,37 @@ export const MemberLoginForm = () => {
     setError("");
     setSuccess("");
 
-    startTransition(() => {
-      memberLogin(values, callbackUrl)
-        .then((data) => {
-          if (data?.error) {
-            form.reset();
-            setError(data.error);
-          }
+    startTransition(async () => {
+      const data = await memberLogin(values, callbackUrl);
 
-          if (data?.success) {
-            form.reset();
-            setSuccess(data.success);
-          }
+      if (data?.redirect) {
+        window.location.href = data.redirect;
+        return;
+      }
 
-          if (data?.twoFactor) {
-            setShowTwoFactor(true);
-          }
-        })
-        .catch(() => setError("Something went wrong!"));
+      if (data?.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      if (data?.error) {
+        setError(data.error);
+      }
+
+      if (data?.success) {
+        setSuccess(data.success);
+      }
+
+      if (data?.twoFactor) {
+        setShowTwoFactor(true);
+      }
     });
   };
 
   return (
     <CardWrapper
-      headerLabel="Login as Member"
-      headerDescription="Sign in to your clinic"
-      backButtonLabel="Dont have an account"
-      backButtonHref="/auth/register"
+      headerLabel="เข้าสู่ระบบสมาชิก"
+      headerDescription="เข้าสู่ระบบคลินิกของคุณ"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
@@ -175,7 +179,7 @@ export const MemberLoginForm = () => {
             className="w-full py-7 mt-7 text-base"
             disabled={isPending}
           >
-            {showTwoFactor ? "Confirm" : "Login"}
+            {showTwoFactor ? "ยืนยัน" : "เข้าสู่ระบบ"}
           </Button>
         </form>
       </Form>

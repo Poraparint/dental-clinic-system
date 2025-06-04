@@ -15,7 +15,7 @@ const DashboardPage = () => {
   }
 
   return (
-    <RoleGate allowedRole={[CompanyRole.MANAGER]}>
+    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}>
       <Dashboard />
     </RoleGate>
   );

@@ -12,14 +12,37 @@ import {
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useMembers } from "@/hooks";
+import { updateRoleMember, useMembers } from "@/hooks";
 import { formatDate } from "@/lib/utils";
-import { Member } from "@/types";
+import { Member, RefreshableProps } from "@/types";
 import { useCompany } from "@/context/context";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CompanyRole } from "@prisma/client";
+import { toast } from "sonner";
+import { getTextRoleColor } from "@/lib/common/role-color";
 
-export const MemberTable = () => {
+export const MemberTable = ({
+  refreshKey,
+  handleRefresh,
+}: RefreshableProps) => {
   const { companyId } = useCompany();
-  const { members, error, isLoading } = useMembers(companyId);
+  const { members, error, isLoading } = useMembers(companyId, refreshKey);
+
+  const updateRole = async (memberId: string, role: CompanyRole) => {
+    const response = await updateRoleMember(companyId, memberId, role);
+    if (response.error) {
+      toast.error(response.error, { description: response.description });
+    } else {
+      toast.success(response.success);
+      handleRefresh?.()
+    };
+  };
 
   const columns = [
     {
@@ -87,8 +110,24 @@ export const MemberTable = () => {
       header: "ตำแหน่ง",
       render: (item: Member) => (
         <div className="flex items-center gap-2">
-          <BriefcaseBusiness className="size-4" />
-          {item.role}
+          <Select
+            value={item.role}
+            onValueChange={(role) => updateRole(item.id, role as CompanyRole)}
+          >
+            <SelectTrigger className="h-8 w-[140px]">
+              <BriefcaseBusiness className={`size-4 ${getTextRoleColor(item.role)}`} />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(CompanyRole)
+                .filter((role) => role !== CompanyRole.MANAGER)
+                .map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
         </div>
       ),
     },

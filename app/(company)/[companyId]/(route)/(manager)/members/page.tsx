@@ -4,7 +4,7 @@ import { CompanyRole } from "@prisma/client";
 
 const MemberManagementPage = () => {
   return (
-    <RoleGate allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}>
+    <RoleGate allowedRole={[CompanyRole.MANAGER]}>
       <MemberBoard />
     </RoleGate>
   );

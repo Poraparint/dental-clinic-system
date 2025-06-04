@@ -1,8 +1,6 @@
-import { ModeToggle } from "@/theme/modetoggle";
-import { ChevronRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -10,37 +8,29 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm md:max-w-6xl md:h-[40rem] border rounded-xl shadow-md relative">
-        <div className="flex h-full">
-          <div className="relative w-2/4 m-3 max-md:sr-only">
-            <Image
-              src="/night.jpeg"
-              fill
-              alt="night-sky"
-              className="rounded-md object-cover dark:block"
-            />
-            <Image
-              src="/day.jpeg"
-              fill
-              alt="day-sky"
-              className="rounded-md object-cover dark:hidden"
-            />
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-purple-600 relative">
+      {/* Home Button */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 flex items-center gap-2 text-white/90 hover:text-white transition-colors duration-200 group"
+      >
+        <ArrowLeft className="size-4 group-hover:-translate-x-1 transition-transform duration-200" />
+        <span className="text-sm font-medium tracking-wide">หน้าหลัก</span>
+      </Link>
 
-            {/* ลิงก์ที่แสดงบนรูป */}
-            <Link href="/" className="block w-full h-full">
-              <div className="absolute top-3 left-3 bg-background/80 px-3 py-1 rounded-md flex items-center text-sm">
-                <ChevronRight size={16} className="mr-1" />
-                Back to website
-              </div>
-            </Link>
+      <div className="flex items-center justify-center min-h-screen p-6">
+        <div className="w-full max-w-md">
+          {" "}
+          <div className="flex gap-2 text-white tracking-wide items-center justify-center pb-5">
+            <Image
+              src="/favicon.ico"
+              height={30}
+              width={30}
+              alt="Dental-clinic-system"
+            />
+            <span>ระบบบริหารคลินิคทันตกรรม</span>
           </div>
-          <div className="space-y-6 md:w-2/4 w-full">{children}</div>
-          <div className="p-2 absolute right-0">
-            <ModeToggle />
-          </div>
-          
-          {/* ส่วนภาพประกอบ */}
+          {children}
         </div>
       </div>
     </div>

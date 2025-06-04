@@ -7,9 +7,9 @@ export const Header = ({
     label, description
 }: HeaderProps) => {
     return (
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{label}</h1>
-          <p className="text-muted-foreground text-lg">{description}</p>
+      <div className="flex flex-col items-center text-center">
+        <h1 className="text-2xl font-bold tracking-tight">{label}</h1>
+          <p className="text-muted-foreground text-base">{description}</p>
       </div>
     );
 }

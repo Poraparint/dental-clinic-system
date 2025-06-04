@@ -174,6 +174,7 @@ export const CalendarEventCard = <T,>({
               CompanyRole.COMANAGER,
               CompanyRole.DENTIST,
             ]}
+            fallback={<></>}
           >
             {onSoftDelete && (
               <ConfirmDeleteDialog

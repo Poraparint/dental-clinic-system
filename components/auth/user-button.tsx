@@ -17,25 +17,10 @@ import { CompanyRole } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserCard } from "@/components/props/component/card/user-card";
+import { getBgRoleColor } from "@/lib/common/role-color";
 
 export const UserButton = () => {
   const user = useCurrentUser();
-  const getAvatarBgColor = (role?: CompanyRole) => {
-    switch (role) {
-      case CompanyRole.MANAGER:
-        return "bg-indigo-500";
-      case CompanyRole.COMANAGER:
-        return "bg-blue-400";
-      case CompanyRole.DENTIST:
-        return "bg-teal-500";
-      case CompanyRole.DENTALTECHNICIAN:
-        return "bg-amber-500";
-      case CompanyRole.ASSISTANT:
-        return "bg-purple-400";
-      default:
-        return "bg-gray-400";
-    }
-  };
 
   if (!user) {
     return (
@@ -65,7 +50,7 @@ export const UserButton = () => {
           avatar={user?.image || ""}
           icon={
             <AvatarFallback
-              className={`p-1 text-white ${getAvatarBgColor(user.role)}`}
+              className={`p-1 text-white ${getBgRoleColor(user.role)}`}
             >
               <User size={15} />
             </AvatarFallback>
