@@ -9,14 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronRight, Trash } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { FormNotFound } from "@/components/form-not-found";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
-import { SubmitButton } from "@/components/shared/button/submit-button";
+import { handleSoftDelete } from "@/lib/common/soft-delete";
+import { onSoftDeleteProps } from "@/interface/props";
+import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
 
 interface ColumnConfig<T> {
   key: string;
@@ -33,16 +35,8 @@ interface DynamicTableProps<T> {
   description?: string;
   onRowClick?: (item: T) => void;
   dialogEdit?: (item: T) => React.ReactNode;
-  onSoftDelete?: (item: T) => Promise<{
-    success?: string;
-    error?: string;
-    description?: string;
-  }>;
-  onDeleteResult?: (result: {
-    success?: string;
-    error?: string;
-    description?: string;
-  }) => void;
+  onSoftDelete?: onSoftDeleteProps<T>["onSoftDelete"];
+  onDeleteResult?: onSoftDeleteProps<T>["onDeleteResult"];
 }
 
 export function DynamicTable<T>({
@@ -54,25 +48,8 @@ export function DynamicTable<T>({
   onRowClick,
   dialogEdit,
   onSoftDelete,
-  onDeleteResult,
+  onDeleteResult
 }: DynamicTableProps<T>) {
-  const handleSoftDelete = async (item: T) => {
-    if (!onSoftDelete) return;
-
-    try {
-      const result = await onSoftDelete(item);
-
-      if (onDeleteResult) {
-        onDeleteResult(result);
-      }
-    } catch {
-      onDeleteResult?.({
-        error: "เกิดข้อผิดพลาดในการลบข้อมูล",
-        description: "โปรดลองอีกครั้งหรือติดต่อผู้ดูแลระบบ",
-      });
-    }
-  };
-
   return (
     <>
       {/* Desktop Table View */}
@@ -126,10 +103,14 @@ export function DynamicTable<T>({
                       )}
                       {onSoftDelete && (
                         <TableCell className="text-right">
-                          <SubmitButton
-                            icon={<Trash />}
-                            variant="ghost"
-                            onClick={() => handleSoftDelete(item)}
+                          <ConfirmDeleteDialog
+                            onConfirm={() =>
+                              handleSoftDelete<T>({
+                                item,
+                                onSoftDelete,
+                                onDeleteResult,
+                              })
+                            }
                           />
                         </TableCell>
                       )}
@@ -200,13 +181,15 @@ export function DynamicTable<T>({
                           )}
 
                           {onSoftDelete && (
-                            <Button
-                              variant="destructive"
-                              className="w-full"
-                              onClick={() => handleSoftDelete(item)}
-                            >
-                              <Trash/>
-                            </Button>
+                            <ConfirmDeleteDialog
+                              onConfirm={() =>
+                                handleSoftDelete<T>({
+                                  item,
+                                  onSoftDelete,
+                                  onDeleteResult,
+                                })
+                              }
+                            />
                           )}
                         </div>
                       </RoleGate>

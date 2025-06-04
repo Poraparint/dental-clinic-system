@@ -46,22 +46,25 @@ export const Expenses = () => {
   );
 
   const categoryData = useMemo(() => {
-    return categories?.map((category) => {
-      const categoryExpenses =
-        expensesOverview.byCategory.find(
-          (item) => item.categoryId === category.id
-        )?.total || 0;
-      const percentage =
-        expensesOverview.total > 0
-          ? Math.round((categoryExpenses / expensesOverview.total) * 100)
-          : 0;
+    const unsorted =
+      categories?.map((category) => {
+        const categoryExpenses =
+          expensesOverview.byCategory.find(
+            (item) => item.categoryId === category.id
+          )?.total || 0;
 
-      return {
-        ...category,
-        expenses: categoryExpenses,
-        percentage,
-      };
-    });
+        const percentage =
+          expensesOverview.total > 0
+            ? Math.round((categoryExpenses / expensesOverview.total) * 100)
+            : 0;
+
+        return {
+          ...category,
+          expenses: categoryExpenses,
+          percentage,
+        };
+      }) || [];
+    return unsorted.sort((a, b) => b.expenses - a.expenses);
   }, [categories, expensesOverview]);
 
   return (

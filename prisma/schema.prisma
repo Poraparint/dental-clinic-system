@@ -405,6 +405,7 @@ model Schedule {
   companyId           String
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
+  isDeleted        Boolean          @default(false)
   transactionCategory TransactionCategory @relation(fields: [tcId], references: [id])
   scheduleCategory    ScheduleCategory    @relation(fields: [scheduleId], references: [id])
   company             Company             @relation(fields: [companyId], references: [id])

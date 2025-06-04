@@ -42,7 +42,7 @@ export const SelectCategory = ({
       disabled={disabled || isLoading}
     >
       <FormControl>
-        <SelectTrigger>
+        <SelectTrigger >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
       </FormControl>

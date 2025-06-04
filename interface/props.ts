@@ -11,4 +11,18 @@ export interface CommonCategoryFormProps {
   onSuccess?: () => void;
   updateData?: CommonCategoryFormData;
 }
+
+export interface onSoftDeleteProps<T = unknown> {
+  item?: T;
+  onSoftDelete?: (item: T) => Promise<{
+    success?: string;
+    error?: string;
+    description?: string;
+  }>;
+  onDeleteResult?: (result: {
+    success?: string;
+    error?: string;
+    description?: string;
+  }) => void;
+};
   

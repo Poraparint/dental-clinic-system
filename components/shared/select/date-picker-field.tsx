@@ -21,10 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn, formatDate } from "@/lib/utils";
-import { addDays } from "date-fns";
+import { addDays, isSameDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { UseFormReturn, FieldPath, FieldValues } from "react-hook-form";
+import { UseFormReturn, FieldPath, FieldValues, PathValue } from "react-hook-form";
 
 interface DatePickerFieldProps<T extends FieldValues> {
   form: UseFormReturn<T>;
@@ -102,7 +102,18 @@ export const DatePickerField = <T extends FieldValues>({
                   <Calendar
                     mode="single"
                     selected={field.value}
-                    onSelect={field.onChange}
+                    onSelect={(date) => {
+                      if (date) {
+                        if (!isSameDay(date, field.value)) {
+                          field.onChange(date);
+                        } else {
+                          form.setValue(
+                            field.name,
+                            date as PathValue<T, typeof field.name>
+                          );
+                        }
+                      }
+                    }}
                   />
                 </div>
               </PopoverContent>

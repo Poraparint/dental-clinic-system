@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { DialogCreateSchedule } from "@/components/dialog/internal/dialog-create-schedule";
+import { DialogCreateSchedule } from "@/components/dialog/internal/dialog-schedule";
 import { ScheduleCard } from "@/components/companys/internal/schedule/schedule-card";
 import { CalendarBoard } from "@/components/props/wrapper/calendar-board";
 import {
@@ -54,6 +54,7 @@ export const ScheduleBoard = () => {
         error={hasError}
         isLoading={isLoading}
         events={combinedEvents}
+        handleRefresh={ handleRefresh }
       />
     </CalendarBoard>
   );
