@@ -14,15 +14,15 @@ export const HeroSection = () => {
 
   return (
     <div className="container flex justify-between">
-      <div className="space-y-6 w-2/4">
+      <div className="space-y-6 md:w-2/4">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
           ระบบบริการจัดการคลินิกทันตกรรม
         </h1>
         <div className="w-24 h-1 bg-primary mb-6" />
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-          ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบครบวงจรที่ออกแบบมาโดยเฉพาะสำหรับทันตแพทย์
+          ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบเรียบง่ายที่ออกแบบมาโดยเฉพาะสำหรับคลินิคขนาดเล็ก
         </p>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           {user ? (
             <RoleGate
               allowedRole={[CompanyRole.MANAGER]}
@@ -41,7 +41,7 @@ export const HeroSection = () => {
               />
             </RoleGate>
           ) : (
-            <LinkButton title="ทดลองใช้งาน" icon={<Rocket />} url="/" />
+            <LinkButton title="ทดลองใช้งาน" icon={<Rocket />} url="/auth/login?demo=true&email=admin@test.com&password=123456" />
           )}
 
           <Button size="lg" variant="outline">
@@ -49,7 +49,7 @@ export const HeroSection = () => {
           </Button>
         </div>
       </div>
-      <div className="w-2/4 flex justify-end">
+      <div className="w-2/4 max-md:sr-only flex justify-end">
         <Image
           src="/dental-chair.jpeg"
           height={400}

@@ -34,7 +34,7 @@ export const Contact = () => {
                 id="companyName"
                 name="companyName"
                 placeholder="Your dental clinic name"
-                required
+                readOnly
               />
             </div>
 
@@ -44,7 +44,7 @@ export const Contact = () => {
                 id="customerName"
                 name="customerName"
                 placeholder="Full name"
-                required
+                readOnly
               />
             </div>
 
@@ -55,7 +55,7 @@ export const Contact = () => {
                 name="phone"
                 type="tel"
                 placeholder="Contact number"
-                required
+                readOnly
               />
             </div>
 
@@ -66,7 +66,7 @@ export const Contact = () => {
                 name="email"
                 type="email"
                 placeholder="Your email"
-                required
+                readOnly
               />
             </div>
 
@@ -77,11 +77,12 @@ export const Contact = () => {
                 name="message"
                 placeholder="Tell us about your practice and requirements"
                 rows={4}
+                readOnly
               />
             </div>
 
             <Button type="submit" className="w-full">
-              Submit Inquiry
+              ยังไม่ได้ทำ
             </Button>
           </div>
         </form>
