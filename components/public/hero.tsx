@@ -20,7 +20,7 @@ export const HeroSection = () => {
         </h1>
         <div className="w-24 h-1 bg-primary mb-6" />
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-          ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบเรียบง่ายที่ออกแบบมาโดยเฉพาะสำหรับคลินิคขนาดเล็ก
+          ยกระดับการจัดการคลินิกของคุณด้วยโซลูชันแบบเรียบง่ายที่ออกแบบมาโดยเฉพาะสำหรับคลินิกขนาดเล็ก
         </p>
         <div className="flex flex-col md:flex-row gap-4">
           {user ? (
