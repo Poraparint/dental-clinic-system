@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CardWrapperProps {
   children: React.ReactNode;
-  headerLabel: string;
+  headerLabel?: string;
   headerDescription?: string;
   backButtonLabel?: string;
   backButtonHref?: string;

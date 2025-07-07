@@ -1,7 +1,6 @@
 "use client";
 
 import * as z from "zod";
-import Link from "next/link";
 
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -78,10 +77,7 @@ export const MemberLoginForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel="เข้าสู่ระบบสมาชิก"
-      headerDescription="เข้าสู่ระบบคลินิกของคุณ"
-    >
+    <CardWrapper>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
           <div className="space-y-3">
@@ -130,7 +126,12 @@ export const MemberLoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>
+                        Password{" "}
+                        <p className="text-sm text-muted-foreground">
+                          (ในระบบทดลองรหัสผ่านจะเป็น 123456 ทุกตำแหน่ง)
+                        </p>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -139,14 +140,6 @@ export const MemberLoginForm = () => {
                           type="password"
                         />
                       </FormControl>
-                      <Button
-                        size="sm"
-                        variant="link"
-                        asChild
-                        className="px-0 font-normal justify-start"
-                      >
-                        <Link href="/auth/reset">Forgot password?</Link>
-                      </Button>
                       <FormMessage />
                     </FormItem>
                   )}

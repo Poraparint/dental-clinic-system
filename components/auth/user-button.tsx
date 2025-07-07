@@ -31,14 +31,11 @@ export const UserButton = () => {
             <span className="max-md:sr-only">เข้าสู่ระบบพนักงาน</span>
           </Link>
         </Button>
-        <div className="gap-2 border-l-2 pl-2 items-center flex">
+       
           <Button asChild variant="outline">
-            <Link href="/auth/login">เข้าสู่ระบบ</Link>
+            <Link href="/auth/login">เข้าสู่ระบบบริหารคลินิค</Link>
           </Button>
-          <Button asChild>
-            <Link href="/auth/register">ลงทะเบียน</Link>
-          </Button>
-        </div>
+        
       </div>
     );
   }

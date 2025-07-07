@@ -1,4 +1,6 @@
 import {
+  startOfDay,
+  endOfDay,
   startOfMonth,
   endOfMonth,
   startOfWeek,
@@ -10,9 +12,10 @@ import {
   subYears,
   format,
   eachMonthOfInterval,
+  subDays,
 } from "date-fns";
 
-export type Period = "month" | "week" | "year";
+export type Period =  "today" | "month" | "week" | "year";
 
 export interface PeriodData<T> {
   current: T[];
@@ -77,6 +80,12 @@ export const getPeriodRanges = (
   };
 
   switch (period) {
+    case "today":
+      current.start = startOfDay(referenceDate);
+      current.end = endOfDay(referenceDate);
+      previous.start = startOfDay(subDays(referenceDate, 1));
+      previous.end = endOfDay(subDays(referenceDate, 1));
+      break;
     case "month":
       current.start = startOfMonth(referenceDate);
       current.end = endOfMonth(referenceDate);
@@ -84,7 +93,7 @@ export const getPeriodRanges = (
       previous.end = endOfMonth(subMonths(referenceDate, 1));
       break;
     case "week":
-      current.start = startOfWeek(referenceDate, { weekStartsOn: 1 }); 
+      current.start = startOfWeek(referenceDate, { weekStartsOn: 1 });
       current.end = endOfWeek(referenceDate, { weekStartsOn: 1 });
       previous.start = startOfWeek(subWeeks(referenceDate, 1), {
         weekStartsOn: 1,
@@ -161,6 +170,7 @@ export const calculatePercentChange = (
  */
 export const getPeriodLabel = (period: Period): string => {
   const labels = {
+    today: "เมื่อวานนี้",
     month: "เดือนที่แล้ว",
     week: "สัปดาห์ที่แล้ว",
     year: "ปีที่แล้ว",

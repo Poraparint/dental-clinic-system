@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
@@ -36,7 +36,12 @@ export const LoginForm = () => {
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
+      const isDemo = searchParams.get("demo") === "true";
+      const demoEmail = searchParams.get("email");
+  const demoPassword = searchParams.get("password");
+  
   const [showTwoFactor, setShowTwoFactor] = useState(false);
+
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -49,6 +54,13 @@ export const LoginForm = () => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (isDemo && demoEmail && demoPassword) {
+      form.setValue("email", demoEmail);
+      form.setValue("password", demoPassword);
+    }
+  }, [isDemo, demoEmail, demoPassword, form]);
 
   const OnSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
@@ -81,12 +93,14 @@ export const LoginForm = () => {
   };
 
   return (
-    <CardWrapper
-      headerLabel="ยินดีต้อนรับกลับมา"
-      headerDescription="เข้าสู่ระบบเพื่อเข้าถึงแดชบอร์ดจัดการคลินิก"
-      backButtonLabel="ยังไม่มีบัญชี?"
-      backButtonHref="/auth/register"
-    >
+    <CardWrapper>
+      {isDemo && (
+        <div className="mb-4 p-3 bg-emerald-bg border border-emerald-border rounded-lg">
+          <p className="text-sm text-emerald-text">
+            🎯 <strong>โหมดทดลองใช้งาน</strong>
+          </p>
+        </div>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(OnSubmit)} className="space-y-4">
           <div className="space-y-3">
@@ -117,7 +131,7 @@ export const LoginForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>อีเมล</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -135,7 +149,7 @@ export const LoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>รหัสผ่าน</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
@@ -150,7 +164,7 @@ export const LoginForm = () => {
                         asChild
                         className="px-0 font-normal justify-start text-charoite"
                       >
-                        <Link href="/auth/reset">Forgot password?</Link>
+                        <Link href="/auth/reset">ลืมรหัสผ่าน?</Link>
                       </Button>
                       <FormMessage />
                     </FormItem>
@@ -163,7 +177,7 @@ export const LoginForm = () => {
           <FormSuccess message={success} />
           <Button
             typeof="submit"
-            className="w-full py-7 mt-7 text-base"
+            className="w-full py-5 mt-7 text-base"
             disabled={isPending}
           >
             {showTwoFactor ? "ยืนยัน" : "เข้าสู่ระบบ"}
