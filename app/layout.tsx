@@ -33,8 +33,8 @@ export default async function RootLayout({
           <Suspense fallback={<div className="flex justify-center items-center h-screen w-screen"><Loading /></div>}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="light"
+              enableSystem={true}
               disableTransitionOnChange
             >
               <Toaster />
