@@ -31,7 +31,7 @@ import { CreateDentalTechSchema } from "@/schemas";
 
 //props
 import { CardCategory } from "@/components/shared/card";
-import { SelectCategory } from "@/components/shared/select/select-category";
+import { SelectCategory } from "@/components/shared/select";
 
 //actions
 import { Textarea } from "@/components/ui/textarea";

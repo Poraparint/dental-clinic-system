@@ -1,19 +1,19 @@
 "use client";
 
 import {
+  profile,
   manages,
   views,
   settings,
-} from "@/app/(company)/[companyId]/(route)/_components/app-sidebar";
+} from "@/lib/utils/validation/filterd-menu";
+import { useCompany } from "@/context/context";
 import { usePathname } from "next/navigation";
-import { useParams } from "next/navigation";
 
 export const ShowInfoPathname = () => {
   const pathname = usePathname();
-  const params = useParams();
-  const companyId = params.companyId as string;
+  const { companyId } = useCompany();
 
-  const allMenus = [...manages, ...views, ...settings];
+  const allMenus = [profile, ...manages, ...views, ...settings];
   const currentMenu = allMenus.find((menu) =>
     pathname.startsWith(menu.url(companyId))
   );

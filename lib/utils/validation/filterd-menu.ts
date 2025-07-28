@@ -9,27 +9,34 @@ import {
   Wallet,
   UserRoundCog,
   Aperture,
+  CircleUserRound,
 } from "lucide-react";
+
+export const profile = {
+  title: "โปรไฟล์",
+  url: (companyId: string) => `/${companyId}/profile`,
+  icon: CircleUserRound,
+};
 
 export const manages = [
   {
     title: "จัดการคนไข้",
-    url: (companyId: string) => `/${companyId}/patients`,
+    url: (id: string) => `/${id}/patients`,
     icon: UsersRound,
   },
   {
     title: "จัดการตารางนัด",
-    url: (companyId: string) => `/${companyId}/appointments`,
+    url: (id: string) => `/${id}/appointments`,
     icon: Calendar,
   },
   {
     title: "คนไข้รีเช็ค/แบ่งจ่าย",
-    url: (companyId: string) => `/${companyId}/rechecks`,
+    url: (id: string) => `/${id}/rechecks`,
     icon: LampDesk,
   },
   {
     title: "งานทันตกรรม",
-    url: (companyId: string) => `/${companyId}/dentaltech`,
+    url: (id: string) => `/${id}/dentaltech`,
     icon: Aperture,
   },
 ];
@@ -37,12 +44,12 @@ export const manages = [
 export const views = [
   {
     title: "แดชบอร์ด",
-    url: (companyId: string) => `/${companyId}/dashboard`,
+    url: (id: string) => `/${id}/dashboard`,
     icon: LayoutDashboard,
   },
   {
     title: "รายงานการเงิน",
-    url: (companyId: string) => `/${companyId}/financial-reports`,
+    url: (id: string) => `/${id}/financial-reports`,
     icon: Landmark,
   },
 ];
@@ -50,67 +57,57 @@ export const views = [
 export const settings = [
   {
     title: "จัดการค่าใช้จ่าย",
-    url: (companyId: string) => `/${companyId}/expenses`,
+    url: (id: string) => `/${id}/expenses`,
     icon: Wallet,
   },
   {
     title: "จัดการสมาชิก",
-    url: (companyId: string) => `/${companyId}/members`,
+    url: (id: string) => `/${id}/members`,
     icon: UserRoundCog,
   },
-  {
-    title: "ตั้งค่า",
-    url: (companyId: string) => `/${companyId}/settings`,
-    icon: Settings,
-  },
+  { title: "ตั้งค่า", url: (id: string) => `/${id}/settings`, icon: Settings },
 ];
 
-
 export const getFilteredMenus = (role: CompanyRole) => {
-  let filteredManages = [...manages];
-  let filteredViews = [...views];
-  let filteredSettings = [...settings];
+  type MenuItem = {
+    title: string;
+    url: (id: string) => string;
+    icon: React.ElementType;
+  };
 
-  switch (role) {
-    case CompanyRole.COMANAGER:
-      filteredSettings = filteredSettings.filter(
-        (item) => item.title === "ตั้งค่า"
-      );
-      filteredViews = filteredViews.filter(
-        (item) => item.title !== "รายงานการเงิน"
-      );
-      break;
-    case CompanyRole.DENTIST:
-      // สามารถเข้าถึง manages ทั้งหมดอยู่แล้ว
-      filteredViews = [];
-      filteredSettings = [];
-      break;
-    case CompanyRole.DENTALTECHNICIAN:
-      filteredManages = filteredManages.filter(
-        (item) => item.title === "งานทันตกรรม"
-      );
-      filteredViews = [];
-      filteredSettings = filteredSettings.filter(
-        (item) => item.title === "ตั้งค่า"
-      );
-      break;
-    case CompanyRole.ASSISTANT:
-      filteredManages = filteredManages.filter((item) =>
-        ["จัดการคนไข้", "จัดการตารางนัด"].includes(item.title)
-      );
-      filteredViews = [];
-      filteredSettings = [];
-      break;
-    case CompanyRole.MANAGER:
-      // เข้าถึงทั้งหมดอยู่แล้ว
-      break;
-    default:
-      // สำหรับ role อื่นๆ
-      filteredManages = [];
-      filteredViews = [];
-      filteredSettings = [];
+  const allowedManageTitlesForAssistant = new Set([
+    "จัดการคนไข้",
+    "จัดการตารางนัด",
+  ]);
+
+  let filteredManages: MenuItem[] = [];
+  let filteredViews: MenuItem[] = [];
+  let filteredSettings: MenuItem[] = [];
+
+  if (role === CompanyRole.MANAGER) {
+    // เข้าถึงทั้งหมด
+    return {
+      profile,
+      filteredManages: manages,
+      filteredViews: views,
+      filteredSettings: settings,
+    };
   }
 
-  return { filteredManages, filteredViews, filteredSettings };
-};
+  if (role === CompanyRole.COMANAGER) {
+    filteredManages = manages;
+    filteredViews = views.filter((item) => item.title !== "รายงานการเงิน");
+    filteredSettings = settings.filter((item) => item.title === "ตั้งค่า");
+  } else if (role === CompanyRole.DENTIST) {
+    filteredManages = manages;
+  } else if (role === CompanyRole.DENTALTECHNICIAN) {
+    filteredManages = [manages.find((item) => item.title === "งานทันตกรรม")!];
+    filteredSettings = [settings.find((item) => item.title === "ตั้งค่า")!];
+  } else if (role === CompanyRole.ASSISTANT) {
+    filteredManages = manages.filter((item) =>
+      allowedManageTitlesForAssistant.has(item.title)
+    );
+  }
 
+  return { profile, filteredManages, filteredViews, filteredSettings };
+};

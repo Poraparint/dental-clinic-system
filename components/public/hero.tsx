@@ -30,7 +30,7 @@ export const HeroSection = () => {
                 <LinkButton
                   title="เข้าทำงาน"
                   icon={<ArrowBigLeft />}
-                  url={user?.companyId ? `/${user.companyId}/patients` : "/"}
+                  url={user?.companyId ? `/${user.companyId}/profile` : "/"}
                 />
               }
             >

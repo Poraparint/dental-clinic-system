@@ -1,18 +1,5 @@
 "use client";
 
-//icon
-import {
-  LayoutDashboard,
-  Settings,
-  Landmark,
-  Calendar,
-  LampDesk,
-  UsersRound,
-  Wallet,
-  UserRoundCog,
-  Aperture,
-} from "lucide-react";
-
 //ui
 import {
   Sidebar,
@@ -41,7 +28,7 @@ export function AppSidebar() {
   const role = useCurrentRole();
 
   // กรองเมนูตาม role
-  const { filteredManages, filteredViews, filteredSettings } =
+  const { profile, filteredManages, filteredViews, filteredSettings } =
     getFilteredMenus(role);
 
   return (
@@ -51,15 +38,17 @@ export function AppSidebar() {
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Image
-                  src="/favicon.ico"
-                  height={25}
-                  width={25}
-                  alt="Dental-clinic-system"
-                  className="rounded-md"
-                />
-                <span>DentalClinicSystem</span>
+              <SidebarMenuButton
+                asChild
+                variant={
+                  isActive(profile.url(companyId)) ? "charoite" : "default"
+                }
+                onClick={() => navigateTo(profile.url(companyId))}
+              >
+                <div className="flex items-center gap-3">
+                  <profile.icon className="size-20" />
+                  <span>{profile.title}</span>
+                </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -178,58 +167,3 @@ export function AppSidebar() {
     </>
   );
 }
-
-// Menu items.
-export const manages = [
-  {
-    title: "จัดการคนไข้",
-    url: (companyId: string) => `/${companyId}/patients`,
-    icon: UsersRound,
-  },
-  {
-    title: "จัดการตารางนัด",
-    url: (companyId: string) => `/${companyId}/appointments`,
-    icon: Calendar,
-  },
-  {
-    title: "คนไข้รีเช็ค/แบ่งจ่าย",
-    url: (companyId: string) => `/${companyId}/rechecks`,
-    icon: LampDesk,
-  },
-  {
-    title: "งานทันตกรรม",
-    url: (companyId: string) => `/${companyId}/dentaltech`,
-    icon: Aperture,
-  },
-];
-
-export const views = [
-  {
-    title: "แดชบอร์ด",
-    url: (companyId: string) => `/${companyId}/dashboard`,
-    icon: LayoutDashboard,
-  },
-  {
-    title: "รายงานการเงิน",
-    url: (companyId: string) => `/${companyId}/financial-reports`,
-    icon: Landmark,
-  },
-];
-
-export const settings = [
-  {
-    title: "จัดการค่าใช้จ่าย",
-    url: (companyId: string) => `/${companyId}/expenses`,
-    icon: Wallet,
-  },
-  {
-    title: "จัดการสมาชิก",
-    url: (companyId: string) => `/${companyId}/members`,
-    icon: UserRoundCog,
-  },
-  {
-    title: "ตั้งค่า",
-    url: (companyId: string) => `/${companyId}/settings`,
-    icon: Settings,
-  },
-];
