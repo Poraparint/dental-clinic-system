@@ -11,7 +11,7 @@ import { FormSuccess } from "@/components/form-success";
 import { MemberLoginSchema } from "@/schemas";
 
 //action
-import { memberLogin } from "@/hooks/external/auth/use-member";
+import { memberLogin } from "@/hooks/external/auth/use-member-auth";
 
 //ui
 import {

@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { onSoftDeleteProps } from "@/interface/props";
+import { onSoftActionProps } from "@/interface/props";
 
-export async function handleSoftDelete<T>({item, onSoftDelete, onDeleteResult}: onSoftDeleteProps<T>) {
+export async function handleSoftDelete<T>({item, onSoftDelete, onDeleteResult}: onSoftActionProps<T>) {
   if (item === undefined || !onSoftDelete) return;
 
   try {

@@ -50,7 +50,7 @@ export const DentalTechTable = ({
             status={dentaltech.status}
             categoryName={dentaltech.dentalTechCategory.name}
             detail={dentaltech.detail}
-            teeth={dentaltech.teeth}
+            teeth={dentaltech.teeth || 0}
             datetime={dentaltech.deadline}
             dentist={dentaltech.creator.name}
           />

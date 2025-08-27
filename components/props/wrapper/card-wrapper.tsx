@@ -30,7 +30,7 @@ export const CardWrapper = ({
   showSocial,
 }: CardWrapperProps) => {
   return (
-    <Card className="rounded-xl border-none relative">
+    <Card className="rounded-xl border-none relative shadow-none">
       <CardHeader>
         <Header label={headerLabel} description={headerDescription} />
       </CardHeader>

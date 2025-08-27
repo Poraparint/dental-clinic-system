@@ -6,7 +6,7 @@ import { MemberRegisterSchema } from "@/schemas";
 import * as z from "zod";
 import { CompanyRole } from "@prisma/client";
 
-export const useMembers = (companyId: string, refreshKey?:number) => {
+export const useMembers = (companyId: string, refreshKey?: number) => {
   const [members, setMembers] = useState<Member[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,15 +67,22 @@ export const createMembers = async (
   }
 };
 
-export const updateRoleMember = async (companyId: string, memberId: string, role: CompanyRole) => {
+export const updateRoleMember = async (
+  companyId: string,
+  memberId: string,
+  role: CompanyRole
+) => {
   try {
-    const response = await fetch(`/api/companies/${companyId}/members/${memberId}/update`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({role}),
-    });
+    const response = await fetch(
+      `/api/companies/${companyId}/members/${memberId}/update`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role }),
+      }
+    );
 
     const data = await response.json();
     if (!response.ok) {
@@ -87,6 +94,35 @@ export const updateRoleMember = async (companyId: string, memberId: string, role
     console.error("[UPDATE_MEMBER_ROLE]", error);
     return {
       error: "ไม่สามารถเปลี่ยนตำแหน่งได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
+
+export const softDeleteMember = async (companyId: string, memberId: string) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/members/${memberId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[SOFT_DELETE_MEMBER]", error);
+    return {
+      error: "ไม่สามารถลบพนักงานได้",
       description: "โปรดติดต่อผู้ดูแลระบบ",
     };
   }
