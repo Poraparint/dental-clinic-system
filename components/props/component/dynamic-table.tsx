@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { handleSoftDelete } from "@/lib/common/soft-delete";
-import { onSoftDeleteProps } from "@/interface/props";
+import { onSoftActionProps } from "@/interface/props";
 import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
 
 interface ColumnConfig<T> {
@@ -35,8 +35,8 @@ interface DynamicTableProps<T> {
   description?: string;
   onRowClick?: (item: T) => void;
   dialogEdit?: (item: T) => React.ReactNode;
-  onSoftDelete?: onSoftDeleteProps<T>["onSoftDelete"];
-  onDeleteResult?: onSoftDeleteProps<T>["onDeleteResult"];
+  onSoftDelete?: onSoftActionProps<T>["onSoftDelete"];
+  onDeleteResult?: onSoftActionProps<T>["onDeleteResult"];
 }
 
 export function DynamicTable<T>({

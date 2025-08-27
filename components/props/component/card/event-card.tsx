@@ -15,13 +15,11 @@ import {
 } from "lucide-react";
 import { CardCategory } from "@/components/shared/card";
 import { DialogWrapper } from "@/components/shared/dialog";
-import { onSoftDeleteProps } from "@/interface/props";
+import { onSoftActionProps } from "@/interface/props";
 import { handleSoftDelete } from "@/lib/common/soft-delete";
-import { RoleGate } from "../../wrapper/role-gate";
-import { CompanyRole } from "@prisma/client";
 import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
 
-interface CalendarEventProp<T = unknown> extends onSoftDeleteProps<T> {
+interface CalendarEventProp<T = unknown> extends onSoftActionProps<T> {
   avatar?: string;
   badge?: React.ReactNode;
   badgeTooltip?: string;
@@ -62,6 +60,7 @@ export const CalendarEventCard = <T,>({
   item,
   onSoftDelete,
   onDeleteResult,
+
 }: CalendarEventProp<T>) => {
   return (
     <DialogWrapper
@@ -149,7 +148,6 @@ export const CalendarEventCard = <T,>({
             )}
           </div>
           <hr className="mb-4 border-primary-foreground" />
-          {/* Additional Notes */}
           {detail && (
             <div className="p-4">
               <div className="flex items-center space-x-2 mb-3">
@@ -168,26 +166,18 @@ export const CalendarEventCard = <T,>({
               {extraLabel}
             </span>
           )}
-          <RoleGate
-            allowedRole={[
-              CompanyRole.MANAGER,
-              CompanyRole.COMANAGER,
-              CompanyRole.DENTIST,
-            ]}
-            fallback={<></>}
-          >
-            {onSoftDelete && (
-              <ConfirmDeleteDialog
-                onConfirm={() =>
-                  handleSoftDelete({
-                    item,
-                    onSoftDelete,
-                    onDeleteResult,
-                  })
-                }
-              />
-            )}
-          </RoleGate>
+
+          {onSoftDelete && (
+            <ConfirmDeleteDialog
+              onConfirm={() =>
+                handleSoftDelete({
+                  item,
+                  onSoftDelete,
+                  onDeleteResult,
+                })
+              }
+            />
+          )}
         </div>
       </CardCategory>
     </DialogWrapper>

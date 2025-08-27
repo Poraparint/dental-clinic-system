@@ -12,7 +12,7 @@ import {
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { updateRoleMember, useMembers } from "@/hooks";
+import { softDeleteMember, updateRoleMember, useMembers } from "@/hooks";
 import { formatDate } from "@/lib/utils";
 import { Member, RefreshableProps } from "@/types";
 import { useCompany } from "@/context/context";
@@ -140,6 +140,17 @@ export const MemberTable = ({
     <DynamicTable
       data={members}
       columns={columns}
+      onSoftDelete={(item) => softDeleteMember(companyId, item.id)}
+      onDeleteResult={({ success, error, description }) => {
+        if (success) {
+          toast.success(success);
+          handleRefresh?.();
+        } else {
+          toast.error(error, {
+            description,
+          });
+        }
+      }}
       error={error?.error}
       description={error?.description}
     />

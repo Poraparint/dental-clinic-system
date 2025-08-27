@@ -50,10 +50,11 @@ export async function POST(request: NextRequest) {
   if (
     !existingUser.member ||
     !existingUser.member.companyId ||
-    !existingUser.member.memberCode
+    !existingUser.member.memberCode ||
+    existingUser.member?.isDeleted === true
   ) {
     return NextResponse.json(
-      { error: "ไม่มีข้อมูลอีเมลนี้ในบริษัท" },
+      { error: "ไม่มีข้อมูลอีเมลนี้ในบริษัทหรือถูกหยุดหารทำงานไปแล้ว" },
       { status: 403 }
     );
   }
