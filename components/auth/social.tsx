@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 
 //next-auth
 import { signIn } from "next-auth/react";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { MANAGER_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
 
 export const Social = () => {
@@ -16,7 +16,7 @@ export const Social = () => {
 
   const onClick = (provider: "google") => {
     signIn(provider, {
-      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: callbackUrl || MANAGER_LOGIN_REDIRECT,
     });
   }
 
