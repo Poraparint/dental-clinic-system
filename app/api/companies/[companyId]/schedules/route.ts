@@ -43,6 +43,7 @@ export async function GET(
         },
         dentist: {
           select: {
+            id: true,
             name: true,
           },
         },
