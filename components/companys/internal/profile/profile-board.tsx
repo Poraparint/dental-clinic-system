@@ -1,28 +1,59 @@
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { currentUser } from "@/lib/auth";
 import { getBgRoleColor } from "@/lib/common/role-color";
 import { User } from "lucide-react";
+import { ScheduleBoard } from "@/components/companys/internal/schedule/schedule-board";
+import { CompanyRole } from "@prisma/client";
 
 export const ProfileBoard = async () => {
   const user = await currentUser();
+
+  const userInfo = [
+    {
+      name: "ชื่อผู้ใช้",
+      value: user.name,
+    },
+    {
+      name: "บทบาท",
+      value: user.role,
+    },
+    {
+      name: "อีเมล",
+      value: user.email,
+    },
+  ];
+
+  const dentistId = user.role === CompanyRole.DENTIST ? user.id : undefined;
+
   return (
     <div>
-      <div className="grid grid-cols-3 grid-rows-1 gap-2">
-        <Card className="flex flex-row items-center">
-          <div
-            className={`rounded-full text-white md:flex size-10 justify-center items-center hidden ${getBgRoleColor(user.role)}`}
-          >
-            <User />
+      <div className="flex flex-col md:grid grid-cols-3 grid-rows-1 gap-2">
+        <Card className="flex flex-col md:flex-row items-center">
+          <div className="">
+            <div
+              className={`rounded-full text-white size-10 justify-center items-center shadow-md flex ${getBgRoleColor(user.role)}`}
+            >
+              <User />
+            </div>
           </div>
-          <div>
-            <CardTitle>{user.name}</CardTitle>
-            <CardDescription>{user.role}</CardDescription>
-            <CardDescription>{user.email}</CardDescription>
+
+          <div className="w-full">
+            {userInfo.map((info, index) => (
+              <div
+                key={`${info.name}-${index}`}
+                className="flex justify-between items-center"
+              >
+                <div className="text-sm font-medium text-muted-foreground">
+                  {info.name} :
+                </div>
+                <div>{info.value}</div>
+              </div>
+            ))}
           </div>
         </Card>
         <Card className="col-span-2">{/* สรุป */}</Card>
       </div>
-      {/* Calendar component */}
+      <ScheduleBoard dentistId={dentistId} />
     </div>
   );
 };
