@@ -12,7 +12,7 @@ import {
 } from "@/hooks";
 import { useCompany } from "@/context/context";
 
-export const ScheduleBoard = () => {
+export const ScheduleBoard = ({dentistId}: {dentistId?: string}) => {
   const { companyId } = useCompany();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { refreshKey, handleRefresh, isRefreshing } = useRefreshable();
@@ -30,12 +30,14 @@ export const ScheduleBoard = () => {
 
   const { combinedEvents } = useCombinedAppointments({ schedules, rechecks });
 
+  const filteredEvents = dentistId ? combinedEvents.filter((e) => e.dentist.id === dentistId) : combinedEvents;
+
   const isLoading = scheduleLoading && recheckLoading;
   const hasError = scheduleError && recheckError;
 
   return (
     <CalendarBoard
-      data={combinedEvents}
+      data={filteredEvents}
       date={date}
       onDateChange={setDate}
       onRefresh={handleRefresh}
@@ -54,7 +56,7 @@ export const ScheduleBoard = () => {
         error={hasError}
         isLoading={isLoading}
         events={combinedEvents}
-        handleRefresh={ handleRefresh }
+        handleRefresh={handleRefresh}
       />
     </CalendarBoard>
   );

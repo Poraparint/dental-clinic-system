@@ -8,6 +8,7 @@ import { RoleGate } from "../props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { LinkButton } from "@/components/shared/button/link-button";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { CLINIC_LOGIN_REDIRECT, MANAGER_LOGIN_REDIRECT } from "@/routes";
 
 export const HeroSection = () => {
   const user = useCurrentUser();
@@ -30,14 +31,14 @@ export const HeroSection = () => {
                 <LinkButton
                   title="เข้าทำงาน"
                   icon={<ArrowBigLeft />}
-                  url={user?.companyId ? `/${user.companyId}/profile` : "/"}
+                  url={user?.companyId ? `/${user.companyId}${CLINIC_LOGIN_REDIRECT}` : "/"}
                 />
               }
             >
               <LinkButton
                 title="เริ่มต้นใช้งาน"
                 icon={<ShieldCheck />}
-                url="/dashboard/ministry"
+                url={`${MANAGER_LOGIN_REDIRECT}`}
               />
             </RoleGate>
           ) : (

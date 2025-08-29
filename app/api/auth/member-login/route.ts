@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
-import { MEMBER_LOGIN_REDIRECT } from "@/routes";
+import { CLINIC_LOGIN_REDIRECT } from "@/routes";
 
 //schema
 import { MemberLoginSchema } from "@/schemas";
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
     );
   }
   const callbackUrl =
-    values.callbackUrl || `/${companyId}${MEMBER_LOGIN_REDIRECT}`;
+    values.callbackUrl || `/${companyId}${CLINIC_LOGIN_REDIRECT}`;
 
   try {
     await signIn("credentials", {

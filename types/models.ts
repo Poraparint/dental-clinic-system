@@ -69,7 +69,7 @@ export type Schedule = Prisma.ScheduleGetPayload<{
   include: {
     transactionCategory: { select: { name: true } };
     scheduleCategory: { select: { name: true; order: true } };
-    dentist: { select: { name: true } };
+    dentist: { select: { id: true; name: true } };
     creator: { select: { name: true } };
   };
 }>;
@@ -98,7 +98,7 @@ export type Recheck = Prisma.RecheckGetPayload<{
         scheduleCategory: { select: { name: true; order: true } };
       };
     };
-    creator: { select: { name: true } };
+    creator: { select: { id: true; name: true } };
   };
 }>;
 

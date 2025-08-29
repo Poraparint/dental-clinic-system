@@ -4,7 +4,7 @@ import { Hospital } from "lucide-react";
 
 //props
 import { CardMinistry } from "@/components/props/component/card/card-ministry";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { CLINIC_LOGIN_REDIRECT } from "@/routes";
 import { FormNotFound } from "@/components/form-not-found";
 import { Loading } from "@/components/loading";
 import { useMinistry, useNavigation } from "@/hooks";
@@ -18,7 +18,7 @@ export const CompanyCard = ({refreshKey}: RefreshableProps) => {
   const { isNavigating, navigateTo } = useNavigation();
 
   const handleCardClick = (ministryId: string) => {
-    navigateTo(`/${ministryId}${DEFAULT_LOGIN_REDIRECT}`);
+    navigateTo(`/${ministryId}${CLINIC_LOGIN_REDIRECT}`);
   };
 
   if (isLoading) return <Loading />;
