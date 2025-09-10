@@ -57,15 +57,9 @@ const PatientInfoCardPage = () => {
             </div>
 
             <PatientInfoCard patient={patient} />
-            <RoleGate
-              allowedRole={[
-                CompanyRole.MANAGER,
-                CompanyRole.COMANAGER,
-                CompanyRole.DENTIST,
-              ]}
-            >
+            
               <TransactionInfoCard />
-            </RoleGate>
+            
           </Tabs>
         </Card>
       </RoleGate>
