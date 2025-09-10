@@ -2,7 +2,6 @@ import Image from "next/image";
 import { UserButton } from "@/components/auth/user-button";
 import { ModeToggle } from "@/theme/modetoggle";
 import Link from "next/link";
-import { Wrench } from "lucide-react";
 
 interface PublicNavbarProps {
   children?: React.ReactNode;
@@ -28,9 +27,6 @@ export const PublicNavbar = ({ children }: PublicNavbarProps) => {
           <UserButton />
           <ModeToggle />
         </div>
-      </div>
-      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2 border p-2 mt-4 rounded-md bg-amber-bg/70 border-amber-border text-amber-text">
-        <Wrench /> Work in Progress
       </div>
     </nav>
   );

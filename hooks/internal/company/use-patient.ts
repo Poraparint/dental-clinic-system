@@ -154,7 +154,6 @@ export const softDeletePatient = async (
   }
 };
 
-
 export const usePatient = (
   companyId: string,
   patientId: string,

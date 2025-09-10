@@ -6,7 +6,7 @@ import { CreateCommonCategorySchema } from "@/schemas";
 import * as z from "zod";
 
 
-export const useDentaltTechCategories = (companyId: string) => {
+export const useDentaltTechCategories = (companyId: string, refreshKey?: number) => {
   const [categories, setCategories] = useState<DentalTechCategoryWithCreator[]>(
     []
   );
@@ -37,7 +37,7 @@ export const useDentaltTechCategories = (companyId: string) => {
       }
     };
       fetchCategories();
-  }, [companyId]);
+  }, [companyId, refreshKey]);
 
   return { categories, error, isLoading };
 };
@@ -71,3 +71,68 @@ export const createDentalTechCategory = async (
     };
    }
 }
+
+export const updateDentalTechCategory = async (
+  values: Partial<z.infer<typeof CreateCommonCategorySchema>>,
+  companyId: string,
+  dcId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/dentaltech/${dcId}/update`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[UPDATE_DENTALTECH_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถอัปเดตข้อมูลได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
+
+export const SoftDeleteDentalTechCategory = async (
+  companyId: string,
+  dcId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/dentaltech/${dcId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[DELETE_DENTALTECH_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลหมวดหมู่ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};

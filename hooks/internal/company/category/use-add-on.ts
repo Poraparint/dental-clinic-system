@@ -106,3 +106,35 @@ export const updateAddOnCategory = async (
     };
   }
 };
+
+export const softDeleteAddOnCategory = async (
+  companyId: string,
+  addonId: string
+) => { 
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/addon/${addonId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[DELETE_ADDON_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลหมวดหมู่ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+}

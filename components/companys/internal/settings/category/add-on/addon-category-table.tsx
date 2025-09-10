@@ -7,7 +7,8 @@ import { RefreshableProps, AddOnCategoryWithManager } from "@/types";
 import { useCompany } from "@/context/context";
 import { Calendar } from "lucide-react";
 import { DialogUpdateAddOnCategory } from "@/components/dialog/internal/category/dialog-add-on";
-import { useAddOnCategories } from "@/hooks/internal/company/category/use-add-on";
+import { softDeleteAddOnCategory, useAddOnCategories } from "@/hooks/internal/company/category/use-add-on";
+import { toast } from "sonner";
 
 export const AddOnCategoriesTable = ({refreshKey, handleRefresh}: RefreshableProps) => {
   const { companyId } = useCompany();
@@ -71,6 +72,17 @@ export const AddOnCategoriesTable = ({refreshKey, handleRefresh}: RefreshablePro
           onSuccess={handleRefresh}
         />
       )}
+      onSoftDelete={(item) => softDeleteAddOnCategory(companyId, item.id)}
+      onDeleteResult={({ success, error, description }) => {
+        if (success) {
+          toast.success(success);
+          handleRefresh?.();
+        } else {
+          toast.error(error, {
+            description,
+          });
+        }
+      }}
       error={error?.error}
       description={error?.description}
     />

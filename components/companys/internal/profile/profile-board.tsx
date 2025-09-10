@@ -4,6 +4,9 @@ import { getBgRoleColor } from "@/lib/common/role-color";
 import { User } from "lucide-react";
 import { ScheduleBoard } from "@/components/companys/internal/schedule/schedule-board";
 import { CompanyRole } from "@prisma/client";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MemberView } from "@/components/companys/internal/profile/tabs/member-view";
 
 export const ProfileBoard = async () => {
   const user = await currentUser();
@@ -26,7 +29,7 @@ export const ProfileBoard = async () => {
   const dentistId = user.role === CompanyRole.DENTIST ? user.id : undefined;
 
   return (
-    <div>
+    <div className="space-y-2">
       <div className="flex flex-col md:grid grid-cols-3 grid-rows-1 gap-2">
         <Card className="flex flex-col md:flex-row items-center">
           <div className="">
@@ -53,7 +56,20 @@ export const ProfileBoard = async () => {
         </Card>
         <Card className="col-span-2">{/* สรุป */}</Card>
       </div>
-      <ScheduleBoard dentistId={dentistId} />
+      <RoleGate allowedRole={[CompanyRole.DENTIST]} fallback={<div></div>}>
+        <ScheduleBoard dentistId={dentistId} />
+      </RoleGate>
+      <RoleGate allowedRole={[CompanyRole.MANAGER]} fallback={<div></div>}>
+        <Tabs defaultValue="member-view">
+          <TabsList className="w-fit mb-6">
+            <TabsTrigger value="member-view">ดูข้อมูลสมาชิก</TabsTrigger>
+            <TabsTrigger value="recovery-data">ข้อมูลที่ถูกลบ</TabsTrigger>
+          </TabsList>
+          <>
+            <MemberView/>
+          </>
+        </Tabs>
+      </RoleGate>
     </div>
   );
 };

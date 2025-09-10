@@ -41,6 +41,7 @@ export async function GET(
     const transactions = await db.transaction.findMany({
       where: {
         patientId,
+        isDelete: false,
       },
       select: {
         id: true,

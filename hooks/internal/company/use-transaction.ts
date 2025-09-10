@@ -140,3 +140,36 @@ export const updateTransaction = async (
     };
   }
 };
+
+export const softDeleteTransaction = async (
+  companyId: string,
+  patientId: string,
+  transactionId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/patients/${patientId}/transaction/${transactionId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[DELETE_TRANSACTION]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลรายการธุรกรรมได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
