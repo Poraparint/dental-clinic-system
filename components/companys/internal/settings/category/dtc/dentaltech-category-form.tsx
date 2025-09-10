@@ -24,20 +24,21 @@ import { CardCategory } from "@/components/shared/card";
 import { Aperture } from "lucide-react";
 import { toast } from "sonner";
 import { SubmitButton } from "@/components/shared/button/submit-button";
-import { createDentalTechCategory } from "@/hooks/internal/company/category/use-dtc";
+import { createDentalTechCategory, updateDentalTechCategory } from "@/hooks/internal/company/category/use-dtc";
 import { useCompany } from "@/context/context";
 import { CommonCategoryFormProps } from "@/interface/props";
 
 export const CreateDentalTechCategoryForm = ({
   setOpen,
   onSuccess,
+  updateData,
 }: CommonCategoryFormProps) => {
   const { companyId } = useCompany();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof CreateCommonCategorySchema>>({
     resolver: zodResolver(CreateCommonCategorySchema),
-    defaultValues: {
+    defaultValues: updateData ?? {
       name: "",
       description: "",
     },
@@ -45,7 +46,17 @@ export const CreateDentalTechCategoryForm = ({
 
   const OnSubmit = (values: z.infer<typeof CreateCommonCategorySchema>) => {
     startTransition(async () => {
-      const data = await createDentalTechCategory(values, companyId);
+      let data;
+
+      if (updateData?.id) {
+        data = await updateDentalTechCategory(
+          values,
+          companyId,
+          updateData.id
+        );
+      } else {
+        data = await createDentalTechCategory(values, companyId);
+      }
 
       if (data.error) {
         toast.error(data.error, {
@@ -102,7 +113,7 @@ export const CreateDentalTechCategoryForm = ({
 
         <div className="flex justify-end">
           <SubmitButton
-            label="เพิ่มหมวดหมู่"
+            label={updateData?.id ? "อัพเดตข้อมูล" : "เพิ่มหมวดหมู่"}
             type="submit"
             isPending={isPending}
           />

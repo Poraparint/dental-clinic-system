@@ -55,7 +55,7 @@ export const ScheduleBoard = ({dentistId}: {dentistId?: string}) => {
         date={date || new Date()}
         error={hasError}
         isLoading={isLoading}
-        events={combinedEvents}
+        events={filteredEvents}
         handleRefresh={handleRefresh}
       />
     </CalendarBoard>

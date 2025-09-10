@@ -1,13 +1,13 @@
 import { db } from "@/lib/db";
 import { validateManager } from "@/lib/utils/validation/manager";
-import { CreateTransactionCategorySchema } from "@/schemas";
+import { CreateCommonCategorySchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ companyId: string; tcId: string }> }
+  { params }: { params: Promise<{ companyId: string; dcId: string }> }
 ) {
-  const { companyId, tcId } = await params;
+  const { companyId, dcId } = await params;
 
   const values = await request.json();
 
@@ -17,7 +17,7 @@ export async function PATCH(
     return accessToPatch;
   }
 
-  const validation = CreateTransactionCategorySchema.partial().safeParse(values);
+  const validation = CreateCommonCategorySchema.partial().safeParse(values);
 
   if (!validation.success) {
     return NextResponse.json(
@@ -31,9 +31,9 @@ export async function PATCH(
   const dataToUpdate = validation.data;
 
   try {
-    await db.transactionCategory.update({
+    await db.dentalTechCategory.update({
         where: {
-          id: tcId,
+          id: dcId,
         companyId,
       },
       data: {
@@ -42,12 +42,12 @@ export async function PATCH(
     });
     return NextResponse.json(
       {
-        success: `อัปเดตข้อมูลหมวดหมู่ทำฟันสำเร็จ`,
+        success: `อัปเดตข้อมูลหมวดหมู่ทันตกรรมสำเร็จ`,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("[TRANSACTION_CATEGORY_PATCH]", error);
+    console.error("[CREATE_DENTALTECH_CATEGORY]", error);
     return NextResponse.json(
       {
         error: "ไม่สามารถอัพเดตข้อมูลหมวดหมู่ได้",

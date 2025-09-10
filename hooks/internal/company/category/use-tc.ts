@@ -106,3 +106,33 @@ export const updateTransactionCategory = async (
     };
   }
 };
+
+export const SoftDeleteTransactionCategory = async (companyId: string, tcId: string) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/category/transaction/${tcId}/delete`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: true }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+
+  } catch (error) {
+    console.error("[DELETE_TRANSACTION_CATEGORY]", error);
+    return {
+      error: "ไม่สามารถลบข้อมูลหมวดหมู่ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+}

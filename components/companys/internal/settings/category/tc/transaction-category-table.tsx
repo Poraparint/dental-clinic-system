@@ -2,16 +2,23 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
+import { SoftDeleteTransactionCategory, useTransactionCategories } from "@/hooks/internal/company/category/use-tc";
 import { formatDate } from "@/lib/utils";
 import { RefreshableProps, TransactionCategoryWithManager } from "@/types";
 import { useCompany } from "@/context/context";
 import { Calendar } from "lucide-react";
 import { DialogUpdateTransactionCategory } from "@/components/dialog/internal/category/dialog-tc";
+import { toast } from "sonner";
 
-export const TransactionCategoriesTable = ({refreshKey, handleRefresh}: RefreshableProps) => {
+export const TransactionCategoriesTable = ({
+  refreshKey,
+  handleRefresh,
+}: RefreshableProps) => {
   const { companyId } = useCompany();
-  const { categories, error, isLoading } = useTransactionCategories(companyId, refreshKey);
+  const { categories, error, isLoading } = useTransactionCategories(
+    companyId,
+    refreshKey
+  );
 
   const columns = [
     {
@@ -66,6 +73,17 @@ export const TransactionCategoriesTable = ({refreshKey, handleRefresh}: Refresha
           onSuccess={handleRefresh}
         />
       )}
+      onSoftDelete={(item) => SoftDeleteTransactionCategory(companyId, item.id)}
+      onDeleteResult={({ success, error, description }) => {
+        if (success) {
+          toast.success(success);
+          handleRefresh?.();
+        } else {
+          toast.error(error, {
+            description,
+          });
+        }
+      }}
       error={error?.error}
       description={error?.description}
     />

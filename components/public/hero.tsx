@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 
 //icon
-import { ShieldCheck, Rocket, ArrowBigLeft } from "lucide-react";
+import { ShieldCheck, Rocket, ArrowBigLeft, BookMarked } from "lucide-react";
 import Image from "next/image";
 import { RoleGate } from "../props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
@@ -46,7 +46,7 @@ export const HeroSection = () => {
           )}
 
           <Button size="lg" variant="outline">
-            เรียนรู้เพิ่มเติม
+            <BookMarked/>ดูคู่มือการใช้งาน
           </Button>
         </div>
       </div>

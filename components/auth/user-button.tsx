@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { UserCard } from "@/components/props/component/card/user-card";
 import { getBgRoleColor } from "@/lib/common/role-color";
+import { MANAGER_LOGIN_REDIRECT } from "@/routes";
 
 export const UserButton = () => {
   const user = useCurrentUser();
@@ -66,7 +67,7 @@ export const UserButton = () => {
           allowedRole={[CompanyRole.MANAGER, CompanyRole.COMANAGER]}
           fallback={<></>}
         >
-          <Link href="/dashboard/ministry">
+          <Link href={MANAGER_LOGIN_REDIRECT}>
             <DropdownMenuItem>
               <House />
               แดชบอร์ด

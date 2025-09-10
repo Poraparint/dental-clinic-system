@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Pencil } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 type Props = {
@@ -24,7 +24,6 @@ type Props = {
     id: string;
     name: string;
     createdAt: Date;
-    onEdit?: (id: string) => void;
   }[];
   onReorder: (orderedIds: string[]) => void;
 };
@@ -33,7 +32,6 @@ type SortableItemProps = {
   id: string;
   name: string;
   createdAt: Date;
-  onEdit?: (id: string) => void;
 };
 
 export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
@@ -71,7 +69,6 @@ export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
                 id={category.id}
                 name={category.name}
                 createdAt={category.createdAt}
-                onEdit={category.onEdit}
               />
             );
           })}
@@ -81,7 +78,7 @@ export const DraggableCategoryList = ({ categories, onReorder }: Props) => {
   );
 };
 
-function SortableItem({ id, name, createdAt, onEdit }: SortableItemProps) {
+function SortableItem({ id, name, createdAt }: SortableItemProps) {
   const {
     attributes,
     listeners,
@@ -115,13 +112,6 @@ function SortableItem({ id, name, createdAt, onEdit }: SortableItemProps) {
           </p>
         </div>
       </div>
-      <button
-        onClick={() => onEdit?.(id)}
-        className="text-primary hover:underline text-sm flex items-center space-x-1"
-      >
-        <Pencil size={16} />
-        <span>แก้ไข</span>
-      </button>
     </div>
   );
 }

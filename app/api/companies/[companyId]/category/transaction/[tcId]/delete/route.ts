@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { validateManager } from "@/lib/utils/validation/manager";
-import { CreateTransactionCategorySchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -9,48 +8,33 @@ export async function PATCH(
 ) {
   const { companyId, tcId } = await params;
 
-  const values = await request.json();
-
   const accessToPatch = await validateManager(companyId);
 
   if (accessToPatch instanceof Response) {
     return accessToPatch;
   }
 
-  const validation = CreateTransactionCategorySchema.partial().safeParse(values);
-
-  if (!validation.success) {
-    return NextResponse.json(
-      {
-        error: "ข้อมูลไม่ถูกต้อง",
-      },
-      { status: 400 }
-    );
-  }
-
-  const dataToUpdate = validation.data;
-
   try {
     await db.transactionCategory.update({
-        where: {
-          id: tcId,
+      where: {
+        id: tcId,
         companyId,
       },
       data: {
-        ...dataToUpdate,
+        isDeleted: true,
       },
     });
     return NextResponse.json(
       {
-        success: `อัปเดตข้อมูลหมวดหมู่ทำฟันสำเร็จ`,
+        success: "ลบข้อมูลหมวดหมู่เรียบร้อยแล้ว",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("[TRANSACTION_CATEGORY_PATCH]", error);
+    console.error("[TRANSACTION_CATEGORY_SOFT_DELETE]", error);
     return NextResponse.json(
       {
-        error: "ไม่สามารถอัพเดตข้อมูลหมวดหมู่ได้",
+        error: "ไม่สามารถลบข้อมูลหมวดหมู่ได้",
         description: "โปรดติดต่อผู้ดูแลระบบ",
       },
       { status: 500 }

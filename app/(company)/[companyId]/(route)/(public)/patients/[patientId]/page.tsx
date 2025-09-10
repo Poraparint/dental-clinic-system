@@ -63,7 +63,6 @@ const PatientInfoCardPage = () => {
                 CompanyRole.COMANAGER,
                 CompanyRole.DENTIST,
               ]}
-              fallback={<></> }
             >
               <TransactionInfoCard />
             </RoleGate>

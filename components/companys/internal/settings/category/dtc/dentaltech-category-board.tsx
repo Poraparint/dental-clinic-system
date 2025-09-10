@@ -1,15 +1,11 @@
 "use client";
 import { TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
 import { DentalTechCategoriesTable } from "@/components/companys/internal/settings/category/dtc/dentaltech-category-table";
-import { DialogCreateDentalTechCategory } from "@/components/dialog/internal/category/dialog-create-dtc";
+import { DialogCreateDentalTechCategory } from "@/components/dialog/internal/category/dialog-dtc";
+import { useRefreshable } from "@/hooks";
 
 export const DentalTechCategoryBoard = () => {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const handleRefresh = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
+  const { refreshKey, handleRefresh } = useRefreshable();
 
   return (
     <TabsContent value="dental-items" className="space-y-4">
@@ -20,7 +16,10 @@ export const DentalTechCategoryBoard = () => {
         <DialogCreateDentalTechCategory onSuccess={handleRefresh} />
       </div>
       <hr />
-      <DentalTechCategoriesTable key={refreshKey} />
+      <DentalTechCategoriesTable
+        refreshKey={refreshKey}
+        handleRefresh={handleRefresh}
+      />
     </TabsContent>
   );
 };

@@ -33,6 +33,7 @@ export async function GET(
         name: true,
         description: true,
         createdAt: true,
+        updatedAt: true,
         creator: {
           select: {
             name: true,

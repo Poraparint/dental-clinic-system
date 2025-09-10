@@ -2,15 +2,26 @@
 
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
-import { useDentaltTechCategories } from "@/hooks/internal/company/category/use-dtc";
+import {
+  SoftDeleteDentalTechCategory,
+  useDentaltTechCategories,
+} from "@/hooks/internal/company/category/use-dtc";
 import { formatDate } from "@/lib/utils";
-import { DentalTechCategoryWithCreator } from "@/types";
+import { DentalTechCategoryWithCreator, RefreshableProps } from "@/types";
 import { useCompany } from "@/context/context";
 import { Calendar, UserCheck } from "lucide-react";
+import { DialogUpdateDentalTechCategory } from "@/components/dialog/internal/category/dialog-dtc";
+import { toast } from "sonner";
 
-export const DentalTechCategoriesTable = () => {
+export const DentalTechCategoriesTable = ({
+  refreshKey,
+  handleRefresh,
+}: RefreshableProps) => {
   const { companyId } = useCompany();
-  const { categories, error, isLoading } = useDentaltTechCategories(companyId);
+  const { categories, error, isLoading } = useDentaltTechCategories(
+    companyId,
+    refreshKey
+  );
 
   const columns = [
     {
@@ -59,6 +70,24 @@ export const DentalTechCategoriesTable = () => {
     <DynamicTable
       data={categories}
       columns={columns}
+      dialogEdit={(item) => (
+        <DialogUpdateDentalTechCategory
+          key={item.id}
+          category={item}
+          onSuccess={handleRefresh}
+        />
+      )}
+      onSoftDelete={(item) => SoftDeleteDentalTechCategory(companyId, item.id)}
+      onDeleteResult={({ success, error, description }) => {
+        if (success) {
+          toast.success(success);
+          handleRefresh?.();
+        } else {
+          toast.error(error, {
+            description,
+          });
+        }
+      }}
       error={error?.error}
       description={error?.description}
     />
