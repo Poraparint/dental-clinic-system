@@ -4,13 +4,21 @@ import { DialogCreateTransaction } from "@/components/dialog/internal/dialog-tra
 import { TabsContent } from "@/components/ui/tabs";
 import { TransactionTable } from "@/components/companys/internal/patient/transaction/transaction-table";
 import { useRefreshable } from "@/hooks";
+import { RoleGate } from "@/components/props/wrapper/role-gate";
+import { CompanyRole } from "@prisma/client";
 
 export const TransactionInfoCard = () => {
   const { refreshKey, handleRefresh } = useRefreshable();
 
   return (
-    <>
-      <TabsContent value="transactions" className="space-y-4">
+    <TabsContent value="transactions" className="space-y-4">
+      <RoleGate
+        allowedRole={[
+          CompanyRole.MANAGER,
+          CompanyRole.COMANAGER,
+          CompanyRole.DENTIST,
+        ]}
+      >
         <div className="flex justify-between">
           <div>
             <h1 className="text-2xl font-bold">
@@ -24,8 +32,11 @@ export const TransactionInfoCard = () => {
           <DialogCreateTransaction onSuccess={handleRefresh} />
         </div>
 
-        <TransactionTable refreshKey={refreshKey} handleRefresh={ handleRefresh } />
-      </TabsContent>
-    </>
+        <TransactionTable
+          refreshKey={refreshKey}
+          handleRefresh={handleRefresh}
+        />
+      </RoleGate>
+    </TabsContent>
   );
 };
