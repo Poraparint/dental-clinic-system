@@ -35,8 +35,8 @@ export const CompanyCard = ({refreshKey}: RefreshableProps) => {
       <RoleGate allowedRole={[CompanyRole.MANAGER]}>
         <CardCategory
           icon={<Hospital />}
-          title="Dental Clinic"
-          description="Manage your dental clinic"
+          title="ระบบบริหารคลินิคทันตกรรม"
+          description="จัดการคลินิคทันตกรรมของคุณ"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {ministries.map((ministry) => (

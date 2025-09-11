@@ -9,7 +9,6 @@ interface DialogCreateMinistryProps {
   onSuccess?: () => void;
 }
 
-// ตัวอย่างการใช้งาน
 export const DialogCreateMinistry = ({
   onSuccess,
 }: DialogCreateMinistryProps) => {
@@ -18,10 +17,10 @@ export const DialogCreateMinistry = ({
   return (
     <>
       <DialogButton
-        title="Create Ministry"
+        title="สร้างคลินิกใหม่"
         icon={<PlusIcon />}
-        dialogTitle="Create New Ministry"
-        dialogDescription="Fill in the form to create a new ministry"
+        dialogTitle="สร้างคลินิกใหม่"
+        dialogDescription="กรอกข้อมูลในแบบฟอร์มเพื่อสร้างคลินิกใหม่"
         open={open}
         setOpen={setOpen}
       >
