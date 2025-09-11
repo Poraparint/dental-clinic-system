@@ -65,7 +65,7 @@ export const ScheduleForm = ({
       patientName: "",
       detail: "",
       tcId: "",
-      memberId: "",
+      memberId: undefined,
     },
   });
 
