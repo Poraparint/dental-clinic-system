@@ -131,5 +131,5 @@ export const CreateScheduleSchema = z.object({
   }),
   ...detailSchema,
   tcId: z.string().min(1, "ต้องเลือกประเภทรายการ"),
-  memberId: z.string().min(1, "กรุณาเลือกทันตแพทย์ผู้รับผิดชอบ"),
+  memberId: z.string().optional(),
 });

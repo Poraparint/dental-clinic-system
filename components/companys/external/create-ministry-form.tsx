@@ -74,12 +74,12 @@ export const CreateMinistryForm = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>ชื่อบอร์ด / บริษัท</FormLabel>
+                  <FormLabel>ชื่อคลินิก</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="Dental-clinic-ministry"
+                      placeholder="ชื่อคลินิก"
                     />
                   </FormControl>
                   <FormMessage />
@@ -91,7 +91,7 @@ export const CreateMinistryForm = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>รายละเอียด</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -107,7 +107,7 @@ export const CreateMinistryForm = ({
         </CardCategory>
         <div className="flex justify-end">
           <SubmitButton
-            label="สร้างบริษัทใหม่"
+            label="สร้างคลินิกใหม่"
             type="submit"
             isPending={isPending}
           />

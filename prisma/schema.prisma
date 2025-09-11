@@ -401,7 +401,7 @@ model Schedule {
   creatorUserId       String
   updaterUserId       String?
   status              String              @default("รอดำเนินการ")
-  memberId            String
+  memberId            String?
   companyId           String
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
@@ -409,7 +409,7 @@ model Schedule {
   transactionCategory TransactionCategory @relation(fields: [tcId], references: [id])
   scheduleCategory    ScheduleCategory    @relation(fields: [scheduleId], references: [id])
   company             Company             @relation(fields: [companyId], references: [id])
-  dentist             User                @relation(fields: [memberId], references: [id], name: "idx_schedule_dentist")
+  dentist             User?               @relation(fields: [memberId], references: [id], name: "idx_schedule_dentist")
   creator             User                @relation(fields: [creatorUserId], references: [id], name: "idx_schedule_creator")
   updater             User?               @relation("UpdatedSchedule", fields: [updaterUserId], references: [id])
 

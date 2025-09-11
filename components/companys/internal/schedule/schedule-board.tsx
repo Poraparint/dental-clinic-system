@@ -30,7 +30,7 @@ export const ScheduleBoard = ({dentistId}: {dentistId?: string}) => {
 
   const { combinedEvents } = useCombinedAppointments({ schedules, rechecks });
 
-  const filteredEvents = dentistId ? combinedEvents.filter((e) => e.dentist.id === dentistId) : combinedEvents;
+  const filteredEvents = dentistId ? combinedEvents.filter((e) => e.dentist?.id === dentistId) : combinedEvents;
 
   const isLoading = scheduleLoading && recheckLoading;
   const hasError = scheduleError && recheckError;
@@ -55,7 +55,12 @@ export const ScheduleBoard = ({dentistId}: {dentistId?: string}) => {
         date={date || new Date()}
         error={hasError}
         isLoading={isLoading}
-        events={filteredEvents}
+        events={filteredEvents.map(event => ({
+          ...event,
+          dentist: event.dentist
+            ? { name: event.dentist.name ?? undefined }
+            : undefined,
+        }))}
         handleRefresh={handleRefresh}
       />
     </CalendarBoard>

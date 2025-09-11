@@ -31,7 +31,7 @@ export const CardMinistry = ({
       </CardHeader>
       <CardFooter className="pt-4">
         <Button className="group px-0" onClick={onClick}>
-          <span>Access to dashboard</span>
+          <span>เข้าสู่ระบบบริหาร</span>
           <ChevronRight className="size-4 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
         </Button>
       </CardFooter>

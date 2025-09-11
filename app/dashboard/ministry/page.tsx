@@ -9,7 +9,7 @@ const MinistryPage = () => {
   return (
     <div className="space-y-4">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Ministry Dashboard</h1>
+        <h1 className="text-2xl font-bold">แดชบอร์ด จัดการคลินิกทันตกรรม</h1>
 
         <DialogCreateMinistry onSuccess={handleRefresh} />
       </div>
