@@ -1,48 +1,19 @@
 "use client";
-import { softDeletePatient, useAllPatients } from "@/hooks";
+import { softRecoveryPatient, useDeletedPatients } from "@/hooks";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { User, Phone, Calendar, UserCheck } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { Patients, RefreshableProps } from "@/types";
 import { useCompany } from "@/context/context";
-import { DialogUpdatePatient } from "@/components/dialog/internal/dialog-patient";
 import { toast } from "sonner";
 import { Loading } from "@/components/loading";
-import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
 
-interface PatientTableProps extends RefreshableProps {
-  searchValue?: string;
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
-}
-
-export const PatientTable = ({
-  onRowClick,
+export const DeletedPatientTable = ({
   refreshKey,
   handleRefresh,
-  searchValue = "",
-  currentPage = 1,
-  onPageChange,
-}: PatientTableProps) => {
+}: RefreshableProps) => {
   const { companyId } = useCompany();
-  const { patients, error, isLoading } = useAllPatients(companyId, refreshKey);
-
-  const filteredPatients = useMemo(() => {
-    if (!patients) return [];
-    return patients.filter(
-      (p) =>
-        p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        p.phone?.includes(searchValue)
-    );
-  }, [patients, searchValue]);
-
-  const pageSize = 20;
-  const totalPages = Math.ceil(filteredPatients.length / pageSize);
-  const paginatedPatients = filteredPatients.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const { patients, error, isLoading } = useDeletedPatients(companyId, refreshKey);
 
   const columns = [
     {
@@ -108,19 +79,9 @@ export const PatientTable = ({
   return (
     <>
       <DynamicTable
-        data={paginatedPatients}
+        data={patients}
         columns={columns}
-        onRowClick={
-          onRowClick ? (patient) => onRowClick(patient.id) : undefined
-        }
-        dialogEdit={(item) => (
-          <DialogUpdatePatient
-            key={item.id}
-            patient={item}
-            onSuccess={handleRefresh}
-          />
-        )}
-        onSoftDelete={(item) => softDeletePatient(companyId, item.id)}
+        onSoftRecovery={(item) => softRecoveryPatient(companyId, item.id)}
         onDeleteResult={({ success, error, description }) => {
           if (success) {
             toast.success(success);
@@ -134,25 +95,7 @@ export const PatientTable = ({
         error={error?.error}
         description={error?.description}
       />
-      {totalPages > 1 && (
-        <div className="flex justify-end items-center space-x-4 mt-4">
-          <Button
-            disabled={currentPage === 1}
-            onClick={() => onPageChange?.(currentPage - 1)}
-          >
-            ก่อนหน้า
-          </Button>
-          <span className="text-sm">
-            หน้า {currentPage} / {totalPages}
-          </span>
-          <Button
-            disabled={currentPage === totalPages}
-            onClick={() => onPageChange?.(currentPage + 1)}
-          >
-            ถัดไป
-          </Button>
-        </div>
-      )}
+      
     </>
   );
 };

@@ -69,3 +69,35 @@ export const createDentalTech = async (
     };
   }
 };
+
+export const updateDentalTechStatus = async (
+  companyId: string,
+  dentalTechId: string,
+  status: string,
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/dentaltechs/${dentalTechId}/update`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      }
+    );
+
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[UPDATE_DENTALTECH_STATUS]", error);
+    return {
+      error: "ไม่สามารถเปลี่ยนสถานะได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};

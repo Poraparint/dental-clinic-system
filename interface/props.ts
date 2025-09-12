@@ -18,7 +18,7 @@ export interface onSoftActionProps<T = unknown> {
     success?: string;
     error?: string;
     description?: string;
-  }>
+  }>;
   onEditResult?: (result: {
     success?: string;
     error?: string;
@@ -29,11 +29,15 @@ export interface onSoftActionProps<T = unknown> {
     error?: string;
     description?: string;
   }>;
+  onSoftRecovery?: (item: T) => Promise<{
+    success?: string;
+    error?: string;
+    description?: string;
+  }>;
   onDeleteResult?: (result: {
     success?: string;
     error?: string;
     description?: string;
   }) => void;
-
 };
   

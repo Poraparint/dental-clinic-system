@@ -1,8 +1,5 @@
-import { Label } from "@radix-ui/react-label";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
 export const Contact = () => {
   return (
@@ -26,66 +23,7 @@ export const Contact = () => {
             ติดต่อเราเพื่อเรียนรู้เพิ่มเติมเกี่ยวกับวิธีที่ระบบของเราจะช่วยคุณได้
           </p>
         </div>
-        <form>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="companyName">ชื่อคลินิก</Label>
-              <Input
-                id="companyName"
-                name="companyName"
-                placeholder="Your dental clinic name"
-                readOnly
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="customerName">ชื่อ-นามสกุล</Label>
-              <Input
-                id="customerName"
-                name="customerName"
-                placeholder="Full name"
-                readOnly
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="phone">เบอร์ติดต่อ</Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="Contact number"
-                readOnly
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="email">ที่อยู่อีเมล</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Your email"
-                readOnly
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="message">ส่งคำสอบถาม</Label>
-              <Textarea
-                id="message"
-                name="message"
-                placeholder="Tell us about your practice and requirements"
-                rows={4}
-                readOnly
-              />
-            </div>
-
-            <Button type="submit" className="w-full">
-              ยังไม่ได้ทำ
-            </Button>
-          </div>
-        </form>
+        <Card>Poraparint@gmail.com</Card>
       </div>
     </div>
   );

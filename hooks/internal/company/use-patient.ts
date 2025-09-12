@@ -5,44 +5,22 @@ import { Patients, ApiError } from "@/types";
 import { CreatePatientSchema } from "@/schemas";
 import * as z from "zod";
 
-interface UsePatientsOptions {
-  page?: number;
-  pageSize?: number;
-  search?: string;
-  refreshKey?: number;
-}
-
-export const useAllPatients = (companyId: string, options?: UsePatientsOptions) => {
+export const useAllPatients = (companyId: string, refreshKey?: number) => {
   const [patients, setPatients] = useState<Patients[]>([]);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [total, setTotal] = useState<number | null>(null);
-  const [totalPages, setTotalPages] = useState<number | null>(null);
-
-  const { page, pageSize, search, refreshKey } = options || {};
 
   useEffect(() => {
     const fetchPatients = async () => {
       setIsLoading(true);
       setError(null);
-
-      const params = new URLSearchParams();
-
-      if (page) params.append("page", page.toString());
-      if (pageSize) params.append("pageSize", pageSize.toString());
-      if (search) params.append("search", search);
-
-      const query = params.toString();
-      const url = `/api/companies/${companyId}/patients${query ? `?${query}` : ""}`;
       try {
-        const response = await fetch(url);
+        const response = await fetch(`/api/companies/${companyId}/patients`);
         const data = await response.json();
         if (!response.ok || data.error) {
           setError(data);
         } else {
           setPatients(Array.isArray(data) ? data : data.data || []);
-          setTotal(data.total || null);
-          setTotalPages(data.totalPages || null);
         }
       } catch (error) {
         console.error("[GET_PATIENT]", error);
@@ -56,9 +34,43 @@ export const useAllPatients = (companyId: string, options?: UsePatientsOptions) 
     };
 
     fetchPatients();
-  }, [companyId, page, pageSize, search, refreshKey]);
+  }, [companyId, refreshKey]);
 
-  return { patients, total, totalPages, error, isLoading };
+  return { patients, error, isLoading };
+};
+
+export const useDeletedPatients = (companyId: string, refreshKey?: number) => {
+  const [patients, setPatients] = useState<Patients[]>([]);
+  const [error, setError] = useState<ApiError | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(`/api/companies/${companyId}/patients/isDeleted`);
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          setError(data);
+        } else {
+          setPatients(Array.isArray(data) ? data : data.data || []);
+        }
+      } catch (error) {
+        console.error("[GET_PATIENT]", error);
+        setError({
+          error: "เกิดข้อผิดพลาดในการดึงข้อมูล",
+          description: "โปรดลองใหม่อีกครั้ง",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPatients();
+  }, [companyId, refreshKey]);
+
+  return { patients, error, isLoading };
 };
 
 export const createPatient = async (
@@ -149,6 +161,38 @@ export const softDeletePatient = async (
     console.error("[DELETE_PATIENT]", error);
     return {
       error: "ไม่สามารถลบข้อมูลคนไข้ได้",
+      description: "โปรดติดต่อผู้ดูแลระบบ",
+    };
+  }
+};
+
+export const softRecoveryPatient = async (
+  companyId: string,
+  patientId: string
+) => {
+  try {
+    const response = await fetch(
+      `/api/companies/${companyId}/patients/${patientId}/recovery`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isDeleted: false }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { error: data.error };
+    }
+
+    return { success: data.success };
+  } catch (error) {
+    console.error("[RECOVERY_PATIENT]", error);
+    return {
+      error: "ไม่สามารถกู้คืนข้อมูลคนไข้ได้",
       description: "โปรดติดต่อผู้ดูแลระบบ",
     };
   }

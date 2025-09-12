@@ -36,9 +36,9 @@ export const UserButton = () => {
         <Button asChild variant="outline">
           <Link href="/auth/login">เข้าสู่ระบบบริหารคลินิค</Link>
         </Button>
-        <Button asChild variant="charoite">
+        {/* <Button asChild variant="charoite">
           <Link href="/auth/register">ลงทะเบียน</Link>
-        </Button>
+        </Button> */}
       </div>
     );
   }
