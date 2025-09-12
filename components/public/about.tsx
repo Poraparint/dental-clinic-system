@@ -5,7 +5,7 @@ export const About = () => {
   return (
     <div className="container">
       <div className="flex flex-col items-center text-center mb-12">
-        <h2 className="text-3xl font-bold mb-4">About Our System</h2>
+        <h2 className="text-3xl font-bold mb-4">เกี่ยวกับระบบ</h2>
         <div className="w-12 h-1 bg-primary mb-6"></div>
         <p className="text-muted-foreground max-w-3xl">
           ระบบบริหารจัดการคลินิกทันตกรรมของเราได้รับการออกแบบมาเพื่อยกระดับและเพิ่มประสิทธิภาพในการดำเนินงานของคลินิกทันตกรรมโดยเฉพาะ
@@ -22,8 +22,8 @@ export const About = () => {
           <p className="text-muted-foreground mb-4">
             DentalClinicSystem
             เป็นระบบบริหารจัดการที่ได้รับการพัฒนาขึ้นสำหรับคลินิกทันตกรรมขนาดเล็กโดยเฉพาะ
-            แพลตฟอร์มของเราผสานการจัดการประวัติผู้ป่วย การนัดหมาย
-            การจัดการสิทธิ์บุคลากร และการดำเนินงานด้านการเงินไว้ภายในระบบเดียว
+            แพลตฟอร์มของเราผสานการจัดการประวัติคนไข้ การนัดหมาย
+            การกำหนดสิทธิ์บุคลากร และการดำเนินงานด้านการเงินไว้ภายในระบบเดียว
           </p>
           <p className="text-muted-foreground mb-4">
             ระบบของเราสามารถปรับใช้ได้อย่างยืดหยุ่นตามความต้องการ
@@ -42,16 +42,12 @@ export const About = () => {
             </li>
             <li className="flex items-start gap-2">
               <CircleCheck className="text-lapis" />
-              <span>เข้าถึงประวัติคนไข้ได้อย่างปลอดภัยจากทุกที่ทุกเวลา</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CircleCheck className="text-lapis" />
-              <span>เพิ่มประสิทธิภาพในการติดตามและจัดทำรายงานทางการเงิน</span>
+              <span>เพิ่มประสิทธิภาพในการติดตามและตรวจรายงานทางการเงิน</span>
             </li>
             <li className="flex items-start gap-2">
               <CircleCheck className="text-lapis" />
               <span>
-                เสริมสร้างการสื่อสารและความพึงพอใจระหว่างผู้ป่วยและคลินิก
+                เสริมสร้างความรวดเร็วและความพึงพอใจระหว่างคนไข้และคลินิก
               </span>
             </li>
           </ul>

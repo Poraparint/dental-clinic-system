@@ -15,12 +15,16 @@ export const DentalTechTable = ({
   dentalTechs,
   error,
   isLoading,
+  onStatusChange,
 }: {
   date: Date;
   dentalTechs: DentalTech[];
   error: ApiError | null;
-  isLoading: boolean;
-}) => {
+    isLoading: boolean;
+    onStatusChange?: (id: string, newStatus: string) => void;
+  }) => {
+  
+  
   const itemsForDate = dentalTechs.filter(
     (item) => new Date(item.deadline).toDateString() === date.toDateString()
   );
@@ -38,7 +42,7 @@ export const DentalTechTable = ({
 
   return (
     <div className="space-y-4">
-     <ScrollArea className="h-[36rem]">
+      <ScrollArea className="h-[36rem]">
         {itemsForDate.map((dentaltech) => (
           <CalendarEventCard
             key={dentaltech.id}
@@ -53,6 +57,9 @@ export const DentalTechTable = ({
             teeth={dentaltech.teeth || 0}
             datetime={dentaltech.deadline}
             dentist={dentaltech.creator.name}
+            onStatusChange={(newStatus) =>
+              onStatusChange?.(dentaltech.id, newStatus)
+            }
           />
         ))}
       </ScrollArea>

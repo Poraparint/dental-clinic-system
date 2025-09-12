@@ -84,7 +84,7 @@ export async function POST(
     });
 
     return NextResponse.json({
-      success: "สร้างบอร์ดสำเร็จ"
+      success: "สร้างคลินิกสำเร็จ"
     })
     
   } catch (error) {

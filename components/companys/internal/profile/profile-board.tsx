@@ -6,7 +6,7 @@ import { ScheduleBoard } from "@/components/companys/internal/schedule/schedule-
 import { CompanyRole } from "@prisma/client";
 import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MemberView } from "@/components/companys/internal/profile/tabs/member-view";
+import { RecoveryCard } from "@/components/companys/internal/profile/tabs/recovery-card";
 
 export const ProfileBoard = async () => {
   const user = await currentUser();
@@ -60,13 +60,12 @@ export const ProfileBoard = async () => {
         <ScheduleBoard dentistId={dentistId} />
       </RoleGate>
       <RoleGate allowedRole={[CompanyRole.MANAGER]} fallback={<div></div>}>
-        <Tabs defaultValue="member-view">
+        <Tabs defaultValue="recovery-data">
           <TabsList className="w-fit mb-6">
-            <TabsTrigger value="member-view">ดูข้อมูลสมาชิก</TabsTrigger>
             <TabsTrigger value="recovery-data">ข้อมูลที่ถูกลบ</TabsTrigger>
           </TabsList>
           <>
-            <MemberView/>
+            <RecoveryCard/>
           </>
         </Tabs>
       </RoleGate>

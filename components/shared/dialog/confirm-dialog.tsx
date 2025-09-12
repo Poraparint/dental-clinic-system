@@ -3,7 +3,7 @@ import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { DialogButton } from "@/components/shared/dialog/dialog-button";
 import { Button } from "@/components/ui/button";
 import { CompanyRole } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { ArchiveRestore, Trash } from "lucide-react";
 import { useState } from "react";
 
 export function ConfirmDeleteDialog({
@@ -41,6 +41,46 @@ export function ConfirmDeleteDialog({
             }}
           >
             ยืนยันการลบ
+          </Button>
+        </div>
+      </DialogButton>
+    </RoleGate>
+  );
+}
+
+export function ConfirmRecoveryDialog({
+  onConfirm,
+  itemName,
+}: {
+  onConfirm: () => void;
+  itemName?: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <RoleGate
+      allowedRole={[
+        CompanyRole.MANAGER,
+      ]}
+      fallback={<></>}
+    >
+      <DialogButton
+        icon={<ArchiveRestore />}
+        open={open}
+        setOpen={setOpen}
+        dialogTitle="ยืนยันการกู้คืน"
+        dialogDescription={`คุณแน่ใจหรือไม่ว่าต้องการกู้คืน ${itemName ?? "รายการนี้"}?.`}
+        variant="outline"
+      >
+        <div className="flex justify-end gap-2 mt-6">
+          <Button
+            variant="outline"
+            onClick={() => {
+              onConfirm();
+              setOpen(false);
+            }}
+          >
+            ยืนยันการกู้คืน
           </Button>
         </div>
       </DialogButton>

@@ -19,6 +19,14 @@ import { onSoftActionProps } from "@/interface/props";
 import { handleSoftDelete } from "@/lib/common/soft-delete";
 import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 interface CalendarEventProp<T = unknown> extends onSoftActionProps<T> {
   avatar?: string;
   badge?: React.ReactNode;
@@ -37,6 +45,7 @@ interface CalendarEventProp<T = unknown> extends onSoftActionProps<T> {
   creator?: string;
   dentist?: string | null;
   extraLabel?: string;
+  onStatusChange?: (newStatus: string) => void;
 }
 
 export const CalendarEventCard = <T,>({
@@ -60,7 +69,7 @@ export const CalendarEventCard = <T,>({
   item,
   onSoftDelete,
   onDeleteResult,
-
+  onStatusChange,
 }: CalendarEventProp<T>) => {
   return (
     <DialogWrapper
@@ -126,13 +135,24 @@ export const CalendarEventCard = <T,>({
                   description={level}
                   className="border-none"
                 />
-                <ProfileCard
-                  icon={statusIcon}
-                  description={status}
-                  className="border-none"
-                />
-              </>
-            )}
+                  <Select
+                    defaultValue={status}
+                    onValueChange={(val) => onStatusChange?.(val)}
+                  >
+                    <SelectTrigger>
+                      <span>{statusIcon}</span>
+                      <SelectValue placeholder="เลือกสถานะ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="รอดำเนินการ">รอดำเนินการ</SelectItem>
+                      <SelectItem value="รับงานเรียบร้อย">
+                        รับงานเรียบร้อย
+                      </SelectItem>
+                      <SelectItem value="เสร็จสิ้น">เสร็จสิ้น</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </>
+              )}
             <ProfileCard
               icon={<Calendar />}
               description={formatDate(datetime)}

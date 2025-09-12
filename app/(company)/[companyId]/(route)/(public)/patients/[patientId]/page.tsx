@@ -57,9 +57,8 @@ const PatientInfoCardPage = () => {
             </div>
 
             <PatientInfoCard patient={patient} />
-            
-              <TransactionInfoCard />
-            
+
+            <TransactionInfoCard />
           </Tabs>
         </Card>
       </RoleGate>

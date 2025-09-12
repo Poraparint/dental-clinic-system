@@ -18,7 +18,8 @@ import { RoleGate } from "@/components/props/wrapper/role-gate";
 import { CompanyRole } from "@prisma/client";
 import { handleSoftDelete } from "@/lib/common/soft-delete";
 import { onSoftActionProps } from "@/interface/props";
-import { ConfirmDeleteDialog } from "@/components/shared/dialog/confirm-dialog";
+import { ConfirmDeleteDialog, ConfirmRecoveryDialog } from "@/components/shared/dialog/confirm-dialog";
+import { handleSoftRecovery } from "@/lib/common/soft-recovery";
 
 interface ColumnConfig<T> {
   key: string;
@@ -36,6 +37,7 @@ interface DynamicTableProps<T> {
   onRowClick?: (item: T) => void;
   dialogEdit?: (item: T) => React.ReactNode;
   onSoftDelete?: onSoftActionProps<T>["onSoftDelete"];
+  onSoftRecovery?: onSoftActionProps<T>["onSoftRecovery"];
   onDeleteResult?: onSoftActionProps<T>["onDeleteResult"];
 }
 
@@ -48,6 +50,7 @@ export function DynamicTable<T>({
   onRowClick,
   dialogEdit,
   onSoftDelete,
+  onSoftRecovery,
   onDeleteResult
 }: DynamicTableProps<T>) {
   return (
@@ -110,6 +113,19 @@ export function DynamicTable<T>({
                               handleSoftDelete<T>({
                                 item,
                                 onSoftDelete,
+                                onDeleteResult,
+                              })
+                            }
+                          />
+                        </TableCell>
+                      )}
+                      {onSoftRecovery && (
+                        <TableCell className="text-right">
+                          <ConfirmRecoveryDialog
+                            onConfirm={() =>
+                              handleSoftRecovery<T>({
+                                item,
+                                onSoftRecovery,
                                 onDeleteResult,
                               })
                             }
@@ -189,6 +205,17 @@ export function DynamicTable<T>({
                                 handleSoftDelete<T>({
                                   item,
                                   onSoftDelete,
+                                  onDeleteResult,
+                                })
+                              }
+                            />
+                          )}
+                          {onSoftRecovery && (
+                            <ConfirmRecoveryDialog
+                              onConfirm={() =>
+                                handleSoftRecovery<T>({
+                                  item,
+                                  onSoftRecovery,
                                   onDeleteResult,
                                 })
                               }

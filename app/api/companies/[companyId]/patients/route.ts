@@ -19,53 +19,29 @@ export async function GET(
   if (accessToGet instanceof Response) {
     return accessToGet;
   }
-  const { searchParams } = new URL(request.url);
-
-  const pageParam = searchParams.get("page");
-  const pageSizeParam = searchParams.get("pageSize");
-  const searchQuery = searchParams.get("search") || "";
-
-
-  const isPagination = pageParam && pageSizeParam;
-
-  const page = parseInt(pageParam || "1");
-  const pageSize = parseInt(pageSizeParam || "20");
-
-  const skip = isPagination ? (page - 1) * pageSize : undefined;
-  const take = isPagination ? pageSize : undefined;
   
   try {
-    const [patients, total] = await Promise.all([
-      db.patient.findMany({
-        where: {
-          companyId,
-          isDeleted: false,
-          ...(searchQuery && {
-            OR: [
-              { name: { contains: searchQuery, mode: "insensitive" } },
-              { phone: { contains: searchQuery, mode: "insensitive" } },
-            ],
-          }),
-        },
+    const patients = await db.patient.findMany({
+      where: {
+        companyId,
+        isDeleted: false,
+      },
 
-        include: {
-          creator: {
-            select: {
-              name: true,
-            },
-          },
-          updater: {
-            select: {
-              name: true,
-            },
+      include: {
+        creator: {
+          select: {
+            name: true,
           },
         },
-        orderBy: { createdAt: "desc" },
-        skip,
-        take,
-      }),
-      db.patient.count({ where: { companyId, isDeleted: false } }),
-    ]);
+        updater: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+       
+    });
 
     if (patients.length < 1) {
       return NextResponse.json({
@@ -76,12 +52,6 @@ export async function GET(
 
     return NextResponse.json({
       data: patients,
-      total,
-      ...(isPagination && {
-        page,
-        pageSize,
-        totalPages: Math.ceil(total / pageSize),
-      }),
     });
   } catch (error) {
     console.error("[PATIENT_GET]", error);

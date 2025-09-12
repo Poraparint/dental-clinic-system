@@ -364,7 +364,9 @@ model Dentaltech {
   dentalTechCategory DentalTechCategory @relation(fields: [dctId], references: [id])
   patient            Patient            @relation(fields: [patientId], references: [id])
 
+  @@unique([id, companyId])
   @@index([companyId], name: "idx_dentaltech_all")
+
 }
 
 model Expenses {

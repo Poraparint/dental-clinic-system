@@ -12,27 +12,25 @@ export const PatientBoard = () => {
   const { companyId } = useCompany();
   const {refreshKey, handleRefresh } = useRefreshable();
   const { navigateTo, isNavigating } = useNavigation();
-    const [search, setSearch] = useState("");
-    const [page, setPage] = useState(1);
+
+    const [searchValue, setSearchValue] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
 
   const handleRowClick = (patientId: string) => {
     navigateTo(`/${companyId}/patients/${patientId}`);
-  };
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    setPage(1);
   };
 
   return (
     <TitleCard
       title="รายชื่อคนไข้ / บัตรคนไข้"
       dialog={<DialogCreatePatient onSuccess={handleRefresh} />}
-      
     >
       <SearchBar
-        value={search}
-        onChange={handleSearchChange}
+        value={searchValue}
+        onChange={(val) => {
+          setSearchValue(val);
+          setCurrentPage(1);
+        }}
         placeholder="ค้นหาชื่อหรือเบอร์โทร"
       />
       {isNavigating && <NavigatingUi />}
@@ -40,9 +38,9 @@ export const PatientBoard = () => {
         refreshKey={refreshKey}
         handleRefresh={handleRefresh}
         onRowClick={handleRowClick}
-        search={search}
-        page={page}
-        setPage={setPage}
+        searchValue={searchValue}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
       />
     </TitleCard>
   );
