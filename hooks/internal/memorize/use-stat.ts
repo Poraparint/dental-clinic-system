@@ -15,7 +15,7 @@ import { useCombinedAppointments, useFilteredAppointments } from "@/hooks";
 
 export const useFinancialStats = ({
   transactions,
-  expenses,
+  allExpenses,
   dentalTechs,
   period,
 }: FinancialStatProps) => {
@@ -29,7 +29,7 @@ export const useFinancialStats = ({
 
     const profit = calculateProfitComparison(
       transactions,
-      expenses,
+      allExpenses,
       period,
       "datetime",
       "paid",
@@ -53,7 +53,7 @@ export const useFinancialStats = ({
     );
 
     const totalExpenses = calculateRevenueComparison(
-      expenses,
+      allExpenses,
       period,
       "datetime",
       "amount"
@@ -75,7 +75,7 @@ export const useFinancialStats = ({
       "price"
     );
     const expensesChartData = getCategoryTotals(
-      expenses,
+      allExpenses,
       period,
       "datetime",
       "expensesCategory.name",
@@ -84,7 +84,7 @@ export const useFinancialStats = ({
 
     const monthlyComparison = getMonthlyRevenueExpenseComparison(
       transactions,
-      expenses,
+      allExpenses,
       "datetime",
       "paid", 
       "datetime",
@@ -94,7 +94,7 @@ export const useFinancialStats = ({
 
     const yearlyComparison = getYearlyRevenueExpenseComparison(
       transactions,
-      expenses,
+      allExpenses,
       "datetime",
       "paid",
       "datetime",
@@ -114,7 +114,7 @@ export const useFinancialStats = ({
       monthlyComparison,
       yearlyComparison,
     };
-  }, [transactions, expenses, dentalTechs, period]);
+  }, [transactions, allExpenses, dentalTechs, period]);
 
   return {
     ...stats,

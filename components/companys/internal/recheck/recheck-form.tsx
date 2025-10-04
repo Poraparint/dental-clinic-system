@@ -96,13 +96,11 @@ export const RecheckForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)} className="overflow-hidden">
-        {/* Header */}
         <CardCategory
           icon={<FilePenLine />}
           title="ข้อมูลรีเช็ค / แบ่งจ่าย"
           description="เพิ่มรายการรีเช็คหรือแบ่งจ่ายของธุรกรรมนี้"
         >
-          {/* Form Body */}
           <div>
             <div className="space-y-4">
               <div>
@@ -248,8 +246,6 @@ export const RecheckForm = ({
               </div>
             </div>
           </div>
-
-          {/* Footer */}
         </CardCategory>
         <div className="border-t flex justify-end pt-5">
           <SubmitButton

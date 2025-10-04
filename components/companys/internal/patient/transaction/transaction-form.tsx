@@ -40,19 +40,21 @@ import { useTransactionCategories } from "@/hooks/internal/company/category/use-
 import { DatePickerField } from "@/components/shared/select/date-picker-field";
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany, usePatient } from "@/context/context";
-import { TransactionFormData } from "@/types";
+import { Transaction, TransactionFormData } from "@/types";
 import { AddonSection } from "@/components/shared/select";
 
 interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
   transactionData?: TransactionFormData;
+  transactionAddon?: Transaction
 }
 
 export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
   transactionData,
+  transactionAddon
 }: CreateTransactionFormProps) => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
@@ -63,7 +65,15 @@ export const CreateTransactionForm = ({
 
   const [addonList, setAddonList] = useState<
     { id: string; name: string; price: number; quantity: number }[]
-  >([]);
+  >(
+    () =>
+      transactionAddon?.transactionAddons?.map((a) => ({
+        id: a.id,
+        name: a.addonItem.name,
+        price: a.price,
+        quantity: a.quantity,
+      })) ?? []
+  );
 
   const [isPending, startTransition] = useTransition();
 
@@ -95,6 +105,7 @@ export const CreateTransactionForm = ({
       form.setValue("price", calculatedBasePrice);
     }
   }, [calculatedBasePrice, form, transactionData]);
+
 
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
     startTransition(async () => {
@@ -142,7 +153,9 @@ export const CreateTransactionForm = ({
           description="รายละเอียดธุรกรรม / ข้อมูลธุรกรรม"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div className={`space-y-2 ${transactionData?.id && "col-span-full"}`}>
+            <div
+              className={`space-y-2 ${transactionData?.id && "col-span-full"}`}
+            >
               <div className="grid grid-cols-2 gap-6">
                 <DatePickerField
                   form={form}
@@ -253,15 +266,13 @@ export const CreateTransactionForm = ({
               </div>
             </div>
 
-            {!transactionData?.id && (
-              <AddonSection
-                availableAddons={availableAddons}
-                addonList={addonList}
-                setAddonList={setAddonList}
-                isPending={isPending}
-                isLoading={addonLoading}
-              />
-            )}
+            <AddonSection
+              availableAddons={availableAddons}
+              addonList={addonList}
+              setAddonList={setAddonList}
+              isPending={isPending}
+              isLoading={addonLoading}
+            />
           </div>
         </CardCategory>
         <div className="flex justify-end">

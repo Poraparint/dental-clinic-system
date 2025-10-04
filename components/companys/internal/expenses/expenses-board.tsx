@@ -6,7 +6,7 @@ import { DialogCreateExpenses } from "@/components/dialog/internal/dialog-create
 import { useExpensesCategories } from "@/hooks/internal/company/category/use-ec";
 import { BriefcaseBusiness, ChevronLeft, ChevronRight } from "lucide-react";
 import { FormNotFound } from "@/components/form-not-found";
-import { useExpensesOverview, useRefreshable } from "@/hooks";
+import { useExpenses, useRefreshable } from "@/hooks";
 import { Button } from "@/components/ui/button";
 import { format, addMonths, subMonths } from "date-fns";
 import { th } from "date-fns/locale";
@@ -19,13 +19,24 @@ export const Expenses = () => {
   const { companyId } = useCompany();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const { refreshKey, handleRefresh } = useRefreshable();
-  const { categories, error } = useExpensesCategories(companyId, refreshKey);
 
-  const { expensesOverview } = useExpensesOverview(
+  const { getExpensesByMonth, isLoading, error } = useExpenses(
     companyId,
-    currentMonth,
     refreshKey
   );
+
+  const { expenses, overview } = useMemo(() => {
+    return getExpensesByMonth(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth()
+    );
+  }, [currentMonth, getExpensesByMonth]);
+
+  const { categories } = useExpensesCategories(
+    companyId,
+    refreshKey
+  );
+
 
   const handlePrevMonth = () => {
     setCurrentMonth(subMonths(currentMonth, 1));
@@ -41,21 +52,20 @@ export const Expenses = () => {
   );
 
   const formattedTotal = useMemo(
-    () => formatCurrency(expensesOverview?.total),
-    [expensesOverview?.total]
+    () => formatCurrency(overview?.total),
+    [overview?.total]
   );
 
   const categoryData = useMemo(() => {
     const unsorted =
       categories?.map((category) => {
         const categoryExpenses =
-          expensesOverview.byCategory.find(
-            (item) => item.categoryId === category.id
-          )?.total || 0;
+          overview.byCategory.find((item) => item.categoryId === category.id)
+            ?.total || 0;
 
         const percentage =
-          expensesOverview.total > 0
-            ? Math.round((categoryExpenses / expensesOverview.total) * 100)
+          overview.total > 0
+            ? Math.round((categoryExpenses / overview.total) * 100)
             : 0;
 
         return {
@@ -65,7 +75,8 @@ export const Expenses = () => {
         };
       }) || [];
     return unsorted.sort((a, b) => b.expenses - a.expenses);
-  }, [categories, expensesOverview]);
+  }, [categories, overview]);
+
 
   return (
     <div className="lg:flex gap-4 space-y-4">
@@ -107,10 +118,18 @@ export const Expenses = () => {
           </div>
         </Card>
         <Card className="px-5">
-          <ExpensesTable
-            refreshKey={refreshKey}
-            month={format(currentMonth, "yyyy-MM")}
-          />
+          {expenses.length < 1 && !isLoading ? (
+            <FormNotFound
+              message="ไม่พบข้อมูลรายจ่าย"
+              description="ยังไม่มีการบันทึกรายจ่ายในเดือนนี้"
+            />
+          ) : (
+            <ExpensesTable
+              expenses={expenses}
+              error={error}
+              isLoading={isLoading}
+            />
+          )}
         </Card>
       </div>
       <div className="lg:w-4/12 space-y-4">

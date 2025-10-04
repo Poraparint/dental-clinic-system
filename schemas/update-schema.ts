@@ -32,7 +32,14 @@ export const SettingSchema = z
       message: "กรุณากรอกรหัสผ่าน",
       path: ["password"],
     }
-  );
+);
+  
+export const UpdateAddonItemSchema = z.object({
+  addonItemId: z.string(),
+  name: z.string(),
+  price: z.number().nonnegative(),
+  quantity: z.number().int().positive(),
+});
 
 
   export const UpdateTransactionSchema = z
@@ -42,6 +49,7 @@ export const SettingSchema = z
       ...detailSchema,
       ...priceSchema,
       ...createPaymentSchema(),
+      addonItems: z.array(UpdateAddonItemSchema).optional(),
     })
     .superRefine((data, ctx) => {
       if (

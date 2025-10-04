@@ -13,7 +13,6 @@ export * from "@/hooks/external/use-ministry";
 export * from "@/hooks/internal/company/use-dentalTech";
 export * from "@/hooks/internal/company/use-dentist";
 export * from "@/hooks/internal/company/use-expenses";
-export * from "@/hooks/internal/company/use-expenses-overview";
 export * from "@/hooks/internal/company/use-member";
 export * from "@/hooks/internal/company/use-patient";
 export * from "@/hooks/internal/company/use-recheck";

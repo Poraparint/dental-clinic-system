@@ -1,11 +1,10 @@
 import {
   getPatientByCompanyId,
 } from "@/data/internal/patient";
-import { getCreatorIdByTransactionId, getPatientByTransactionId } from "@/data/internal/transaction";
+import { getPatientByTransactionId } from "@/data/internal/transaction";
 import { db } from "@/lib/db";
-import { validateManagerAndDentist } from "@/lib/utils/validation/member";
+import { validateManagerAndComanager } from "@/lib/utils/validation/member";
 import { UpdateTransactionSchema } from "@/schemas";
-import { CompanyRole } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -24,36 +23,13 @@ export async function PATCH(
 
   const values = await request.json();
 
-  const accessToPatch = await validateManagerAndDentist(companyId);
+  const accessToPatch = await validateManagerAndComanager(companyId);
 
   if (accessToPatch instanceof Response) {
     return accessToPatch;
   }
 
   const { member } = accessToPatch;
-
-  if (member.role === CompanyRole.DENTIST) {
-    const creator = await getCreatorIdByTransactionId(patientId, transactionId);
-
-    if (!creator) {
-      return NextResponse.json(
-        {
-          error: "ไม่พบข้อมูลคนไข้",
-          description: "ไม่สามารถตรวจสอบผู้สร้างได้",
-        },
-        { status: 404 }
-      );
-    }
-    if (creator.creatorUserId !== member.id) {
-      return NextResponse.json(
-        {
-          error: "คุณไม่มีสิทธิ์แก้ไขคนไข้รายนี้",
-          description: "เฉพาะผู้สร้างรายการเท่านั้นที่สามารถแก้ไขได้",
-        },
-        { status: 403 }
-      );
-    }
-  }
 
   const existingTransaction = await getPatientByTransactionId(transactionId);
 
@@ -77,7 +53,7 @@ export async function PATCH(
     );
   }
 
-  const dataToUpdate = validation.data;
+  const { addonItems, ...transactionData } = validation.data;
 
   const existingPatient = await getPatientByCompanyId(companyId, patientId);
 
@@ -86,14 +62,38 @@ export async function PATCH(
   }
 
   try {
-    await db.transaction.update({
-      where: {
-        id: transactionId,
-      },
-      data: {
-        ...dataToUpdate,
-        updaterUserId: member.id,
-      },
+    await db.$transaction(async (values) => {
+      if(Object.keys(transactionData).length > 0) {
+        await values.transaction.update({
+          where: {
+            id: transactionId,
+          },
+          data: {
+            ...transactionData,
+            updaterUserId: member.id,
+          },
+        });
+      }
+
+      if (addonItems) {
+        await values.transactionAddon.deleteMany({
+          where: {
+            transactionId
+          },
+        });
+
+        if (addonItems.length > 0) {
+          await values.transactionAddon.createMany({
+            data: addonItems.map((item) => ({
+              transactionId,
+              addonItemId: item.addonItemId,
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          });
+        }
+      }
     });
     return NextResponse.json(
       {
