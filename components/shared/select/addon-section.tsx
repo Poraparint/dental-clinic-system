@@ -66,9 +66,19 @@ export const AddonSection = ({
     setAddonList(addonList.filter((_, i) => i !== index));
   };
 
+   const handleAddonChange = (
+     index: number,
+     field: "price" | "quantity",
+     value: number
+   ) => {
+     const newList = [...addonList];
+     newList[index][field] = value >= 0 ? value : 0;
+     setAddonList(newList);
+   };
+
   return (
     <div className="space-y-2">
-      <h3 className="font-medium text-sm">เพิ่มรายการเสริม</h3>
+      <h3 className="font-medium text-sm">เพิ่ม/แก้ไขรายการเสริม</h3>
 
       <div className="flex gap-2">
         <SelectCategory
@@ -128,10 +138,37 @@ export const AddonSection = ({
                     </div>
                   </TableCell>
                   <TableCell className="py-2 text-center text-xs">
-                    <p>{item.quantity}</p>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleAddonChange(
+                          index,
+                          "quantity",
+                          Number(e.target.value)
+                        )
+                      }
+                      className="h-7 text-xs text-center"
+                    />
                   </TableCell>
-                  <TableCell className="py-2 text-right">
-                    <p>฿ {(item.price * item.quantity).toFixed(2)}</p>
+                  <TableCell className="py-2 text-right text-xs">
+                    <Input
+                      type="number"
+                      min={0}
+                      value={item.price}
+                      onChange={(e) =>
+                        handleAddonChange(
+                          index,
+                          "price",
+                          Number(e.target.value)
+                        )
+                      }
+                      className="h-7 text-xs text-right"
+                    />
+                  </TableCell>
+                  <TableCell className="py-2 text-right text-xs">
+                    ฿ {(item.price * item.quantity).toFixed(2)}
                   </TableCell>
                   <TableCell className="py-2">
                     <Button

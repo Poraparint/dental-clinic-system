@@ -17,27 +17,9 @@ export async function GET(
     return accessToGet;
   }
   try {
-    const { searchParams } = new URL(request.url);
-    const month = searchParams.get("month");
-    const whereCondition: {
-      companyId: string;
-      datetime?: {
-        gte: Date;
-        lt: Date;
-      };
-    } = { companyId };
-
-    if (month) {
-      const [year, monthNum] = month.split("-").map(Number);
-      whereCondition.datetime = {
-        gte: new Date(year, monthNum - 1, 1), // วันที่ 1 ของเดือน
-        lt: new Date(year, monthNum, 1), // วันที่ 1 ของเดือนถัดไป
-      };
-    }
-
-    // 2. ดึงข้อมูลรายจ่ายพร้อมหมวดหมู่
+    
     const expenses = await db.expenses.findMany({
-      where: whereCondition,
+      where: { companyId },
       select: {
         id: true,
         datetime: true,
@@ -53,7 +35,7 @@ export async function GET(
         },
       },
       orderBy: {
-        datetime: "desc", // เรียงจากวันที่ล่าสุด
+        datetime: "desc", 
       },
     });
 
@@ -64,17 +46,7 @@ export async function GET(
       });
     }
 
-    // 3. คำนวณยอดรวมทั้งหมด
-    const totalAmount = expenses.reduce(
-      (sum, expense) => sum + Number(expense.amount),
-      0
-    );
-
-    return NextResponse.json({
-      data: expenses,
-      total: totalAmount,
-      count: expenses.length,
-    });
+    return NextResponse.json(expenses);
   } catch (error) {
     console.error("[EXPENSES_GET]", error);
     return NextResponse.json(

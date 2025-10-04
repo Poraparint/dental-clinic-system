@@ -14,9 +14,9 @@ export const FinancialReport = () => {
   const { companyId } = useCompany();
   const [period, setPeriod] = useState<Period>("month");
   const { transactions } = useAllTransaction(companyId);
-  const { expenses } = useExpenses(companyId);
+  const { allExpenses } = useExpenses(companyId);
   const { dentalTechs } = useDentalTechs(companyId);
-  const { ...stats } = useFinancialStats({ transactions, expenses, dentalTechs, period });
+  const { ...stats } = useFinancialStats({ transactions, allExpenses, dentalTechs, period });
 
   return (
     <Card>

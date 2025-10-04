@@ -3,23 +3,15 @@
 import { Loading } from "@/components/loading";
 import { DynamicTable } from "@/components/props/component/dynamic-table";
 import { Badge } from "@/components/ui/badge";
-import { useExpenses } from "@/hooks";
-import { Expenses } from "@/types";
-import { useCompany } from "@/context/context";
+import { ApiError, Expenses } from "@/types";
 
 interface ExpensesTableProps {
-  refreshKey?: number;
-  month?: string;
+  expenses: Expenses[];
+  error?: ApiError | null;
+  isLoading: boolean;
 }
 
-export const ExpensesTable = ({ refreshKey, month }: ExpensesTableProps) => {
-  const { companyId } = useCompany();
-  const { expenses, error, isLoading } = useExpenses(
-    companyId,
-    month,
-    refreshKey
-  );
-
+export const ExpensesTable = ({ expenses, error, isLoading }: ExpensesTableProps) => {
   const columns = [
     {
       key: "datetime",

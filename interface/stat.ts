@@ -25,7 +25,7 @@ export interface DashboardStatProps {
 
 export interface FinancialStatProps {
   transactions: Transaction[];
-  expenses: Expenses[];
+  allExpenses: Expenses[];
   dentalTechs: DentalTech[];
   period: Period;
 }
