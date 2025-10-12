@@ -46,6 +46,7 @@ export const DialogUpdateTransaction = ({
       dialogTitle="แก้ไขข้อมูลคนไข้"
       dialogDescription="ปรับปรุงข้อมูลของคนไข้"
       variant="secondary"
+      formWidth="md:max-w-5xl"
       open={open}
       setOpen={setOpen}
       className="rounded-full size-10"
@@ -53,7 +54,10 @@ export const DialogUpdateTransaction = ({
       <CreateTransactionForm
         setOpen={setOpen}
         onSuccess={onSuccess}
-        transactionData={transaction ? toTransactionFormData(transaction) : undefined}
+        transactionData={
+          transaction ? toTransactionFormData(transaction) : undefined
+        }
+        transactionAddon={transaction}
       />
     </DialogButton>
   );

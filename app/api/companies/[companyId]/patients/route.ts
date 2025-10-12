@@ -7,6 +7,7 @@ import {
 } from "@/lib/utils/validation/member";
 import { CreatePatientSchema } from "@/schemas";
 import { getPatientByName } from "@/data/internal/patient";
+import { getDisplayDate } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
@@ -102,12 +103,14 @@ export async function POST(
     return NextResponse.json({ error: "ชื่อนี้ถูกใช้ไปแล้ว" }, { status: 409 });
   }
 
+  const birthDate = age ? getDisplayDate(age) : null;
+
   try {
     await db.patient.create({
       data: {
         name,
         phone,
-        age,
+        age: birthDate,
         address,
         job,
         work,

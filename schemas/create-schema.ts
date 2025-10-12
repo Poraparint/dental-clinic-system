@@ -33,7 +33,7 @@ export const CreateAddOnCategorySchema = z.object({
 export const CreatePatientSchema = z.object({
   ...baseNameSchema,
   phone: z.optional(z.string()),
-  age: z.optional(z.string()),
+  age: z.coerce.date().optional(),
   address: z.optional(z.string()),
   job: z.optional(z.string()),
   work: z.optional(z.string()),

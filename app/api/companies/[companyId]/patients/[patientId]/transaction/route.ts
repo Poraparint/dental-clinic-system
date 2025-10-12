@@ -67,6 +67,7 @@ export async function GET(
             price: true,
             addonItem: {
               select: {
+                id: true,
                 name: true,
               },
             },
@@ -160,6 +161,8 @@ export async function POST(
     await db.$transaction([
       ...addonItemsData.map((data) => db.transactionAddon.create({ data })),
     ]);
+
+    console.log("Created transaction with addons:", { transaction, addonItemsData });
 
     return NextResponse.json(
       {

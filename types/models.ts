@@ -53,6 +53,7 @@ export type Transaction = Prisma.TransactionGetPayload<{
     transactionAddons: {
       select: {
         id: true;
+        addonItemId: true;
         quantity: true;
         price: true;
         addonItem: {
