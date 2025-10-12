@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Info, User } from "lucide-react";
+import { CalendarIcon, Info, User } from "lucide-react";
 import { toast } from "sonner";
 
 //schema
@@ -34,6 +34,10 @@ import {
 import { SubmitButton } from "@/components/shared/button/submit-button";
 import { useCompany } from "@/context/context";
 import { PatientFormData } from "@/types";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils";
+import { YearCalendar } from "@/components/ui/year-calendar";
 
 interface CreatePatientFormProps {
   setOpen: (open: boolean) => void;
@@ -54,7 +58,7 @@ export const CreatePatientForm = ({
     defaultValues: patientData ?? {
       name: "",
       phone: "",
-      age: "",
+      age: undefined,
       address: "",
       job: "",
       work: "",
@@ -118,20 +122,46 @@ export const CreatePatientForm = ({
                 control={form.control}
                 name="age"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>อายุ</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        disabled={isPending}
-                        placeholder="อายุ"
-                      />
-                    </FormControl>
+                  <FormItem className="flex flex-col">
+                    <FormLabel>วัน/เดือน/ปีเกิด</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={`pl-3 text-left font-normal ${
+                              !field.value && "text-muted-foreground"
+                            }`}
+                            disabled={isPending}
+                          >
+                            {field.value ? (
+                              <>{formatDate(field.value)}</>
+                            ) : (
+                              <span>เลือกวันเกิด</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <YearCalendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) => date > new Date()}
+                          captionLayout="dropdown"
+                          fromYear={1940}
+                          toYear={new Date().getFullYear()}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+
             <div className="col-start-4">
               <FormField
                 control={form.control}

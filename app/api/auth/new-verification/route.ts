@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "โทเคนหมดอายุ",
-        description: "กรุณาขอเปลี่ยนรหัสผ่านใหม่อีกครั้ง",
+        description: "กรุณาขอยืนยันตัวตนอีกครั้ง",
       },
       { status: 400 }
     );

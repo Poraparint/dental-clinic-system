@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     existingUser.member?.isDeleted === true
   ) {
     return NextResponse.json(
-      { error: "ไม่มีข้อมูลอีเมลนี้ในบริษัทหรือถูกหยุดหารทำงานไปแล้ว" },
+      { error: "ไม่มีข้อมูลอีเมลนี้ในบริษัทหรือถูกหยุดการทำงานไปแล้ว" },
       { status: 403 }
     );
   }

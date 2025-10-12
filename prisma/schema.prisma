@@ -273,7 +273,7 @@ model Patient {
   id            String        @id @default(cuid())
   name          String
   phone         String?
-  age           String?
+  age           DateTime?
   address       String?
   job           String?
   work          String?

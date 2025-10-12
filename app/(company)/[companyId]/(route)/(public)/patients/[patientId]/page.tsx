@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCompany } from "@/context/context";
 import { PatientProvider } from "@/context/provider";
 import { usePatient } from "@/hooks/internal/company/use-patient";
+import { calculateAge } from "@/lib/utils/date/date";
 import { CompanyRole } from "@prisma/client";
 import { useParams } from "next/navigation";
 
@@ -51,7 +52,9 @@ const PatientInfoCardPage = () => {
               <div>
                 <h1 className="text-3xl font-bold">{patient.name}</h1>
                 {patient.age && (
-                  <p className="text-foreground/80">• อายุ: {patient.age} ปี</p>
+                  <p className="text-foreground/80">
+                    • อายุ: {calculateAge(new Date(patient.age))} ปี
+                  </p>
                 )}
               </div>
             </div>

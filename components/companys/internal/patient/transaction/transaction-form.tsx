@@ -47,14 +47,14 @@ interface CreateTransactionFormProps {
   setOpen: (open: boolean) => void;
   onSuccess?: () => void;
   transactionData?: TransactionFormData;
-  transactionAddon?: Transaction
+  transactionAddon?: Transaction;
 }
 
 export const CreateTransactionForm = ({
   setOpen,
   onSuccess,
   transactionData,
-  transactionAddon
+  transactionAddon,
 }: CreateTransactionFormProps) => {
   const { companyId } = useCompany();
   const { patientId } = usePatient();
@@ -68,7 +68,7 @@ export const CreateTransactionForm = ({
   >(
     () =>
       transactionAddon?.transactionAddons?.map((a) => ({
-        id: a.id,
+        id: a.addonItemId,
         name: a.addonItem.name,
         price: a.price,
         quantity: a.quantity,
@@ -106,20 +106,18 @@ export const CreateTransactionForm = ({
     }
   }, [calculatedBasePrice, form, transactionData]);
 
-
   const OnSubmit = (values: z.infer<typeof CreateTransactionSchema>) => {
-    startTransition(async () => {
-      const addonItems = addonList.map((item) => ({
-        addonItemId: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-      }));
 
+    startTransition(async () => {
       const payload = {
         ...values,
-        addonItems,
+        addonItems: addonList.map((item) => ({
+          addonItemId: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
       };
+
       let data;
 
       if (transactionData?.id) {
@@ -144,6 +142,9 @@ export const CreateTransactionForm = ({
       }
     });
   };
+
+  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(OnSubmit)}>

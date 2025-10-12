@@ -4,7 +4,7 @@ import {
 import { getPatientByTransactionId } from "@/data/internal/transaction";
 import { db } from "@/lib/db";
 import { validateManagerAndComanager } from "@/lib/utils/validation/member";
-import { UpdateTransactionSchema } from "@/schemas";
+import { CreateTransactionSchema } from "@/schemas";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
@@ -42,7 +42,7 @@ export async function PATCH(
     );
   }
 
-  const validation = UpdateTransactionSchema.safeParse(values);
+  const validation = CreateTransactionSchema.safeParse(values);
 
   if (!validation.success) {
     return NextResponse.json(
@@ -62,9 +62,9 @@ export async function PATCH(
   }
 
   try {
-    await db.$transaction(async (values) => {
+    await db.$transaction(async (tx) => {
       if(Object.keys(transactionData).length > 0) {
-        await values.transaction.update({
+        await tx.transaction.update({
           where: {
             id: transactionId,
           },
@@ -75,25 +75,20 @@ export async function PATCH(
         });
       }
 
-      if (addonItems) {
-        await values.transactionAddon.deleteMany({
-          where: {
-            transactionId
-          },
-        });
+      await tx.transactionAddon.deleteMany({
+        where: { transactionId },
+      });
 
-        if (addonItems.length > 0) {
-          await values.transactionAddon.createMany({
-            data: addonItems.map((item) => ({
-              transactionId,
-              addonItemId: item.addonItemId,
-              name: item.name,
-              quantity: item.quantity,
-              price: item.price,
-            })),
-          });
-        }
-      }
+     if (addonItems && addonItems.length > 0) {
+       await tx.transactionAddon.createMany({
+         data: addonItems.map((item) => ({
+           transactionId,
+           addonItemId: item.addonItemId,
+           quantity: item.quantity,
+           price: item.price,
+         })),
+       });
+     }
     });
     return NextResponse.json(
       {
